@@ -1,0 +1,5 @@
+{
+  "layout": "scaffold",
+  "permalink": "./{{ slug }}/index.html",
+  "slug": "page.fileSlug"
+}

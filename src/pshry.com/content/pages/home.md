@@ -1,0 +1,6 @@
+---
+slug: .
+---
+## Home
+
+Lorem ipsum.

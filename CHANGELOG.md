@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Add dependencies.
 - Configure Gulp and Eleventy.
 - Add legacy content.
+- Add pshry.com content, data, and layouts.
 
 ### Changed
 
