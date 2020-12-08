@@ -1,0 +1,67 @@
+{
+  "name": "paul-shryock",
+  "version": "1.0.0",
+  "private": true,
+  "description": "2020 reboot of my personal website",
+  "license": "Hippocratic 2.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulshryock/paul-shryock.git"
+  },
+  "author": {
+    "name": "Paul Shryock",
+    "url": "https://github.com/paulshryock"
+  },
+  "bugs": {
+    "url": "https://github.com/paulshryock/paul-shryock/issues"
+  },
+  "homepage": "https://github.com/paulshryock/paul-shryock#readme",
+  "scripts": {
+    "start": "npm run build",
+    "clean": "gulp clean",
+    "html": "gulp html",
+    "lint": "npm run lint:js",
+    "lint:js": "gulp lintJavaScript",
+    "build": "npm run build:pshry.com",
+    "build:pshry.com": "gulp build"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "sync-dotenv": {
+    "preserve": [
+      "BUILD_ENV",
+      "SITE_URL",
+      "TWITTER_API_KEY",
+      "TWITTER_API_SECRET_KEY",
+      "TWITTER_BEARER_TOKEN"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "sync-dotenv"
+    }
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^0.11.0",
+    "del": "^6.0.0",
+    "eslint": "^7.12.1",
+    "eslint-config-standard": "^16.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-sonarjs": "^0.5.0",
+    "eslint-plugin-unicorn": "^23.0.0",
+    "gulp": "^4.0.2",
+    "gulp-beautify": "^3.0.0",
+    "gulp-cli": "^2.3.0",
+    "gulp-connect": "^5.7.0",
+    "gulp-eslint": "^6.0.0",
+    "gulp-htmlmin": "^5.0.1",
+    "husky": "^4.3.0",
+    "sync-dotenv": "^2.6.2"
+  },
+  "dependencies": {
+    "config": "^3.3.2"
+  }
+}

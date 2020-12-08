@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](semver).
 
 ### Added
 - Add repository files.
+- Add dependencies.
+- Configure Gulp and Eleventy.
 
 ### Changed
 
