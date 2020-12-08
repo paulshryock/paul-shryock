@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Add repository files.
 - Add dependencies.
 - Configure Gulp and Eleventy.
+- Add legacy content.
 
 ### Changed
 
