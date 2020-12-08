@@ -1,8 +1,8 @@
 # pshry.com
 
-## About
+<img src="https://raw.githubusercontent.com/paulshryock/paul-shryock/main/legacy/assets/paul-shryock-logos/paul-shryock-logo-4c.png" alt="Paul Shryock" align="center">
+<p align="center">2020 reboot of my personal website.</p>
 
-2020 reboot of my personal website.
 
 I [aspire][aspire] to make this project Accessible, Secure, Performant, Inclusive, Responsive, and Ethical.
 
