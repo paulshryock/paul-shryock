@@ -30,7 +30,7 @@ module.exports = {
   },
   site: {
     url: ''
-  }
+  },
   twitter: {
     api: {
       key: '',

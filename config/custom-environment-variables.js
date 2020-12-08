@@ -4,7 +4,7 @@ module.exports = {
   },
   site: {
     url: 'SITE_URL'
-  }
+  },
   twitter: {
     api: {
       key: 'TWITTER_API_KEY',
