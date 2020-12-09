@@ -140,7 +140,6 @@ exports.version = function version () {
    * Bump docblock version.
    *
    * @since unreleased
-   * @todo  Abstract some of the changelog strings
    *
    * @return {function} [description]
    */
@@ -168,7 +167,7 @@ exports.version = function version () {
     gulp.src(paths.changelog)
       // Bump unreleased version.
       .pipe(replace('## [Unreleased]', `## [${version}] - ${today}`))
-      // Remove empty release changelog subheads.
+      // Remove empty changelog subheads.
       .pipe(replace(
         new RegExp('### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n', 'g'),
         ''
@@ -176,27 +175,19 @@ exports.version = function version () {
       // Bump unreleased link and add new release link.
       .pipe(replace(
         new RegExp('/compare/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)', 'g'),
-        `/compare/HEAD..${version}
-[${version}]: ${url}/commits/${version}`)
+        `/compare/HEAD..${version}\n[${version}]: ${url}/commits/${version}`)
       )
       // Add default unreleased section.
       .pipe(replace(
-        'and this project adheres to [Semantic Versioning](semver).',
-        `and this project adheres to [Semantic Versioning](semver).
-
-## [Unreleased]
-
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security`
+        '[Semantic Versioning](semver).',
+        '[Semantic Versioning](semver).\n\n' +
+          '## [Unreleased]\n\n' +
+          '### Added\n\n' +
+          '### Changed\n\n' +
+          '### Deprecated\n\n' +
+          '### Removed\n\n' +
+          '### Fixed\n\n' +
+          '### Security'
       ))
       .pipe(gulp.dest('./'))
   )
