@@ -1,17 +1,28 @@
 const config = require('config')
 const gulp = require('gulp')
+const merge = require('merge-stream')
 const del = require('del')
 const Eleventy = require('@11ty/eleventy')
+const ssg = new Eleventy()
 const beautify = require('gulp-beautify')
 const htmlmin = require('gulp-htmlmin')
 const connect = require('gulp-connect')
 const eslint = require('gulp-eslint')
+const replace = require('gulp-replace')
 
-const ssg = new Eleventy()
-const isProduction = 'production' === config.get('build.environment')
+/**
+ * Returns true if `BUILD_ENV` is set to 'production'.
+ *
+ * @since unreleased
+ *
+ * @type {Boolean}
+ */
+const isProduction = config.get('build.environment') === 'production'
 
 /**
  * File paths.
+ *
+ * @since unreleased
  *
  * @type {Object}
  */
@@ -20,41 +31,63 @@ const paths = {
   build: './build/pshry.com',
   get html () {
     return {
-      written: `${this.build}/**/*.html`,
-      postProcessed: this.build
+      written: `${this.build}/**/*.html`
     }
   },
-  get javascript () {
-    return {
-      lint: [
-        './.eleventy.js',
-        './gulpfile.js',
-        `${this.src}/assets/js/**/*.js`
-      ],
-      src: `${this.src}/assets/js/**/*.js`
+  javascript: {
+    config: './config/*.js',
+    src: './src/**/*.js',
+    root: './*.js',
+    get lint () {
+      return [
+        this.config,
+        this.src,
+        this.root
+      ]
     }
   }
 }
 
 /**
  * Cleans the build directory.
+ * Usage: `gulp clean`
+ *
+ * @since unreleased
  *
  * @return {Promise}
  */
-function clean () {
+exports.clean = function clean () {
   return Promise.all([
     del([paths.build])
   ])
 }
 
 /**
- * Handle HTML tasks.
+ * Handle linting tasks.
+ * Usage: `gulp lint`
+ *
+ * @since unreleased
  *
  * @return {Object} Gulp stream
  */
-async function html () {
+exports.lint = function lint () {
+  return gulp.src(paths.javascript.lint)
+    .pipe(eslint(config.get('lint.javascript')))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError())
+}
+
+/**
+ * Handle HTML tasks.
+ * Usage: `gulp html`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+exports.html = async function html () {
   // Delete previously written HTML files
-  del([paths.html.written])
+  del([paths.html.written])  
 
   // Start SSG
   await ssg.init()
@@ -65,11 +98,11 @@ async function html () {
   // Post-process HTML
   const beautifyHtml = gulp.src(paths.html.written)
     .pipe(beautify.html(config.get('build.html.beautify')))
-    .pipe(gulp.dest(paths.html.postProcessed))
+    .pipe(gulp.dest(paths.build))
 
   const minifyHtml = beautifyHtml
     .pipe(htmlmin(config.get('build.html.minify')))
-    .pipe(gulp.dest(paths.html.postProcessed))
+    .pipe(gulp.dest(paths.build))
 
   return isProduction
     ? minifyHtml
@@ -78,52 +111,51 @@ async function html () {
 }
 
 /**
- * Lint JavaScript.
+ * Handle version tasks.
+ * Usage: `gulp version`
+ *
+ * @since unreleased
  *
  * @return {Object} Gulp stream
  */
-function lintJavaScript () {
-  return gulp.src(paths.javascript.lint)
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError())
+exports.version = function version () {
+  const { version } = require('./package.json')
+
+  const merged = merge(
+    // Config files.
+    gulp.src(paths.javascript.config)
+      .pipe(replace(/(?<!\))@since unreleased/g, `@since ${version}`))
+      .pipe(gulp.dest('./config/')),
+
+    // Source files.
+    gulp.src(paths.javascript.src)
+      .pipe(replace(/(?<!\))@since unreleased/g, `@since ${version}`))
+      .pipe(gulp.dest('./src/')),
+
+    // Root files.
+    gulp.src(paths.javascript.root)
+      .pipe(replace(/(?<!\))@since unreleased/g, `@since ${version}`))
+      .pipe(gulp.dest('./'))
+  )
+
+  return merged.isEmpty() ? null : merged
 }
-
-/**
- * Cleans the build directory.
- * Usage: `gulp clean`
- *
- * @type {gulp.task}
- */
-exports.clean = clean
-
-/**
- * Handles HTML tasks.
- * Usage: `gulp html`
- *
- * @type {gulp.task}
- */
-exports.html = html
-
-/**
- * Handles Javascript tasks.
- * Usage: `gulp javascript`
- *
- * @type {gulp.task}
- */
-exports.lintJavaScript = lintJavaScript
 
 /**
  * Builds the site.
  * Usage: `gulp build`
  *
+ * @since unreleased
+ *
  * @type {gulp.series}
  */
-exports.build = gulp.series(clean, html)
+exports.build = gulp.series(exports.clean, exports.lint, exports.html)
 
 /**
  * Default Gulp task.
  * Usage: `gulp`
+ *
+ * @since unreleased
  *
  * @type {gulp.series}
  */

@@ -24,11 +24,11 @@ The type of contributions I am interested in are those that would make the websi
 
 You're welcome to [create an Issue][github-create-issue] if there's something on my website that you would like to discuss, or to report a bug, typo, or problematic content or functionality.
 
-[docs]: tree/master/docs
+[docs]: tree/main/docs
 [aspire]: https://www.filamentgroup.com/lab/aspire/
 [github-repo]: https://github.com/paulshryock/paul-shryock
 [license]: https://firstdonoharm.dev/
-[code-of-conduct]: blob/master/CODE_OF_CONDUCT.md
-[contributing]: blob/master/CONTRIBUTING.md
+[code-of-conduct]: blob/main/CODE_OF_CONDUCT.md
+[contributing]: blob/main/CONTRIBUTING.md
 [github-pull-requests]: https://github.com/paulshryock/paul-shryock/pulls
 [github-create-issue]: https://github.com/paulshryock/paul-shryock/issues/new/choose

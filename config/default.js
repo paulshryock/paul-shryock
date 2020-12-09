@@ -25,8 +25,27 @@ module.exports = {
         sortClassName: true,
         trimCustomFragments: true,
         useShortDoctype: true
+      }
+    }
+  },
+  lint: {
+    javascript: {
+      env: {
+        browser: true,
+        node: true
       },
-    },
+      extends: [
+        'standard',
+        'plugin:sonarjs/recommended',
+        'plugin:unicorn/recommended'
+      ],
+      parserOptions: {
+        ecmaVersion: 11,
+        sourceType: 'module'
+      },
+      rules: {
+      }
+    }
   },
   site: {
     url: ''
@@ -38,6 +57,6 @@ module.exports = {
     },
     bearer: {
       token: ''
-    },
-  },
+    }
+  }
 }
