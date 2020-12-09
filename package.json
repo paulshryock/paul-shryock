@@ -19,11 +19,12 @@
   "scripts": {
     "start": "npm run build",
     "clean": "gulp clean",
-    "html": "gulp html",
     "lint": "gulp lint",
+    "html": "gulp html",
     "build": "gulp build",
     "version": "gulp version && git add .",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "postinstall": "husky install"
   },
   "browserslist": [
     "defaults"
@@ -39,7 +40,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "sync-dotenv"
+      "pre-commit": "npm run lint && sync-dotenv"
     }
   },
   "devDependencies": {
