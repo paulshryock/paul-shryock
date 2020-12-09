@@ -141,7 +141,7 @@ exports.version = function version () {
    *
    * @since unreleased
    *
-   * @return {function} [description]
+   * @return {string} Bumped docblock version.
    */
   function bumpDocblock () {
     return replace(/(?<!\))@since unreleased/g, `@since ${version}`)
@@ -201,6 +201,6 @@ exports.version = function version () {
  *
  * @since unreleased
  *
- * @type {gulp.series}
+ * @type {Object} Gulp series
  */
 exports.build = gulp.series(exports.clean, exports.lint, exports.html)
