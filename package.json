@@ -26,9 +26,11 @@
     "postversion": "git push && git push --tags",
     "postinstall": "husky install"
   },
-  "browserslist": [
-    "defaults"
-  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && sync-dotenv"
+    }
+  },
   "sync-dotenv": {
     "preserve": [
       "BUILD_ENV",
@@ -38,11 +40,9 @@
       "TWITTER_BEARER_TOKEN"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && sync-dotenv"
-    }
-  },
+  "browserslist": [
+    "defaults"
+  ],
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
     "del": "^6.0.0",

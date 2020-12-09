@@ -37,12 +37,21 @@ const paths = {
   javascript: {
     config: './config/*.js',
     src: './src/**/*.js',
-    root: './*.js',
+    root: {
+      files: './*.js',
+      dotfiles: './.*.js',
+      get all () {
+        return [
+          this.files,
+          this.dotfiles
+        ]
+      }
+    },
     get lint () {
       return [
         this.config,
         this.src,
-        this.root
+        this.root.files
       ]
     }
   }
@@ -133,7 +142,7 @@ exports.version = function version () {
       .pipe(gulp.dest('./src/')),
 
     // Root files.
-    gulp.src(paths.javascript.root)
+    gulp.src(paths.javascript.root.all)
       .pipe(replace(/(?<!\))@since unreleased/g, `@since ${version}`))
       .pipe(gulp.dest('./'))
   )
