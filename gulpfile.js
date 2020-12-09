@@ -29,6 +29,7 @@ const isProduction = config.get('build.environment') === 'production'
 const paths = {
   src: './src/pshry.com',
   build: './build/pshry.com',
+  changelog: './CHANGELOG.md',
   get html () {
     return {
       written: `${this.build}/**/*.html`
@@ -128,22 +129,75 @@ exports.html = async function html () {
  * @return {Object} Gulp stream
  */
 exports.version = function version () {
-  const { version } = require('./package.json')
+  const { version, repository } = require('./package.json')
+  const url = repository.url
+    .replace('git+', '')
+    .replace('.git', '')
+  const [month, date, year] = new Date().toLocaleDateString('en-US').split('/')
+  const today = `${month}/${date}/${year}`
+
+  /**
+   * Bump docblock version.
+   *
+   * @since unreleased
+   * @todo  Abstract some of the changelog strings
+   *
+   * @return {function} [description]
+   */
+  function bumpDocblock () {
+    return replace(/(?<!\))@since unreleased/g, `@since ${version}`)
+  }
 
   const merged = merge(
     // Config files.
     gulp.src(paths.javascript.config)
-      .pipe(replace(/(?<!\))@since unreleased/g, `@since ${version}`))
+      .pipe(bumpDocblock())
       .pipe(gulp.dest('./config/')),
 
     // Source files.
     gulp.src(paths.javascript.src)
-      .pipe(replace(/(?<!\))@since unreleased/g, `@since ${version}`))
+      .pipe(bumpDocblock())
       .pipe(gulp.dest('./src/')),
 
     // Root files.
     gulp.src(paths.javascript.root.all)
-      .pipe(replace(/(?<!\))@since unreleased/g, `@since ${version}`))
+      .pipe(bumpDocblock())
+      .pipe(gulp.dest('./')),
+
+    // Changelog.
+    gulp.src(paths.changelog)
+      // Bump unreleased version.
+      .pipe(replace('## [Unreleased]', `## [${version}] - ${today}`))
+      // Remove empty release changelog subheads.
+      .pipe(replace(
+        new RegExp('### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n', 'g'),
+        ''
+      ))
+      // Bump unreleased link and add new release link.
+      .pipe(replace(
+        new RegExp('/compare/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)', 'g'),
+        `/compare/HEAD..${version}
+[${version}]: ${url}/commits/${version}`)
+      )
+      // Add default unreleased section.
+      .pipe(replace(
+        'and this project adheres to [Semantic Versioning](semver).',
+        `and this project adheres to [Semantic Versioning](semver).
+
+## [Unreleased]
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security`
+      ))
       .pipe(gulp.dest('./'))
   )
 
