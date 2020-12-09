@@ -150,13 +150,3 @@ exports.version = function version () {
  * @type {gulp.series}
  */
 exports.build = gulp.series(exports.clean, exports.lint, exports.html)
-
-/**
- * Default Gulp task.
- * Usage: `gulp`
- *
- * @since unreleased
- *
- * @type {gulp.series}
- */
-exports.default = exports.build
