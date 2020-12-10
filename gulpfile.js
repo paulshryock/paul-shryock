@@ -1,5 +1,8 @@
+const dotenv = require('dotenv').config()
+if (dotenv.error) throw dotenv.error
 const config = require('config')
 const { src, dest, series, parallel } = require('gulp')
+const gulpif = require('gulp-if')
 const merge = require('merge-stream')
 const del = require('del')
 const Eleventy = require('@11ty/eleventy')
@@ -113,22 +116,17 @@ exports.html = async function html () {
   await ssg.write()
 
   // Post-process HTML.
-  const beautifyHtml = src(paths.html.written)
+  return src(paths.html.written)
 		// @todo [#6]: Validate HTML after building.
 		// - https://github.com/validator/gulp-html
 		// - https://github.com/center-key/gulp-w3c-html-validator
   	// @todo [#5]: Inline critical CSS.
+  	// Beautify HTML.
     .pipe(beautify.html(config.get('build.html.beautify')))
+    // Minify HTML in production.
+    .pipe(gulpif(isProduction, htmlmin(config.get('build.html.htmlmin'))))
     .pipe(dest(paths.build))
-
-  const minifyHtml = src(paths.html.written)
-    .pipe(htmlmin(config.get('build.html.htmlmin')))
-    .pipe(dest(paths.build))
-
-  return isProduction
-    ? minifyHtml
-    : beautifyHtml
-      .pipe(connect.reload())
+    .pipe(connect.reload())
 }
 
 // @todo [#3]: Lint CSS after building.

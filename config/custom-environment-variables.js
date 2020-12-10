@@ -12,6 +12,6 @@ module.exports = {
     },
     bearer: {
       token: 'TWITTER_BEARER_TOKEN'
-    },
-  },
+    }
+  }
 }

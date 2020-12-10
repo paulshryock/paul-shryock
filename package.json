@@ -60,12 +60,14 @@
     "gulp-connect": "^5.7.0",
     "gulp-eslint": "^6.0.0",
     "gulp-htmlmin": "^5.0.1",
+    "gulp-if": "^3.0.0",
     "gulp-replace": "^1.0.0",
     "husky": "^4.3.0",
     "merge-stream": "^2.0.0",
     "sync-dotenv": "^2.6.2"
   },
   "dependencies": {
-    "config": "^3.3.2"
+    "config": "^3.3.2",
+    "dotenv": "^8.2.0"
   }
 }
