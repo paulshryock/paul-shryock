@@ -1,3 +1,10 @@
+/**
+ * eslint configuration.
+ *
+ * @since unreleased
+ *
+ * @type {Object}
+ */
 module.exports = {
   env: {
     browser: true,

@@ -1,3 +1,10 @@
+/**
+ * htmlmin configuration.
+ *
+ * @since unreleased
+ *
+ * @type {Object}
+ */
 module.exports = {
   collapseBooleanAttributes: true,
   collapseWhitespace: true,

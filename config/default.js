@@ -1,3 +1,10 @@
+/**
+ * Default configuration.
+ *
+ * @since unreleased
+ *
+ * @type {Object}
+ */
 module.exports = {
   build: {
     environment: '',

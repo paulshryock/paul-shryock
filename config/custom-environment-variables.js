@@ -1,3 +1,10 @@
+/**
+ * Custom environment variables.
+ *
+ * @since unreleased
+ *
+ * @type {Object}
+ */
 module.exports = {
   build: {
     environment: 'BUILD_ENV'
