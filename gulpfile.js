@@ -1,5 +1,5 @@
 const config = require('config')
-const gulp = require('gulp')
+const { src, dest, series, parallel } = require('gulp')
 const merge = require('merge-stream')
 const del = require('del')
 const Eleventy = require('@11ty/eleventy')
@@ -81,8 +81,8 @@ exports.clean = function clean () {
  * @return {Object} Gulp stream
  */
 exports.lint = function lint () {
-  return gulp.src(paths.javascript.lint)
-    .pipe(eslint(config.get('lint.javascript')))
+  return src(paths.javascript.lint)
+    .pipe(eslint(config.get('javascript.eslint')))
     .pipe(eslint.format())
     .pipe(eslint.failAfterError())
 }
@@ -97,7 +97,7 @@ exports.lint = function lint () {
  */
 exports.html = async function html () {
   // Delete previously written HTML files
-  del([paths.html.written])  
+  del([paths.html.written])
 
   // Start SSG
   await ssg.init()
@@ -106,13 +106,13 @@ exports.html = async function html () {
   await ssg.write()
 
   // Post-process HTML
-  const beautifyHtml = gulp.src(paths.html.written)
+  const beautifyHtml = src(paths.html.written)
     .pipe(beautify.html(config.get('build.html.beautify')))
-    .pipe(gulp.dest(paths.build))
+    .pipe(dest(paths.build))
 
   const minifyHtml = beautifyHtml
-    .pipe(htmlmin(config.get('build.html.minify')))
-    .pipe(gulp.dest(paths.build))
+    .pipe(htmlmin(config.get('build.html.htmlmin')))
+    .pipe(dest(paths.build))
 
   return isProduction
     ? minifyHtml
@@ -149,22 +149,22 @@ exports.version = function version () {
 
   const merged = merge(
     // Config files.
-    gulp.src(paths.javascript.config)
+    src(paths.javascript.config)
       .pipe(bumpDocblock())
-      .pipe(gulp.dest('./config/')),
+      .pipe(dest('./config/')),
 
     // Source files.
-    gulp.src(paths.javascript.src)
+    src(paths.javascript.src)
       .pipe(bumpDocblock())
-      .pipe(gulp.dest('./src/')),
+      .pipe(dest('./src/')),
 
     // Root files.
-    gulp.src(paths.javascript.root.all)
+    src(paths.javascript.root.all)
       .pipe(bumpDocblock())
-      .pipe(gulp.dest('./')),
+      .pipe(dest('./')),
 
     // Changelog.
-    gulp.src(paths.changelog)
+    src(paths.changelog)
       // Bump unreleased version.
       .pipe(replace('## [Unreleased]', `## [${version}] - ${today}`))
       // Remove empty changelog subheads.
@@ -189,7 +189,7 @@ exports.version = function version () {
           '### Fixed\n\n' +
           '### Security'
       ))
-      .pipe(gulp.dest('./'))
+      .pipe(dest('./'))
   )
 
   return merged.isEmpty() ? null : merged
@@ -203,4 +203,4 @@ exports.version = function version () {
  *
  * @type {Object} Gulp series
  */
-exports.build = gulp.series(exports.clean, exports.lint, exports.html)
+exports.build = series(parallel(exports.clean, exports.lint), exports.html)
