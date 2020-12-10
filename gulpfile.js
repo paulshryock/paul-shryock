@@ -81,6 +81,13 @@ exports.clean = function clean () {
  * @return {Object} Gulp stream
  */
 exports.lint = function lint () {
+	// @todo [#2]: Lint HTML.
+	// - https://github.com/yvanavermaet/gulp-htmllint
+	// @todo [#7]: Lint Sass.
+	// - https://github.com/sasstools/gulp-sass-lint/
+	// - https://github.com/juanfran/gulp-scss-lint
+	// @todo [#4]: Lint SVG.
+	// - https://github.com/birjolaxew/svglint
   return src(paths.javascript.lint)
     .pipe(eslint(config.get('javascript.eslint')))
     .pipe(eslint.format())
@@ -96,17 +103,21 @@ exports.lint = function lint () {
  * @return {Object} Gulp stream
  */
 exports.html = async function html () {
-  // Delete previously written HTML files
+  // Delete previously written HTML files.
   del([paths.html.written])
 
-  // Start SSG
+  // Start SSG.
   await ssg.init()
 
-  // Write HTML files
+  // Write HTML files.
   await ssg.write()
 
-  // Post-process HTML
+  // Post-process HTML.
   const beautifyHtml = src(paths.html.written)
+		// @todo [#6]: Validate HTML after building.
+		// - https://github.com/validator/gulp-html
+		// - https://github.com/center-key/gulp-w3c-html-validator
+  	// @todo [#5]: Inline critical CSS.
     .pipe(beautify.html(config.get('build.html.beautify')))
     .pipe(dest(paths.build))
 
@@ -120,6 +131,17 @@ exports.html = async function html () {
       .pipe(connect.reload())
 }
 
+// @todo [#3]: Lint CSS after building.
+// @todo [#8]: Validate CSS after building.
+// - https://github.com/gchudnov/gulp-w3c-css
+
+// @todo [#11]: Bundle JavaScript modules.
+// @todo [#12]: Transpile modern JavaScript.
+// @todo [#13]: Polyfill modern JavaScript.
+
+// @todo [#9]: Optimize SVG.
+// @todo [#10]: Minify SVG.
+
 /**
  * Handle version tasks.
  * Usage: `gulp version`
@@ -130,9 +152,7 @@ exports.html = async function html () {
  */
 exports.version = function version () {
   const { version, repository } = require('./package.json')
-  const url = repository.url
-    .replace('git+', '')
-    .replace('.git', '')
+  const url = repository.url.replace('git+', '').replace('.git', '')
   const [month, date, year] = new Date().toLocaleDateString('en-US').split('/')
   const today = `${month}/${date}/${year}`
 
