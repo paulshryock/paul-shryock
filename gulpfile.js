@@ -169,7 +169,10 @@ exports.version = function version () {
       .pipe(replace('## [Unreleased]', `## [${version}] - ${today}`))
       // Remove empty changelog subheads.
       .pipe(replace(
-        new RegExp('### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n', 'g'),
+        new RegExp(
+        	'### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n',
+        	'g'
+        ),
         ''
       ))
       // Bump unreleased link and add new release link.
