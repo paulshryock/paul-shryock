@@ -121,7 +121,7 @@ exports.html = async function html () {
     .pipe(beautify.html(config.get('build.html.beautify')))
     .pipe(dest(paths.build))
 
-  const minifyHtml = beautifyHtml
+  const minifyHtml = src(paths.html.written)
     .pipe(htmlmin(config.get('build.html.htmlmin')))
     .pipe(dest(paths.build))
 
