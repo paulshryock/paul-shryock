@@ -10,7 +10,7 @@ const isProduction = config.get('build.environment') === 'production'
  * @return {Object}                Modified Eleventy configuration.
  */
 module.exports = function (eleventyConfig) {
-  // Quiet output.  
+  // Quiet output.
   eleventyConfig.setQuietMode(true)
 
   // Return configuration object.

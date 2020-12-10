@@ -175,23 +175,23 @@ exports.version = function version () {
         ),
         ''
       ))
-      // Bump unreleased link and add new release link.
-      .pipe(replace(
-        new RegExp('/compare/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)', 'g'),
-        `/compare/HEAD..${version}\n[${version}]: ${url}/commits/${version}`)
-      )
       // Add default unreleased section.
       .pipe(replace(
-        '[Semantic Versioning](semver).',
-        '[Semantic Versioning](semver).\n\n' +
-          '## [Unreleased]\n\n' +
+        `## [${version}] - ${today}`,
+        '## [Unreleased]\n\n' +
           '### Added\n\n' +
           '### Changed\n\n' +
           '### Deprecated\n\n' +
           '### Removed\n\n' +
           '### Fixed\n\n' +
-          '### Security'
+          '### Security\n\n' +
+          `## [${version}] - ${today}`
       ))
+      // Bump unreleased link and add new release link.
+      .pipe(replace(
+        new RegExp('/compare/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)', 'g'),
+        `/compare/HEAD..${version}\n[${version}]: ${url}/commits/${version}`)
+      )
       .pipe(dest('./'))
   )
 
