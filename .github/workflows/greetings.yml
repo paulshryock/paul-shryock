@@ -10,4 +10,4 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-message: "Hi! Thanks for creating your first Issue in this repo. Please review the [Code of Conduct](../blob/main/CODE_OF_CONDUCT.md) before posting your issue. Thanks for contributing, and I look forward to hearing from you."
-        pr-message: "Hi! Thanks for submitting your first Pull Request to this repo. Please review the [Contributing guidelines](../blob/main/CONTRIBUTING.md) and [Code of Conduct][blob/main/CODE_OF_CONDUCT.md] before submitting the PR. Thanks for contributing, and I look forward to reviewing your pull request."
+        pr-message: "Hi! Thanks for submitting your first Pull Request to this repo. Please review the [Contributing guidelines](../blob/main/CONTRIBUTING.md) and [Code of Conduct][../blob/main/CODE_OF_CONDUCT.md] before submitting the PR. Thanks for contributing, and I look forward to reviewing your pull request."
