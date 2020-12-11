@@ -65,7 +65,7 @@ const paths = {
 }
 
 /**
- * Cleans the build directory.
+ * Clean the build directory.
  * Usage: `gulp clean`
  *
  * @since unreleased
@@ -141,6 +141,20 @@ exports.html = async function html () {
 }
 
 /**
+ * Handle Sass tasks.
+ * Usage: `gulp sass`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+exports.sass = function sass (cb) {
+	console.log('@todo [#7]: Lint Sass.')
+	console.log('@todo: Process Sass.')
+	return cb()
+}
+
+/**
  * Handle CSS tasks.
  * Usage: `gulp css`
  *
@@ -149,6 +163,7 @@ exports.html = async function html () {
  * @return {Object} Gulp stream
  */
 exports.css = function css (cb) {
+	console.log('@todo: Post-process CSS.')
 	console.log('@todo [#3]: Lint CSS.')
 	console.log('@todo: Beautify CSS.')
 	console.log('@todo [#8]: Validate CSS.')
@@ -156,12 +171,50 @@ exports.css = function css (cb) {
 	return cb()
 }
 
-// @todo [#11]: Bundle JavaScript modules.
-// @todo [#12]: Transpile modern JavaScript.
-// @todo [#13]: Polyfill modern JavaScript.
+/**
+ * Handle JavaScript tasks.
+ * Usage: `gulp javascript`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+exports.javascript = function javascript (cb) {
+	console.log('@todo [#11]: Bundle JavaScript modules.')
+	console.log('@todo [#12]: Transpile modern JavaScript.')
+	console.log('@todo [#13]: Polyfill modern JavaScript.')
+	return cb()
+}
 
-// @todo [#9]: Optimize SVG.
-// @todo [#10]: Minify SVG.
+/**
+ * Handle SVG tasks.
+ * Usage: `gulp svg`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+exports.svg = function svg (cb) {
+	console.log('@todo [#9]: Optimize SVG.')
+	console.log('@todo [#10]: Minify SVG.')
+	return cb()
+}
+
+/**
+ * Handle build tasks.
+ * Usage: `gulp build`
+ *
+ * @since unreleased
+ *
+ * @type {Object} Gulp series
+ */
+exports.build = series(
+	parallel(
+		exports.clean,
+		exports.lint
+	),
+	exports.html
+)
 
 /**
  * Handle version tasks.
@@ -238,13 +291,3 @@ exports.version = function version () {
 
 	return merged.isEmpty() ? null : merged
 }
-
-/**
- * Builds the site.
- * Usage: `gulp build`
- *
- * @since unreleased
- *
- * @type {Object} Gulp series
- */
-exports.build = series(parallel(exports.clean, exports.lint), exports.html)
