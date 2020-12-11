@@ -7,6 +7,7 @@ const merge = require('merge-stream')
 const del = require('del')
 const Eleventy = require('@11ty/eleventy')
 const ssg = new Eleventy()
+const htmllint = require('gulp-htmllint')
 const beautify = require('gulp-beautify')
 const htmlmin = require('gulp-htmlmin')
 const connect = require('gulp-connect')
@@ -30,13 +31,15 @@ const isProduction = config.get('build.environment') === 'production'
  * @type {Object}
  */
 const paths = {
-  src: './src/pshry.com',
   build: './build/pshry.com',
   changelog: './CHANGELOG.md',
-  get html () {
-    return {
-      written: `${this.build}/**/*.html`
-    }
+  html: {
+  	src: './src/**/*.html',
+  	get lint () {
+  		return this.src
+  	},
+    written: './build/**/*.html',
+    dest: './build'
   },
   javascript: {
     config: './config/*.js',
@@ -71,7 +74,7 @@ const paths = {
  */
 exports.clean = function clean () {
   return Promise.all([
-    del([paths.build])
+    del([paths.html.dest])
   ])
 }
 
@@ -84,17 +87,25 @@ exports.clean = function clean () {
  * @return {Object} Gulp stream
  */
 exports.lint = function lint () {
-	// @todo [#2]: Lint HTML.
-	// - https://github.com/yvanavermaet/gulp-htmllint
-	// @todo [#7]: Lint Sass.
-	// - https://github.com/sasstools/gulp-sass-lint/
-	// - https://github.com/juanfran/gulp-scss-lint
-	// @todo [#4]: Lint SVG.
-	// - https://github.com/birjolaxew/svglint
-  return src(paths.javascript.lint)
-    .pipe(eslint(config.get('javascript.eslint')))
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError())
+	const merged = merge(
+		// Lint HTML.
+		src(paths.html.lint)
+			.pipe(htmllint(config.get('html.htmllint'))),
+
+		// @todo [#7]: Lint Sass.
+		// - https://github.com/sasstools/gulp-sass-lint/
+		// - https://github.com/juanfran/gulp-scss-lint
+		// @todo [#4]: Lint SVG.
+		// - https://github.com/birjolaxew/svglint
+
+		// Lint JavaScript.
+	  src(paths.javascript.lint)
+	    .pipe(eslint(config.get('javascript.eslint')))
+	    .pipe(eslint.format())
+	    .pipe(eslint.failAfterError())
+	)
+
+  return merged.isEmpty() ? null : merged
 }
 
 /**
@@ -122,16 +133,28 @@ exports.html = async function html () {
 		// - https://github.com/center-key/gulp-w3c-html-validator
   	// @todo [#5]: Inline critical CSS.
   	// Beautify HTML.
-    .pipe(beautify.html(config.get('build.html.beautify')))
+    .pipe(beautify.html(config.get('html.beautify')))
     // Minify HTML in production.
-    .pipe(gulpif(isProduction, htmlmin(config.get('build.html.htmlmin'))))
-    .pipe(dest(paths.build))
+    .pipe(gulpif(isProduction, htmlmin(config.get('html.htmlmin'))))
+    .pipe(dest(paths.html.dest))
     .pipe(connect.reload())
 }
 
-// @todo [#3]: Lint CSS after building.
-// @todo [#8]: Validate CSS after building.
-// - https://github.com/gchudnov/gulp-w3c-css
+/**
+ * Handle CSS tasks.
+ * Usage: `gulp css`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+exports.css = function css (cb) {
+	console.log('@todo [#3]: Lint CSS.')
+	console.log('@todo: Beautify CSS.')
+	console.log('@todo [#8]: Validate CSS.')
+	// - https://github.com/gchudnov/gulp-w3c-css
+	return cb()
+}
 
 // @todo [#11]: Bundle JavaScript modules.
 // @todo [#12]: Transpile modern JavaScript.

@@ -8,10 +8,11 @@
 module.exports = {
   build: {
     environment: '',
-    html: {
-    	beautify: require('./html/beautify'),
-      htmlmin: require('./html/htmlmin')
-    }
+  },
+  html: {
+  	beautify: require('./html/beautify'),
+    htmlmin: require('./html/htmlmin'),
+    htmllint: require('./html/htmllint')
   },
   javascript: {
     eslint: require('./javascript/eslint')
