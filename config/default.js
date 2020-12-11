@@ -7,7 +7,10 @@
  */
 module.exports = {
 	build: {
-		environment: '',
+		environment: ''
+	},
+	get isProduction () {
+		return this.build.environment === 'production'
 	},
 	html: {
 		beautify: require('./html/beautify'),
@@ -15,7 +18,8 @@ module.exports = {
 		htmllint: require('./html/htmllint')
 	},
 	javascript: {
-		eslint: require('./javascript/eslint')
+		eslint: require('./javascript/eslint'),
+		ava: require('./javascript/ava')
 	},
 	site: {
 		url: ''

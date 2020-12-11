@@ -1,5 +1,4 @@
 const config = require('config')
-const isProduction = config.get('build.environment') === 'production'
 
 /**
  * Eleventy configuration.
@@ -11,7 +10,7 @@ const isProduction = config.get('build.environment') === 'production'
  */
 module.exports = function (eleventyConfig) {
   // Quiet output.
-  eleventyConfig.setQuietMode(true)
+  eleventyConfig.setQuietMode(config.get('isProduction'))
 
   // Return configuration object.
   return {
