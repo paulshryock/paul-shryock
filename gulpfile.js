@@ -36,7 +36,10 @@ const paths = {
 	html: {
 		src: './src/**/*.html',
 		get lint () {
-			return this.src
+			return [
+				this.src,
+				this.written
+			]
 		},
 		written: './build/**/*.html',
 		dest: './build'
