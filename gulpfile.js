@@ -13,15 +13,7 @@ const htmlmin = require('gulp-htmlmin')
 const connect = require('gulp-connect')
 const eslint = require('gulp-eslint')
 const replace = require('gulp-replace')
-
-/**
- * Returns true if `BUILD_ENV` is set to 'production'.
- *
- * @since unreleased
- *
- * @type {Boolean}
- */
-const isProduction = config.get('build.environment') === 'production'
+const ava = require('gulp-ava')
 
 /**
  * File paths.
@@ -31,7 +23,6 @@ const isProduction = config.get('build.environment') === 'production'
  * @type {Object}
  */
 const paths = {
-	build: './build/pshry.com',
 	changelog: './CHANGELOG.md',
 	html: {
 		src: './src/**/*.html',
@@ -43,6 +34,15 @@ const paths = {
 		},
 		written: './build/**/*.html',
 		dest: './build'
+	},
+	svg: {
+		src: './src/**/*.svg',
+	},
+	sass: {
+		src: './src/**/*.scss',
+	},
+	css: {
+		src: './src/**/*.css',
 	},
 	javascript: {
 		config: './config/*.js',
@@ -63,9 +63,16 @@ const paths = {
 				this.src,
 				this.root.files
 			]
-		}
+		},
+		test: [
+			'./*.test.js',
+			'./.*.test.js',
+			'./config/**/*.test.js',
+			'./src/**/*.test.js',
+		]
 	}
 }
+exports.paths = paths
 
 /**
  * Clean the build directory.
@@ -75,11 +82,10 @@ const paths = {
  *
  * @return {Promise}
  */
-exports.clean = function clean () {
-	return Promise.all([
-		del([paths.html.dest])
-	])
+function clean () {
+	return del([paths.html.dest])
 }
+exports.clean = clean
 
 /**
  * Handle linting tasks.
@@ -89,7 +95,7 @@ exports.clean = function clean () {
  *
  * @return {Object} Gulp stream
  */
-exports.lint = function lint () {
+function lint () {
 	const merged = merge(
 		// Lint HTML.
 		src(paths.html.lint)
@@ -110,6 +116,7 @@ exports.lint = function lint () {
 
 	return merged.isEmpty() ? null : merged
 }
+exports.lint = lint
 
 /**
  * Handle HTML tasks.
@@ -119,7 +126,7 @@ exports.lint = function lint () {
  *
  * @return {Object} Gulp stream
  */
-exports.html = async function html () {
+async function html () {
 	// Delete previously written HTML files.
 	del([paths.html.written])
 
@@ -138,56 +145,11 @@ exports.html = async function html () {
 		// Beautify HTML.
 		.pipe(beautify.html(config.get('html.beautify')))
 		// Minify HTML in production.
-		.pipe(gulpif(isProduction, htmlmin(config.get('html.htmlmin'))))
+		.pipe(gulpif(config.get('isProduction'), htmlmin(config.get('html.htmlmin'))))
 		.pipe(dest(paths.html.dest))
 		.pipe(connect.reload())
 }
-
-/**
- * Handle Sass tasks.
- * Usage: `gulp sass`
- *
- * @since unreleased
- *
- * @return {Object} Gulp stream
- */
-exports.sass = function sass (cb) {
-	console.log('@todo [#7]: Lint Sass.')
-	console.log('@todo: Process Sass.')
-	return cb()
-}
-
-/**
- * Handle CSS tasks.
- * Usage: `gulp css`
- *
- * @since unreleased
- *
- * @return {Object} Gulp stream
- */
-exports.css = function css (cb) {
-	console.log('@todo: Post-process CSS.')
-	console.log('@todo [#3]: Lint CSS.')
-	console.log('@todo: Beautify CSS.')
-	console.log('@todo [#8]: Validate CSS.')
-	// - https://github.com/gchudnov/gulp-w3c-css
-	return cb()
-}
-
-/**
- * Handle JavaScript tasks.
- * Usage: `gulp javascript`
- *
- * @since unreleased
- *
- * @return {Object} Gulp stream
- */
-exports.javascript = function javascript (cb) {
-	console.log('@todo [#11]: Bundle JavaScript modules.')
-	console.log('@todo [#12]: Transpile modern JavaScript.')
-	console.log('@todo [#13]: Polyfill modern JavaScript.')
-	return cb()
-}
+exports.html = html
 
 /**
  * Handle SVG tasks.
@@ -197,11 +159,76 @@ exports.javascript = function javascript (cb) {
  *
  * @return {Object} Gulp stream
  */
-exports.svg = function svg (cb) {
+function svg (cb) {
 	console.log('@todo [#9]: Optimize SVG.')
 	console.log('@todo [#10]: Minify SVG.')
 	return cb()
 }
+exports.svg = svg
+
+/**
+ * Handle Sass tasks.
+ * Usage: `gulp sass`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function sass (cb) {
+	console.log('@todo [#7]: Lint Sass.')
+	console.log('@todo: Process Sass.')
+	return cb()
+}
+exports.sass = sass
+
+/**
+ * Handle CSS tasks.
+ * Usage: `gulp css`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function css (cb) {
+	console.log('@todo: Post-process CSS.')
+	console.log('@todo [#3]: Lint CSS.')
+	console.log('@todo: Beautify CSS.')
+	console.log('@todo [#8]: Validate CSS.')
+	// - https://github.com/gchudnov/gulp-w3c-css
+	return cb()
+}
+exports.css = css
+
+/**
+ * Handle JavaScript tasks.
+ * Usage: `gulp javascript`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function javascript (cb) {
+	console.log('@todo [#11]: Bundle JavaScript modules.')
+	console.log('@todo [#12]: Transpile modern JavaScript.')
+	console.log('@todo [#13]: Polyfill modern JavaScript.')
+	return cb()
+}
+exports.javascript = javascript
+
+/**
+ * Handle testing tasks.
+ * Usage: `gulp test`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function test () {
+	// Test JavaScript.
+	return src(paths.javascript.test)
+		.pipe(ava(config.get('javascript.ava')))
+}
+exports.test = test
 
 /**
  * Handle build tasks.
@@ -211,13 +238,11 @@ exports.svg = function svg (cb) {
  *
  * @type {Object} Gulp series
  */
-exports.build = series(
-	parallel(
-		exports.clean,
-		exports.lint
-	),
-	exports.html
+const build = series(
+	parallel(clean, lint),
+	html
 )
+exports.build = build
 
 /**
  * Handle version tasks.
@@ -227,7 +252,7 @@ exports.build = series(
  *
  * @return {Object} Gulp stream
  */
-exports.version = function version () {
+function version () {
 	const { version, repository } = require('./package.json')
 	const url = repository.url.replace('git+', '').replace('.git', '')
 	const [month, date, year] = new Date().toLocaleDateString('en-US').split('/')
@@ -294,3 +319,4 @@ exports.version = function version () {
 
 	return merged.isEmpty() ? null : merged
 }
+exports.version = version
