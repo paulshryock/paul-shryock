@@ -35,7 +35,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint && sync-dotenv",
-      "pre-push": "npm run lint"
+      "pre-push": "npm run lint && npm test"
     }
   },
   "sync-dotenv": {
