@@ -10,7 +10,7 @@ const config = require('config')
  */
 module.exports = function (eleventyConfig) {
   // Quiet output.
-  eleventyConfig.setQuietMode(config.get('isProduction'))
+  if (eleventyConfig) eleventyConfig.setQuietMode(config.get('isProduction'))
 
   // Return configuration object.
   return {

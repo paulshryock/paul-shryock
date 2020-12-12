@@ -23,7 +23,6 @@ const ava = require('gulp-ava')
  * @type {Object}
  */
 const paths = {
-	build: './build/pshry.com',
 	changelog: './CHANGELOG.md',
 	html: {
 		src: './src/**/*.html',
@@ -35,6 +34,15 @@ const paths = {
 		},
 		written: './build/**/*.html',
 		dest: './build'
+	},
+	svg: {
+		src: './src/**/*.svg',
+	},
+	sass: {
+		src: './src/**/*.scss',
+	},
+	css: {
+		src: './src/**/*.css',
 	},
 	javascript: {
 		config: './config/*.js',
@@ -58,6 +66,7 @@ const paths = {
 		},
 		test: [
 			'./*.test.js',
+			'./.*.test.js',
 			'./config/**/*.test.js',
 			'./src/**/*.test.js',
 		]
@@ -74,9 +83,7 @@ exports.paths = paths
  * @return {Promise}
  */
 function clean () {
-	return Promise.all([
-		del([paths.html.dest])
-	])
+	return del([paths.html.dest])
 }
 exports.clean = clean
 
@@ -145,6 +152,21 @@ async function html () {
 exports.html = html
 
 /**
+ * Handle SVG tasks.
+ * Usage: `gulp svg`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function svg (cb) {
+	console.log('@todo [#9]: Optimize SVG.')
+	console.log('@todo [#10]: Minify SVG.')
+	return cb()
+}
+exports.svg = svg
+
+/**
  * Handle Sass tasks.
  * Usage: `gulp sass`
  *
@@ -192,21 +214,6 @@ function javascript (cb) {
 	return cb()
 }
 exports.javascript = javascript
-
-/**
- * Handle SVG tasks.
- * Usage: `gulp svg`
- *
- * @since unreleased
- *
- * @return {Object} Gulp stream
- */
-function svg (cb) {
-	console.log('@todo [#9]: Optimize SVG.')
-	console.log('@todo [#10]: Minify SVG.')
-	return cb()
-}
-exports.svg = svg
 
 /**
  * Handle testing tasks.
