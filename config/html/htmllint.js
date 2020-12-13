@@ -1,3 +1,10 @@
+/**
+ * html-lint configuration.
+ *
+ * @since unreleased
+ *
+ * @type {Object}
+ */
 module.exports = {
 	rules: {
 		'class-style': 'bem',
