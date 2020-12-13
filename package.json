@@ -17,23 +17,23 @@
   },
   "homepage": "https://github.com/paulshryock/paul-shryock#readme",
   "scripts": {
+    "postinstall": "husky install",
+    "prerebase": "HUSKY_SKIP_HOOKS=1",
     "start": "npm run build",
     "clean": "gulp clean",
     "lint": "gulp lint",
     "html": "gulp html",
+    "svg": "gulp svg",
     "css": "gulp css",
     "javascript": "gulp javascript",
-    "svg": "gulp svg",
+    "test": "gulp test",
     "build": "gulp build",
     "version": "gulp version && git add .",
-    "postversion": "git push && git push --tags",
-    "postinstall": "husky install",
-    "test": "gulp test",
-    "watch": "ava --watch"
+    "postversion": "git push && git push --tags"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && sync-dotenv",
+      "pre-commit": "npm run lint && npm test && sync-dotenv",
       "pre-push": "npm run lint && npm test"
     }
   },
