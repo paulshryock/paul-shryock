@@ -17,6 +17,10 @@ module.exports = {
 		htmlmin: require('./html/htmlmin'),
 		htmllint: require('./html/htmllint')
 	},
+	sass: {
+		'node-sass': require('./sass/node-sass'),
+		rename: require('./sass/rename')
+	},
 	javascript: {
 		eslint: require('./javascript/eslint'),
 		ava: require('./javascript/ava')

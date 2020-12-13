@@ -1,18 +1,33 @@
+// Environment variables and configuration
 const dotenv = require('dotenv').config()
 if (dotenv.error) throw dotenv.error
 const config = require('config')
+
+// Gulp
 const { src, dest, series, parallel } = require('gulp')
 const gulpif = require('gulp-if')
 const merge = require('merge-stream')
+
+// Utilities
 const del = require('del')
 const replace = require('gulp-replace')
+const rename = require('gulp-rename')
+const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
+
+// HTML
 const Eleventy = require('@11ty/eleventy')
 const ssg = new Eleventy()
 const htmllint = require('gulp-htmllint')
 const beautify = require('gulp-beautify')
 const htmlmin = require('gulp-htmlmin')
+
+// CSS
+const sass = require('gulp-sass')
+sass.compiler = require('node-sass')
 const sassLint = require('gulp-sass-lint')
+
+// JavaScript
 const eslint = require('gulp-eslint')
 const ava = require('gulp-ava')
 
@@ -40,13 +55,11 @@ const paths = {
 		src: './src/**/*.svg',
 	},
 	sass: {
-		src: './src/**/*.s+(a|c)ss',
-		get lint () {
-			return this.src
-		}
+		src: './src/**/sass/*.s+(a|c)ss',
+		lint: './src/**/*.s+(a|c)ss'
 	},
 	css: {
-		src: './src/**/*.css',
+		dest: './build'
 	},
 	javascript: {
 		config: './config/*.js',
@@ -107,17 +120,11 @@ function lint () {
 
 		// Lint Sass.
 	  src(paths.sass.lint)
+	  	// @todo: Move sass-lint config into config file
 	    .pipe(sassLint({
 				rules: {
-					'class-name-format': {
-						convention: 'strictbem'
-					},
-					indentation: [
-						1,
-						{
-							size: 'tab'
-						}
-					]
+					'class-name-format': [1, { convention: 'strictbem' }],
+					'indentation': [1, { size: 'tab' }]
 				}
 			}))
 	    .pipe(sassLint.format())
@@ -186,21 +193,6 @@ function svg (cb) {
 exports.svg = svg
 
 /**
- * Handle Sass tasks.
- * Usage: `gulp sass`
- *
- * @since unreleased
- *
- * @return {Object} Gulp stream
- */
-function sass (cb) {
-	console.log('@todo [#7]: Lint Sass.')
-	console.log('@todo: Process Sass.')
-	return cb()
-}
-exports.sass = sass
-
-/**
  * Handle CSS tasks.
  * Usage: `gulp css`
  *
@@ -209,12 +201,21 @@ exports.sass = sass
  * @return {Object} Gulp stream
  */
 function css (cb) {
-	console.log('@todo: Post-process CSS.')
-	console.log('@todo [#3]: Lint CSS.')
-	console.log('@todo: Beautify CSS.')
-	console.log('@todo [#8]: Validate CSS.')
-	// - https://github.com/gchudnov/gulp-w3c-css
-	return cb()
+	return src(paths.sass.src)
+		// Initialize sourcemaps.
+		.pipe(sourcemaps.init())
+		// Process Sass.
+    .pipe(sass(config.get('sass.node-sass')).on('error', sass.logError))
+		// @todo: Post-process CSS.
+		// @todo [#3]: Lint CSS.
+		// @todo: Beautify CSS.
+		// @todo [#8]: Validate CSS.
+		// - https://github.com/gchudnov/gulp-w3c-css
+		// Rewrite directory path.
+		.pipe(rename(config.get('sass.rename')))
+		// Write sourcemaps.
+    .pipe(sourcemaps.write())
+    .pipe(dest(paths.css.dest))
 }
 exports.css = css
 
@@ -258,8 +259,9 @@ exports.test = test
  * @type {Object} Gulp series
  */
 const build = series(
-	parallel(clean, lint),
-	html
+	clean,
+	lint,
+	parallel(html, css)
 )
 exports.build = build
 
