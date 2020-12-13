@@ -23,7 +23,8 @@ module.exports = {
 	},
 	javascript: {
 		eslint: require('./javascript/eslint'),
-		ava: require('./javascript/ava')
+		ava: require('./javascript/ava'),
+		rename: require('./javascript/rename')
 	},
 	site: {
 		url: ''

@@ -42,14 +42,14 @@ const paths = {
 	changelog: './CHANGELOG.md',
 	html: {
 		src: './src/**/*.html',
+		dest: './build',
 		get lint () {
 			return [
 				this.src,
 				this.written
 			]
 		},
-		written: './build/**/*.html',
-		dest: './build'
+		written: './build/**/*.html'
 	},
 	svg: {
 		src: './src/**/*.svg',
@@ -64,6 +64,7 @@ const paths = {
 	javascript: {
 		config: './config/*.js',
 		src: './src/**/*.js',
+		dest: './build',
 		root: {
 			files: './*.js',
 			dotfiles: './.*.js',
@@ -228,10 +229,15 @@ exports.css = css
  * @return {Object} Gulp stream
  */
 function javascript (cb) {
-	console.log('@todo [#11]: Bundle JavaScript modules.')
-	console.log('@todo [#12]: Transpile modern JavaScript.')
-	console.log('@todo [#13]: Polyfill modern JavaScript.')
-	return cb()
+	return src(paths.javascript.src)
+		// Initialize sourcemaps.
+		.pipe(sourcemaps.init())
+		// @todo [#11]: Bundle JavaScript modules.
+		// @todo [#12]: Transpile modern JavaScript.
+		// @todo [#13]: Polyfill modern JavaScript.
+		// Write sourcemaps.
+    .pipe(sourcemaps.write())
+    .pipe(dest(paths.javascript.dest))
 }
 exports.javascript = javascript
 
