@@ -5,14 +5,15 @@ const { src, dest, series, parallel } = require('gulp')
 const gulpif = require('gulp-if')
 const merge = require('merge-stream')
 const del = require('del')
+const replace = require('gulp-replace')
+const connect = require('gulp-connect')
 const Eleventy = require('@11ty/eleventy')
 const ssg = new Eleventy()
 const htmllint = require('gulp-htmllint')
 const beautify = require('gulp-beautify')
 const htmlmin = require('gulp-htmlmin')
-const connect = require('gulp-connect')
+const sassLint = require('gulp-sass-lint')
 const eslint = require('gulp-eslint')
-const replace = require('gulp-replace')
 const ava = require('gulp-ava')
 
 /**
@@ -39,7 +40,10 @@ const paths = {
 		src: './src/**/*.svg',
 	},
 	sass: {
-		src: './src/**/*.scss',
+		src: './src/**/*.s+(a|c)ss',
+		get lint () {
+			return this.src
+		}
 	},
 	css: {
 		src: './src/**/*.css',
@@ -101,9 +105,24 @@ function lint () {
 		src(paths.html.lint)
 			.pipe(htmllint(config.get('html.htmllint'))),
 
-		// @todo [#7]: Lint Sass.
-		// - https://github.com/sasstools/gulp-sass-lint/
-		// - https://github.com/juanfran/gulp-scss-lint
+		// Lint Sass.
+	  src(paths.sass.lint)
+	    .pipe(sassLint({
+				rules: {
+					'class-name-format': {
+						convention: 'strictbem'
+					},
+					indentation: [
+						1,
+						{
+							size: 'tab'
+						}
+					]
+				}
+			}))
+	    .pipe(sassLint.format())
+	    .pipe(sassLint.failOnError()),
+
 		// @todo [#4]: Lint SVG.
 		// - https://github.com/birjolaxew/svglint
 
