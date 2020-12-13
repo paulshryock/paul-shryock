@@ -24,6 +24,7 @@ const critical = require('critical')
 const beautify = require('gulp-beautify')
 const beautifyConfig = config.get('vendor.beautify')
 const htmlmin = require('gulp-htmlmin')
+const validator = require('gulp-html')
 
 // CSS
 const gulpStylelint = require('gulp-stylelint')
@@ -168,7 +169,7 @@ async function html (callback) {
 		await isWatching ? ssg.watch() : ssg.write()
 	})
 
-	callback()
+	return callback()
 }
 exports.html = html
 
@@ -332,9 +333,10 @@ exports.javascript = javascript
  */
 function validate () {
 	const merged = merge(
-		// @todo [#6]: Validate HTML.
-		// - https://github.com/validator/gulp-html
-		// - https://github.com/center-key/gulp-w3c-html-validator
+		// Validate HTML.
+		src(paths.html.temp)
+			.pipe(validator())
+			.pipe(dest(paths.dest)),
 
 		// Validate CSS.
 		src(paths.css.written)
