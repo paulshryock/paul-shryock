@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Add pshry.com content, data, and layouts.
 - Lint JavaScript.
 - Lint HTML. [#2]
+- Lint Sass. [#7]
 - Add JavaScript testing. [#15]
 - Add a few gulpfile and eleventy config unit tests. [#15]
 
