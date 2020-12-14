@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html class="no-js" lang="{{ site.lang }}">
-  <head>
-    <title>{{ site.title }}</title>
-  </head>
+{% include meta/head %}
   <body class="site">
-    <header class="masthead">
-      {%- if slug == '.' %}
-      <h1 class="masthead__title">{{ masthead.title }}</h1>
-      {%- else %}
-      <p class="masthead__title">{{ masthead.title }}</p>
-      {%- endif %}
-    </header>
+    {% include components/masthead %}
     <main>
       {{ content }}
     </main>
-    <footer class="colophon">
-      <p class="colophon__copyright">{{ colophon.copyright }}</p>
-    </footer>
+    {% include components/colophon %}
   </body>
 </html>

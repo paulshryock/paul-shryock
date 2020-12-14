@@ -5,8 +5,13 @@
  *
  * @type {Object}
  */
-module.exports = path => {
-  path.dirname = path.dirname
-  	.replace('/assets', '')
-  	.replace('/sass', '/css')
+module.exports = {
+	dest: path => {
+	  path.dirname = path.dirname
+	  	.replace('/assets', '')
+	  	.replace('/sass', '/css')
+	},
+	min: path => {
+		path.basename += '.min'
+	}
 }

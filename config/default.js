@@ -14,16 +14,17 @@ module.exports = {
 	},
 	html: {
 		beautify: require('./html/beautify'),
-		htmlmin: require('./html/htmlmin'),
-		htmllint: require('./html/htmllint')
+		critical: require('./html/critical'),
+		htmllint: require('./html/htmllint'),
+		htmlmin: require('./html/htmlmin')
 	},
 	sass: {
 		'node-sass': require('./sass/node-sass'),
 		rename: require('./sass/rename')
 	},
 	javascript: {
-		eslint: require('./javascript/eslint'),
 		ava: require('./javascript/ava'),
+		eslint: require('./javascript/eslint'),
 		rename: require('./javascript/rename')
 	},
 	site: {
