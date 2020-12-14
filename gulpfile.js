@@ -217,11 +217,11 @@ function css (cb) {
     .pipe(sass(config.get('sass.node-sass')).on('error', sass.logError))
 		// Post-process CSS.
 		.pipe(postcss([
-      require('precss'), // Use Sass-like markup and staged CSS features
-      require('postcss-preset-env'), // Polyfill modern CSS
-      require('pixrem')(), // Add fallbacks for rem units
-      require('autoprefixer') // Add vendor prefixes
-    ]))
+			require('precss'), // Use Sass-like markup and staged CSS features
+			require('postcss-preset-env'), // Polyfill modern CSS
+			require('pixrem')(), // Add fallbacks for rem units
+			require('autoprefixer') // Add vendor prefixes
+		]))
 		// Beautify CSS.
 		.pipe(beautify.css(config.get('html.beautify')))
 		// @todo [#3]: Lint CSS.
