@@ -19,6 +19,7 @@ const connect = require('gulp-connect')
 const Eleventy = require('@11ty/eleventy')
 const ssg = new Eleventy()
 const htmllint = require('gulp-htmllint')
+const critical = require('critical')
 const beautify = require('gulp-beautify')
 const htmlmin = require('gulp-htmlmin')
 
@@ -165,14 +166,20 @@ async function html () {
 
 	// Post-process HTML.
 	return src(paths.html.written)
+		// Inline critical CSS.
+		.pipe(critical.stream(config.get('html.critical')))
+		// Beautify HTML.
+		.pipe(beautify.html(config.get('html.beautify')))
 		// @todo [#6]: Validate HTML after building.
 		// - https://github.com/validator/gulp-html
 		// - https://github.com/center-key/gulp-w3c-html-validator
-		// @todo [#5]: Inline critical CSS.
-		// Beautify HTML.
-		.pipe(beautify.html(config.get('html.beautify')))
 		// Minify HTML in production.
-		.pipe(gulpif(config.get('isProduction'), htmlmin(config.get('html.htmlmin'))))
+		.pipe(
+			gulpif(
+				config.get('isProduction'),
+				htmlmin(config.get('html.htmlmin'))
+			)
+		)
 		.pipe(dest(paths.html.dest))
 		.pipe(connect.reload())
 }
@@ -213,7 +220,11 @@ function css (cb) {
 		// @todo [#8]: Validate CSS.
 		// - https://github.com/gchudnov/gulp-w3c-css
 		// Rewrite directory path.
-		.pipe(rename(config.get('sass.rename')))
+		.pipe(rename(config.get('sass.rename.dest')))
+		.pipe(gulpif(
+			config.get('isProduction'),
+			rename(config.get('sass.rename.min'))
+		))
 		// Write sourcemaps.
     .pipe(sourcemaps.write())
     .pipe(dest(paths.css.dest))
@@ -267,7 +278,8 @@ exports.test = test
 const build = series(
 	clean,
 	lint,
-	parallel(html, css)
+	css,
+	html
 )
 exports.build = build
 

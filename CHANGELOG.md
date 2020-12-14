@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Lint HTML. [#2]
 - Lint Sass. [#7]
 - Lint JavaScript.
+- Inline critical CSS. [#5]
 - Process Sass. [#20]
 - Add JavaScript testing. [#15]
 - Add a few gulpfile and eleventy config unit tests. [#15]

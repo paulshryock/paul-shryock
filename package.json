@@ -52,6 +52,7 @@
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
     "ava": "^3.14.0",
+    "critical": "^2.0.6",
     "del": "^6.0.0",
     "eslint": "^7.12.1",
     "eslint-config-standard": "^16.0.0",
