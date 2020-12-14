@@ -27,6 +27,7 @@ const htmlmin = require('gulp-htmlmin')
 const sass = require('gulp-sass')
 sass.compiler = require('node-sass')
 const sassLint = require('gulp-sass-lint')
+const postcss = require('gulp-postcss')
 
 // JavaScript
 const eslint = require('gulp-eslint')
@@ -214,9 +215,16 @@ function css (cb) {
 		.pipe(sourcemaps.init())
 		// Process Sass.
     .pipe(sass(config.get('sass.node-sass')).on('error', sass.logError))
-		// @todo: Post-process CSS.
+		// Post-process CSS.
+		.pipe(postcss([
+      require('precss'), // Use Sass-like markup and staged CSS features
+      require('postcss-preset-env'), // Polyfill modern CSS
+      require('pixrem')(), // Add fallbacks for rem units
+      require('autoprefixer') // Add vendor prefixes
+    ]))
+		// Beautify CSS.
+		.pipe(beautify.css(config.get('html.beautify')))
 		// @todo [#3]: Lint CSS.
-		// @todo: Beautify CSS.
 		// @todo [#8]: Validate CSS.
 		// - https://github.com/gchudnov/gulp-w3c-css
 		// Rewrite directory path.

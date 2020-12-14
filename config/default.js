@@ -22,6 +22,9 @@ module.exports = {
 		'node-sass': require('./sass/node-sass'),
 		rename: require('./sass/rename')
 	},
+	css: {
+		beautify: require('./css/beautify'),
+	},
 	javascript: {
 		ava: require('./javascript/ava'),
 		eslint: require('./javascript/eslint'),

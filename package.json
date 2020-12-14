@@ -51,6 +51,7 @@
   ],
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
+    "autoprefixer": "^10.1.0",
     "ava": "^3.14.0",
     "critical": "^2.0.6",
     "del": "^6.0.0",
@@ -70,6 +71,7 @@
     "gulp-htmllint": "0.0.19",
     "gulp-htmlmin": "^5.0.1",
     "gulp-if": "^3.0.0",
+    "gulp-postcss": "^9.0.0",
     "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.1.0",
@@ -78,6 +80,10 @@
     "husky": "^4.3.0",
     "merge-stream": "^2.0.0",
     "node-sass": "^5.0.0",
+    "pixrem": "^5.0.0",
+    "postcss": "^8.2.1",
+    "postcss-preset-env": "^6.7.0",
+    "precss": "^4.0.0",
     "sync-dotenv": "^2.6.2"
   },
   "dependencies": {
