@@ -225,7 +225,13 @@ function css (cb) {
 		.pipe(beautify.css(config.get('vendor.beautify')))
 		// @todo [#8]: Validate CSS.
 		// - https://github.com/gchudnov/gulp-w3c-css
-		// @todo: Minify CSS.
+		// Minify CSS in production.
+		.pipe(gulpif(
+			config.get('isProduction'),
+			postcss([
+				require('cssnano')(config.get('vendor.cssnano'))
+			])
+		))
 		.pipe(gulpif(
 			config.get('isProduction'),
 			rename(config.get('vendor.rename.min'))

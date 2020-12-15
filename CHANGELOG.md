@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Process Sass. [#20]
 - Post-process CSS. [#23]
 - Beautify CSS.
+- Minify CSS in production. [#26]
 - Preserve CSS sourcemaps.
 - Build HTML.
 - Beautify HTML.
