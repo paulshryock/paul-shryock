@@ -23,5 +23,5 @@ module.exports = {
   sortAttributes: true,
   sortClassName: true,
   trimCustomFragments: true,
-  useShortDoctype: true
+  useShortDoctype: true,
 }

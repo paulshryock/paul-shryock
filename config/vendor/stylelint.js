@@ -9,14 +9,14 @@ module.exports = {
 	config: {
 		extends: [
 			"stylelint-config-sass-guidelines",
-			"stylelint-config-standard"
+			"stylelint-config-standard",
 		],
 		rules: {
-			indentation: [ 'tab', { baseIndentLevel: 1 } ]
-		}
+			indentation: [ 'tab', { baseIndentLevel: 1 } ],
+		},
 	},
 	fix: true,
   reporters: [
-    {formatter: 'string', console: true}
-  ]
+    { formatter: 'string', console: true },
+  ],
 }

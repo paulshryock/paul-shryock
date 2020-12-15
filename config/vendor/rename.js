@@ -13,5 +13,5 @@ module.exports = {
 	},
 	min: path => {
 		path.basename += '.min'
-	}
+	},
 }

@@ -6,7 +6,7 @@
  * @type {Object}
  */
 module.exports = {
-	javascript: {
-		ava: require('./javascript/ava')
-	}
+	vendor: {
+		ava: require('./vendor/ava'),
+	},
 }

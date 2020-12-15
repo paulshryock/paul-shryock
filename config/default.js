@@ -12,35 +12,19 @@ module.exports = {
 	get isProduction () {
 		return this.build.environment === 'production'
 	},
-	html: {
-		beautify: require('./html/beautify'),
-		critical: require('./html/critical'),
-		htmllint: require('./html/htmllint'),
-		htmlmin: require('./html/htmlmin')
-	},
-	sass: {
-		'node-sass': require('./sass/node-sass'),
-		rename: require('./sass/rename'),
-		stylelint: require('./sass/stylelint'),
-	},
-	css: {
-		beautify: require('./css/beautify'),
-	},
-	javascript: {
-		ava: require('./javascript/ava'),
-		eslint: require('./javascript/eslint'),
-		rename: require('./javascript/rename')
-	},
 	site: {
 		url: ''
 	},
-	twitter: {
-		api: {
-			key: '',
-			secret: ''
-		},
-		bearer: {
-			token: ''
-		}
-	}
+	vendor: {
+		ava: require('./vendor/ava'),
+		beautify: require('./vendor/beautify'),
+		critical: require('./vendor/critical'),
+		eslint: require('./vendor/eslint'),
+		htmllint: require('./vendor/htmllint'),
+		htmlmin: require('./vendor/htmlmin'),
+		node_sass: require('./vendor/node-sass'),
+		rename: require('./vendor/rename'),
+		stylelint: require('./vendor/stylelint'),
+		twitter: require('./vendor/twitter'),
+	},
 }

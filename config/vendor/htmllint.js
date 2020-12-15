@@ -12,6 +12,6 @@ module.exports = {
 		'id-class-style': 'dash',
 		'indent-width': 2,
 		'line-end-style': false,
-		'link-min-length-4': true
+		'link-min-length-4': true,
 	}
 }

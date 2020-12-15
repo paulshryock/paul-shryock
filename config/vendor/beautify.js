@@ -9,5 +9,5 @@ module.exports = {
 	end_with_newline: true,
   indent_size: 2,
   indent_with_tabs: true,
-  max_preserve_newlines: 1
+  max_preserve_newlines: 1,
 }

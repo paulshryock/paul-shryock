@@ -1,10 +1,10 @@
 /**
- * critical configuration.
+ * ava configuration.
  *
  * @since unreleased
  *
  * @type {Object}
  */
 module.exports = {
-  inline: true
+	watch: false,
 }

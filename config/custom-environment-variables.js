@@ -12,13 +12,15 @@ module.exports = {
   site: {
     url: 'SITE_URL'
   },
-  twitter: {
-    api: {
-      key: 'TWITTER_API_KEY',
-      secret: 'TWITTER_API_SECRET_KEY'
-    },
-    bearer: {
-      token: 'TWITTER_BEARER_TOKEN'
-    }
-  }
+  vendor: {
+	  twitter: {
+	    api: {
+	      key: 'TWITTER_API_KEY',
+	      secret: 'TWITTER_API_SECRET_KEY'
+	    },
+	    bearer: {
+	      token: 'TWITTER_BEARER_TOKEN'
+	    }
+	  }
+  },
 }

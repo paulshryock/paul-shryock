@@ -8,5 +8,5 @@
 module.exports = {
 	indentType: 'tab',
 	indentWidth: 1,
-	outputStyle: 'expanded'
+	outputStyle: 'expanded',
 }

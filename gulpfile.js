@@ -125,11 +125,11 @@ function lint () {
 	const merged = merge(
 		// Lint HTML.
 		src(paths.html.lint)
-			.pipe(htmllint(config.get('html.htmllint'))),
+			.pipe(htmllint(config.get('vendor.htmllint'))),
 
 		// Lint Sass.
 	  src(paths.sass.lint.src)
-			.pipe(gulpStylelint(config.get('sass.stylelint')))
+			.pipe(gulpStylelint(config.get('vendor.stylelint')))
 			.pipe(dest(paths.sass.lint.dest)),
 
 		// @todo [#4]: Lint SVG.
@@ -137,7 +137,7 @@ function lint () {
 
 		// Lint JavaScript.
 		src(paths.javascript.lint)
-			.pipe(eslint(config.get('javascript.eslint')))
+			.pipe(eslint(config.get('vendor.eslint')))
 			.pipe(eslint.format())
 			.pipe(eslint.failAfterError())
 	)
@@ -167,9 +167,9 @@ async function html () {
 	// Post-process HTML.
 	return src(paths.html.written)
 		// Inline critical CSS.
-		.pipe(critical.stream(config.get('html.critical')))
+		.pipe(critical.stream(config.get('vendor.critical')))
 		// Beautify HTML.
-		.pipe(beautify.html(config.get('html.beautify')))
+		.pipe(beautify.html(config.get('vendor.beautify')))
 		// @todo [#6]: Validate HTML after building.
 		// - https://github.com/validator/gulp-html
 		// - https://github.com/center-key/gulp-w3c-html-validator
@@ -177,7 +177,7 @@ async function html () {
 		.pipe(
 			gulpif(
 				config.get('isProduction'),
-				htmlmin(config.get('html.htmlmin'))
+				htmlmin(config.get('vendor.htmlmin'))
 			)
 		)
 		.pipe(dest(paths.html.dest))
@@ -213,7 +213,7 @@ function css (cb) {
 		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
 		// Process Sass.
-    .pipe(sass(config.get('sass.node-sass')).on('error', sass.logError))
+    .pipe(sass(config.get('vendor.node_sass')).on('error', sass.logError))
 		// Post-process CSS.
 		.pipe(postcss([
 			require('precss'), // Use Sass-like markup and staged CSS features
@@ -222,16 +222,16 @@ function css (cb) {
 			require('autoprefixer') // Add vendor prefixes
 		]))
 		// Beautify CSS.
-		.pipe(beautify.css(config.get('css.beautify')))
+		.pipe(beautify.css(config.get('vendor.beautify')))
 		// @todo [#8]: Validate CSS.
 		// - https://github.com/gchudnov/gulp-w3c-css
 		// @todo: Minify CSS.
 		.pipe(gulpif(
 			config.get('isProduction'),
-			rename(config.get('sass.rename.min'))
+			rename(config.get('vendor.rename.min'))
 		))
 		// Rewrite directory path.
-		.pipe(rename(config.get('sass.rename.dest')))
+		.pipe(rename(config.get('vendor.rename.dest')))
 		// Write sourcemaps.
     .pipe(sourcemaps.write())
     .pipe(dest(paths.css.dest))
@@ -270,7 +270,7 @@ exports.javascript = javascript
 function test () {
 	// Test JavaScript.
 	return src(paths.javascript.test)
-		.pipe(ava(config.get('javascript.ava')))
+		.pipe(ava(config.get('vendor.ava')))
 }
 exports.test = test
 
