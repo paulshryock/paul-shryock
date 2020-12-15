@@ -24,6 +24,7 @@ module.exports = {
 		htmllint: require('./vendor/htmllint'),
 		htmlmin: require('./vendor/htmlmin'),
 		node_sass: require('./vendor/node-sass'),
+		purgecss: require('./vendor/purgecss'),
 		rename: require('./vendor/rename'),
 		stylelint: require('./vendor/stylelint'),
 		twitter: require('./vendor/twitter'),

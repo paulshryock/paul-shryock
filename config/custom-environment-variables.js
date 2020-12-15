@@ -6,13 +6,13 @@
  * @type {Object}
  */
 module.exports = {
-  build: {
-    environment: 'BUILD_ENV'
-  },
-  site: {
-    url: 'SITE_URL'
-  },
-  vendor: {
+	build: {
+		environment: 'BUILD_ENV'
+	},
+	site: {
+		url: 'SITE_URL'
+	},
+	vendor: {
 	  twitter: {
 	    api: {
 	      key: 'TWITTER_API_KEY',
@@ -22,5 +22,5 @@ module.exports = {
 	      token: 'TWITTER_BEARER_TOKEN'
 	    }
 	  }
-  },
+	},
 }
