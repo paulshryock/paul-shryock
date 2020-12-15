@@ -19,6 +19,7 @@ module.exports = {
 		ava: require('./vendor/ava'),
 		beautify: require('./vendor/beautify'),
 		critical: require('./vendor/critical'),
+		cssnano: require('./vendor/cssnano'),
 		eslint: require('./vendor/eslint'),
 		htmllint: require('./vendor/htmllint'),
 		htmlmin: require('./vendor/htmlmin'),
