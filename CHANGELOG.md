@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Lint JavaScript.
 - Process Sass. [#20]
 - Post-process CSS. [#23]
+- Purge unused CSS. [#29]
 - Beautify CSS.
 - Minify CSS in production. [#26]
 - Preserve CSS sourcemaps.

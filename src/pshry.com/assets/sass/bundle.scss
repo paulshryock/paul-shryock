@@ -1,3 +1,28 @@
+body {
+	font-size: 1em;
+}
+
+.site {
+	color: #333;
+	font-size: 2em;
+}
+
+.masthead {
+	background: #ccc;
+
+	&__title {
+		font-weight: 700;
+	}
+}
+
+.colophon {
+	font-size: 0.85em;
+
+	&__copyright {
+		color: #666;
+	}
+}
+
 /**
  * Multi-line comment
  */

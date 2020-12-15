@@ -28,6 +28,7 @@ const gulpStylelint = require('gulp-stylelint')
 const sass = require('gulp-sass')
 sass.compiler = require('node-sass')
 const postcss = require('gulp-postcss')
+const purgecss = require('gulp-purgecss')
 
 // JavaScript
 const eslint = require('gulp-eslint')
@@ -84,11 +85,14 @@ const paths = {
 			}
 		},
 		get lint () {
-			return [
-				this.config,
-				this.src,
-				this.root.files
-			]
+			return {
+				src: [
+					this.config,
+					this.src,
+					this.root.files
+				],
+				dest: './'
+			}
 		},
 		test: [
 			'./*.test.js',
@@ -135,11 +139,26 @@ function lint () {
 		// @todo [#4]: Lint SVG.
 		// - https://github.com/birjolaxew/svglint
 
-		// Lint JavaScript.
-		src(paths.javascript.lint)
+		// Lint JavaScript config files.
+		src(paths.javascript.config)
 			.pipe(eslint(config.get('vendor.eslint')))
 			.pipe(eslint.format())
 			.pipe(eslint.failAfterError())
+			.pipe(dest('./config/')),
+
+		// Lint JavaScript source files.
+		src(paths.javascript.src)
+			.pipe(eslint(config.get('vendor.eslint')))
+			.pipe(eslint.format())
+			.pipe(eslint.failAfterError())
+			.pipe(dest('./src/')),
+
+		// Lint JavaScript root files.
+		src(paths.javascript.root.all)
+			.pipe(eslint(config.get('vendor.eslint')))
+			.pipe(eslint.format())
+			.pipe(eslint.failAfterError())
+			.pipe(dest('./'))
 	)
 
 	return merged.isEmpty() ? null : merged
@@ -213,7 +232,7 @@ function css (cb) {
 		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
 		// Process Sass.
-    .pipe(sass(config.get('vendor.node_sass')).on('error', sass.logError))
+		.pipe(sass(config.get('vendor.node_sass')).on('error', sass.logError))
 		// Post-process CSS.
 		.pipe(postcss([
 			require('precss'), // Use Sass-like markup and staged CSS features
@@ -221,6 +240,8 @@ function css (cb) {
 			require('pixrem')(), // Add fallbacks for rem units
 			require('autoprefixer') // Add vendor prefixes
 		]))
+		// Purge unused CSS.
+		.pipe(purgecss(config.get('vendor.purgecss')))
 		// Beautify CSS.
 		.pipe(beautify.css(config.get('vendor.beautify')))
 		// @todo [#8]: Validate CSS.
@@ -239,8 +260,8 @@ function css (cb) {
 		// Rewrite directory path.
 		.pipe(rename(config.get('vendor.rename.dest')))
 		// Write sourcemaps.
-    .pipe(sourcemaps.write())
-    .pipe(dest(paths.css.dest))
+		.pipe(sourcemaps.write())
+		.pipe(dest(paths.css.dest))
 }
 exports.css = css
 
@@ -260,8 +281,8 @@ function javascript (cb) {
 		// @todo [#12]: Transpile modern JavaScript.
 		// @todo [#13]: Polyfill modern JavaScript.
 		// Write sourcemaps.
-    .pipe(sourcemaps.write())
-    .pipe(dest(paths.javascript.dest))
+		.pipe(sourcemaps.write())
+		.pipe(dest(paths.javascript.dest))
 }
 exports.javascript = javascript
 

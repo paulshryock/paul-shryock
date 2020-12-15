@@ -16,6 +16,9 @@ module.exports = {
     'plugin:sonarjs/recommended',
     'plugin:unicorn/recommended',
   ],
+  rules: {
+  	indent: ['error', 'tab']
+  },
   fix: true,
   parserOptions: {
     ecmaVersion: 11,
