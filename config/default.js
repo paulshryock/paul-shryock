@@ -20,7 +20,8 @@ module.exports = {
 	},
 	sass: {
 		'node-sass': require('./sass/node-sass'),
-		rename: require('./sass/rename')
+		rename: require('./sass/rename'),
+		stylelint: require('./sass/stylelint'),
 	},
 	css: {
 		beautify: require('./css/beautify'),

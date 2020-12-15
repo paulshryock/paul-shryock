@@ -13,13 +13,20 @@ and this project adheres to [Semantic Versioning](semver).
 - Add legacy content.
 - Add pshry.com content, data, and layouts.
 - Lint HTML. [#2]
-- Lint Sass. [#7]
+- Lint Sass. [#7]/[#3]
 - Lint JavaScript.
-- Inline critical CSS. [#5]
-- Post-process CSS. [#23]
 - Process Sass. [#20]
+- Post-process CSS. [#23]
+- Beautify CSS.
+- Preserve CSS sourcemaps.
+- Build HTML.
+- Beautify HTML.
+- Minify HTML in production.
+- Inline critical CSS. [#5]
+- Preserve JavaScript sourcemaps.
 - Add JavaScript testing. [#15]
 - Add a few gulpfile and eleventy config unit tests. [#15]
+- Bump docblock and Changelog versions during new version.
 
 ### Changed
 
