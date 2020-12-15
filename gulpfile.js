@@ -24,9 +24,9 @@ const beautify = require('gulp-beautify')
 const htmlmin = require('gulp-htmlmin')
 
 // CSS
+const gulpStylelint = require('gulp-stylelint')
 const sass = require('gulp-sass')
 sass.compiler = require('node-sass')
-const sassLint = require('gulp-sass-lint')
 const postcss = require('gulp-postcss')
 
 // JavaScript
@@ -58,7 +58,13 @@ const paths = {
 	},
 	sass: {
 		src: './src/**/sass/*.s+(a|c)ss',
-		lint: './src/**/*.s+(a|c)ss'
+		lint: {
+			src: [
+				'./src/**/*.s+(a|c)ss',
+				'!./src/**/vendor/**/*.s+(a|c)ss'
+			],
+			dest: './src'
+		}
 	},
 	css: {
 		dest: './build'
@@ -122,16 +128,9 @@ function lint () {
 			.pipe(htmllint(config.get('html.htmllint'))),
 
 		// Lint Sass.
-	  src(paths.sass.lint)
-	  	// @todo: Move sass-lint config into config file
-	    .pipe(sassLint({
-				rules: {
-					'class-name-format': [1, { convention: 'strictbem' }],
-					'indentation': [1, { size: 'tab' }]
-				}
-			}))
-	    .pipe(sassLint.format())
-	    .pipe(sassLint.failOnError()),
+	  src(paths.sass.lint.src)
+			.pipe(gulpStylelint(config.get('sass.stylelint')))
+			.pipe(dest(paths.sass.lint.dest)),
 
 		// @todo [#4]: Lint SVG.
 		// - https://github.com/birjolaxew/svglint
@@ -223,16 +222,16 @@ function css (cb) {
 			require('autoprefixer') // Add vendor prefixes
 		]))
 		// Beautify CSS.
-		.pipe(beautify.css(config.get('html.beautify')))
-		// @todo [#3]: Lint CSS.
+		.pipe(beautify.css(config.get('css.beautify')))
 		// @todo [#8]: Validate CSS.
 		// - https://github.com/gchudnov/gulp-w3c-css
-		// Rewrite directory path.
-		.pipe(rename(config.get('sass.rename.dest')))
+		// @todo: Minify CSS.
 		.pipe(gulpif(
 			config.get('isProduction'),
 			rename(config.get('sass.rename.min'))
 		))
+		// Rewrite directory path.
+		.pipe(rename(config.get('sass.rename.dest')))
 		// Write sourcemaps.
     .pipe(sourcemaps.write())
     .pipe(dest(paths.css.dest))
