@@ -8,11 +8,15 @@ const gulpif = require('gulp-if')
 const merge = require('merge-stream')
 
 // Utilities
+const fs = require('fs')
+const path = require('path')
+const mkdirp = require('mkdirp')
 const del = require('del')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
+const Papa = require('papaparse')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
@@ -52,7 +56,7 @@ exports.paths = paths
  * @return {Promise}
  */
 function clean () {
-	return del([paths.html.dest])
+	return del([paths.dest])
 }
 exports.clean = clean
 
@@ -128,9 +132,6 @@ async function html () {
 		.pipe(critical.stream(config.get('vendor.critical')))
 		// Beautify HTML.
 		.pipe(beautify.html(config.get('vendor.beautify')))
-		// @todo [#6]: Validate HTML after building.
-		// - https://github.com/validator/gulp-html
-		// - https://github.com/center-key/gulp-w3c-html-validator
 		// Minify HTML in production.
 		.pipe(
 			gulpif(
@@ -138,7 +139,7 @@ async function html () {
 				htmlmin(config.get('vendor.htmlmin'))
 			)
 		)
-		.pipe(dest(paths.html.dest))
+		.pipe(dest(paths.dest))
 		.pipe(connect.reload())
 }
 exports.html = html
@@ -184,8 +185,6 @@ function css () {
 		.pipe(purgecss(config.get('vendor.purgecss')))
 		// Beautify CSS.
 		.pipe(beautify.css(config.get('vendor.beautify')))
-		// @todo [#8]: Validate CSS.
-		// - https://github.com/gchudnov/gulp-w3c-css
 		// Minify CSS in production.
 		.pipe(gulpif(
 			config.get('isProduction'),
@@ -193,15 +192,22 @@ function css () {
 				require('cssnano')(config.get('vendor.cssnano'))
 			])
 		))
+		// Rewrite file name in production.
 		.pipe(gulpif(
 			config.get('isProduction'),
-			rename(config.get('vendor.rename.min'))
+			rename(path => {
+				path.basename += '.min'
+			})
 		))
 		// Rewrite directory path.
-		.pipe(rename(config.get('vendor.rename.dest')))
+		.pipe(rename(path => {
+			path.dirname = path.dirname
+		  	.replace('/assets', '')
+		  	.replace('/sass', '/css')
+		}))
 		// Write sourcemaps.
 		.pipe(sourcemaps.write('.'))
-		.pipe(dest(paths.css.dest))
+		.pipe(dest(paths.dest))
 }
 exports.css = css
 
@@ -222,9 +228,69 @@ function javascript () {
 		// @todo [#13]: Polyfill modern JavaScript.
 		// Write sourcemaps.
 		.pipe(sourcemaps.write('.'))
-		.pipe(dest(paths.javascript.dest))
+		.pipe(dest(paths.dest))
 }
 exports.javascript = javascript
+
+/**
+ * Handle validation tasks.
+ * Usage: `gulp validate`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function validate () {
+	const merged = merge(
+		// @todo [#6]: Validate HTML.
+		// - https://github.com/validator/gulp-html
+		// - https://github.com/center-key/gulp-w3c-html-validator
+
+		// Validate CSS.
+		src(paths.css.written)
+			.pipe(require('gulp-w3c-css')())
+			// Beautify
+			.pipe(beautify.js(config.get('vendor.beautify')))
+			// Write to JSON log file.
+			.pipe(rename(path => {
+				path.basename += '.log'
+				path.extname = '.json'
+			}))
+			.pipe(dest(paths.dest))
+	)
+
+	return merged.isEmpty() ? null : merged
+}
+exports.validate = validate
+
+/**
+ * Handle logging tasks.
+ * Usage: `gulp log`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function log (cb) {
+	const json = JSON.parse(fs.readFileSync('./build/pshry.com/css/bundle.log.json', { encoding: 'utf8' }))
+	Object.keys(json).forEach(async type => {
+		// If there's nothing to log, bail.
+		if (json[type].length < 1) return
+
+		// Create the log file directory, if it doesn't exist.
+		const file = `./logs/pshry.com/css/bundle.${type}.log.csv`
+		await mkdirp(path.dirname(file))
+			.catch(err => console.error(err))
+
+		// Create the log file.
+	  fs.writeFileSync(file, Papa.unparse(json[type], { encoding: 'utf8'}))
+
+	  await del(['./build/pshry.com/css/bundle.log.json'])
+	})
+
+	cb()
+}
+exports.log = log
 
 /**
  * Handle testing tasks.
@@ -253,7 +319,9 @@ const build = series(
 	clean,
 	lint,
 	css,
-	html
+	html,
+	validate,
+	log
 )
 exports.build = build
 

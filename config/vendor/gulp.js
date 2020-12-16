@@ -8,9 +8,9 @@
 module.exports = {
 	paths: {
 		changelog: './CHANGELOG.md',
+		dest: './build',
 		html: {
 			src: './src/**/*.html',
-			dest: './build',
 			get lint () {
 				return [
 					this.src,
@@ -33,12 +33,11 @@ module.exports = {
 			}
 		},
 		css: {
-			dest: './build'
+			written: './build/**/*.css'
 		},
 		javascript: {
 			config: './config/*.js',
 			src: './src/**/*.js',
-			dest: './build',
 			root: {
 				files: './*.js',
 				dotfiles: './.*.js',
