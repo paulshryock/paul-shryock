@@ -227,7 +227,7 @@ exports.svg = svg
  *
  * @return {Object} Gulp stream
  */
-function css (cb) {
+function css () {
 	return src(paths.sass.src)
 		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
@@ -235,6 +235,7 @@ function css (cb) {
 		.pipe(sass(config.get('vendor.node_sass')).on('error', sass.logError))
 		// Post-process CSS.
 		.pipe(postcss([
+			require('postcss-import'), // Inline @import rules content
 			require('precss'), // Use Sass-like markup and staged CSS features
 			require('postcss-preset-env'), // Polyfill modern CSS
 			require('pixrem')(), // Add fallbacks for rem units
@@ -273,7 +274,7 @@ exports.css = css
  *
  * @return {Object} Gulp stream
  */
-function javascript (cb) {
+function javascript () {
 	return src(paths.javascript.src)
 		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())

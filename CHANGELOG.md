@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Lint HTML. [#2]
 - Lint Sass. [#7]/[#3]
 - Lint JavaScript.
+- Sanitize CSS. [#32]
 - Process Sass. [#20]
 - Post-process CSS. [#23]
 - Purge unused CSS. [#29]
