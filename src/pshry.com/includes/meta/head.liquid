@@ -1,10 +1,8 @@
   <head>
     <title>{{ site.title }}</title>
     {%- if env.isProduction %}
-    <link rel="preload" href="/css/bundle.min.css" as="style">
-    <link rel="stylesheet" href="/css/bundle.min.css" media="print" onload="this.media='all'; this.onload = null;">
+    <link rel="stylesheet" href="/css/bundle.min.css">
     {%- else %}
-    <link rel="preload" href="/css/bundle.css" as="style">
-    <link rel="stylesheet" href="/css/bundle.css" media="print" onload="this.media='all'; this.onload = null;">
+    <link rel="stylesheet" href="/css/bundle.css">
     {%- endif %}
   </head>
