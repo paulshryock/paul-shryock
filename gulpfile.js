@@ -1,6 +1,5 @@
 // Environment variables and configuration
-const dotenv = require('dotenv').config()
-if (dotenv.error) throw dotenv.error
+require('dotenv').config()
 const config = require('config')
 
 // Gulp
