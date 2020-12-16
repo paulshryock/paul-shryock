@@ -261,7 +261,7 @@ function css () {
 		// Rewrite directory path.
 		.pipe(rename(config.get('vendor.rename.dest')))
 		// Write sourcemaps.
-		.pipe(sourcemaps.write())
+		.pipe(sourcemaps.write('.'))
 		.pipe(dest(paths.css.dest))
 }
 exports.css = css
@@ -282,7 +282,7 @@ function javascript () {
 		// @todo [#12]: Transpile modern JavaScript.
 		// @todo [#13]: Polyfill modern JavaScript.
 		// Write sourcemaps.
-		.pipe(sourcemaps.write())
+		.pipe(sourcemaps.write('.'))
 		.pipe(dest(paths.javascript.dest))
 }
 exports.javascript = javascript
