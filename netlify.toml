@@ -4,22 +4,6 @@
 	command = "npm run build"
 
 # ---------------
-# Redirects
-# ---------------
-
-[[redirects]]
-	from = "/github"
-	to = "https://github.com/paulshryock/paul-shryock"
-	status = 200
-	force = true
-	headers = {X-From = "Netlify"}
-
-[[redirects]]
-	from = "/legacy/*"
-	to = "https://pshry.com/:splat"
-	status = 307
-
-# ---------------
 # Headers
 # ---------------
 
@@ -51,3 +35,19 @@
 		X-Frame-Options = 'DENY'
 		X-Robots-Tag = 'noindex, nofollow'
 		X-Xss-Protection = '1; mode=block'
+
+# ---------------
+# Redirects
+# ---------------
+
+[[redirects]]
+	from = "/github"
+	to = "https://github.com/paulshryock/paul-shryock"
+	status = 200
+	force = true
+	headers = {X-From = "Netlify"}
+
+[[redirects]]
+	from = "/legacy/*"
+	to = "https://pshry.com/:splat"
+	status = 307

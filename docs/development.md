@@ -2,7 +2,7 @@
 
 ## npm scripts
 
-- `npm install`: Install dependencies and husky hooks.
+- `npm install`: Install dependencies.
 - `npm start`: Handle build tasks.
 - `npm run clean`: Clean the build directory.
 - `npm run lint`: Handle linting tasks.
@@ -25,3 +25,7 @@
 - `gulp test`: Handle testing tasks.
 - `gulp build`: Handle build tasks.
 - `gulp version`: Handle version tasks.
+
+## HTTP headers and redirects
+
+Set HTTP headers and redirects in `netlify.toml` using `[[headers]]` and `[[redirects]]` array tables.
