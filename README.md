@@ -4,6 +4,8 @@
 <p align="center"><strong>2020 reboot of my personal website.</strong></p>
 
 
+[![Netlify Status][netlify-status]][netlify-deploys]
+
 # pshry.com
 
 I [aspire][aspire] to make this project Accessible, Secure, Performant, Inclusive, Responsive, and Ethical.
@@ -24,7 +26,8 @@ The type of contributions I am interested in are those that would make the websi
 
 You're welcome to [create an Issue][github-create-issue] if there's something on my website that you would like to discuss, or to report a bug, typo, or problematic content or functionality.
 
-[docs]: tree/main/docs
+[netlify-status]: https://api.netlify.com/api/v1/badges/99675821-ec9f-46d6-a6b4-c47a0104b756/deploy-status
+[netlify-deploys]: https://app.netlify.com/sites/pshry-com/deploys
 [aspire]: https://www.filamentgroup.com/lab/aspire/
 [github-repo]: https://github.com/paulshryock/paul-shryock
 [license]: https://firstdonoharm.dev/
