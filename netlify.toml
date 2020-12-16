@@ -1,0 +1,53 @@
+[build]
+	base = "/"
+	publish = "build/pshry.com/"
+	command = "npm run build"
+
+# ---------------
+# Redirects
+# ---------------
+
+[[redirects]]
+	from = "/github"
+	to = "https://github.com/paulshryock/paul-shryock"
+	status = 200
+	force = true
+	headers = {X-From = "Netlify"}
+
+[[redirects]]
+	from = "/legacy/*"
+	to = "https://pshry.com/:splat"
+	status = 307
+
+# ---------------
+# Headers
+# ---------------
+
+[[headers]]
+	for = "/*"
+
+	[headers.values]
+		Access-Control-Allow-Origin = 'https://pshry-com.netlify.app/'
+		Content-Security-Policy = "default-src 'self';"
+		Feature-Policy = '''
+			geolocation 'none';
+			midi 'none';
+			notifications 'none';
+			push 'none';
+			sync-xhr 'none';
+			microphone 'none';
+			camera 'none';
+			magnetometer 'none';
+			gyroscope 'none';
+			speaker 'none';
+			vibrate 'none';
+			fullscreen 'none';
+			payment 'none';'''
+		Server = ''
+		Vary = 'Origin'
+		X-Content-Type-Options = 'nosniff'
+		X-DNS-Prefetch-Control = 'off'
+		X-Download-Options = 'noopen'
+		X-Frame-Options = 'DENY'
+		X-Robots-Tag = 'noindex, nofollow'
+		X-Xss-Protection = '1; mode=block'

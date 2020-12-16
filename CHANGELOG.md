@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Add JavaScript testing. [#15]
 - Add a few gulpfile and eleventy config unit tests. [#15]
 - Bump docblock and Changelog versions during new version.
+- Setup Netlify deployments. [#38]
 
 ### Changed
 
