@@ -38,6 +38,13 @@ module.exports = {
 		javascript: {
 			config: './config/*.js',
 			src: './src/**/*.js',
+			get assets () {
+				return [
+					this.src,
+					'!./src/**/*.11tydata.js',
+					'!./src/**/data/**/*.js'
+				]
+			},
 			root: {
 				files: './*.js',
 				dotfiles: './.*.js',

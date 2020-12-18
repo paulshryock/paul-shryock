@@ -10,6 +10,7 @@
 - `npm run svg`: Handle SVG tasks.
 - `npm run css`: Handle CSS tasks.
 - `npm run javascript`: Handle JavaScript tasks.
+- `npm run validate`: Handle validation tasks.
 - `npm test`: Handle testing tasks.
 - `npm run build`: Handle build tasks.
 - `npm version`: Handle version tasks.
@@ -22,6 +23,7 @@
 - `gulp svg`: Handle SVG tasks.
 - `gulp css`: Handle CSS tasks.
 - `gulp javascript`: Handle JavaScript tasks.
+- `gulp validate`: Handle validation tasks.
 - `gulp test`: Handle testing tasks.
 - `gulp build`: Handle build tasks.
 - `gulp version`: Handle version tasks.

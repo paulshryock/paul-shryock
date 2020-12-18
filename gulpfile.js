@@ -17,6 +17,7 @@ const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
 const Papa = require('papaparse')
+const log = require('fancylog')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
@@ -153,8 +154,8 @@ exports.html = html
  * @return {Object} Gulp stream
  */
 function svg (cb) {
-	console.log('@todo [#9]: Optimize SVG.')
-	console.log('@todo [#10]: Minify SVG.')
+	log.info('@todo [#9]: Optimize SVG.')
+	log.info('@todo [#10]: Minify SVG.')
 	return cb()
 }
 exports.svg = svg
@@ -220,12 +221,13 @@ exports.css = css
  * @return {Object} Gulp stream
  */
 function javascript () {
-	return src(paths.javascript.src)
+	log.info('@todo [#11]: Bundle JavaScript modules.')
+	log.info('@todo [#12]: Transpile modern JavaScript.')
+	log.info('@todo [#13]: Polyfill modern JavaScript.')
+
+	return src(paths.javascript.assets)
 		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
-		// @todo [#11]: Bundle JavaScript modules.
-		// @todo [#12]: Transpile modern JavaScript.
-		// @todo [#13]: Polyfill modern JavaScript.
 		// Write sourcemaps.
 		.pipe(sourcemaps.write('.'))
 		.pipe(dest(paths.dest))
@@ -264,35 +266,6 @@ function validate () {
 exports.validate = validate
 
 /**
- * Handle logging tasks.
- * Usage: `gulp log`
- *
- * @since unreleased
- *
- * @return {Object} Gulp stream
- */
-function log (cb) {
-	const json = JSON.parse(fs.readFileSync('./build/pshry.com/css/bundle.log.json', { encoding: 'utf8' }))
-	Object.keys(json).forEach(async type => {
-		// If there's nothing to log, bail.
-		if (json[type].length < 1) return
-
-		// Create the log file directory, if it doesn't exist.
-		const file = `./logs/pshry.com/css/bundle.${type}.log.csv`
-		await mkdirp(path.dirname(file))
-			.catch(err => console.error(err))
-
-		// Create the log file.
-	  fs.writeFileSync(file, Papa.unparse(json[type], { encoding: 'utf8'}))
-
-	  await del(['./build/pshry.com/css/bundle.log.json'])
-	})
-
-	cb()
-}
-exports.log = log
-
-/**
  * Handle testing tasks.
  * Usage: `gulp test`
  *
@@ -319,9 +292,8 @@ const build = series(
 	clean,
 	lint,
 	css,
-	html,
-	validate,
-	log
+	parallel(html, javascript, svg),
+	validate
 )
 exports.build = build
 
