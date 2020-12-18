@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Beautify CSS.
 - Minify CSS in production. [#26]
 - Preserve CSS sourcemaps.
+- Validate CSS. [#8]
 - Build HTML.
 - Beautify HTML.
 - Minify HTML in production.
