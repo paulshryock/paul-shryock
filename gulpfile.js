@@ -8,15 +8,12 @@ const gulpif = require('gulp-if')
 const merge = require('merge-stream')
 
 // Utilities
-const fs = require('fs')
 const path = require('path')
-const mkdirp = require('mkdirp')
 const del = require('del')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
-const Papa = require('papaparse')
 const log = require('fancylog')
 
 // HTML
