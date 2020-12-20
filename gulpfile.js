@@ -15,6 +15,7 @@ const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
 const log = require('fancylog')
+const named = require('vinyl-named')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
@@ -34,6 +35,8 @@ const purgecss = require('gulp-purgecss')
 // JavaScript
 const eslint = require('gulp-eslint')
 const ava = require('gulp-ava')
+const webpack = require('webpack-stream')
+const compiler = require('webpack')
 
 /**
  * File paths.
@@ -218,15 +221,32 @@ exports.css = css
  * @return {Object} Gulp stream
  */
 function javascript () {
-	log.info('@todo [#11]: Bundle JavaScript modules.')
-	log.info('@todo [#12]: Transpile modern JavaScript.')
-	log.info('@todo [#13]: Polyfill modern JavaScript.')
-
 	return src(paths.javascript.assets)
 		// Initialize sourcemaps.
-		.pipe(sourcemaps.init())
-		// Write sourcemaps.
-		.pipe(sourcemaps.write('.'))
+		.pipe(named())
+		// Bundle JavaScript modules.
+		.pipe(webpack({
+		  mode: config.isProduction ? 'production' : 'development',
+		  // watch: !config.isProduction,
+		  module: {
+		    rules: [
+		      {
+		        test: /\.js$/,
+		        exclude: /node_modules/,
+		        use: {
+		          loader: 'babel-loader',
+		          options: {
+		            presets: ['@babel/preset-env']
+		          }
+		        }
+		      }
+		    ]
+		  },
+			// Write sourcemaps.
+		  devtool: 'source-map'
+		}, compiler))
+		// Beautify CSS.
+		.pipe(beautify.js(config.get('vendor.beautify')))
 		.pipe(dest(paths.dest))
 }
 exports.javascript = javascript

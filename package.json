@@ -51,8 +51,11 @@
   ],
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "autoprefixer": "^10.1.0",
     "ava": "^3.14.0",
+    "babel-loader": "^8.2.2",
     "critical": "^2.0.6",
     "cssnano": "^4.1.10",
     "del": "^6.0.0",
@@ -93,10 +96,13 @@
     "stylelint": "^13.8.0",
     "stylelint-config-sass-guidelines": "^7.1.0",
     "stylelint-config-standard": "^20.0.0",
-    "sync-dotenv": "^2.6.2"
+    "sync-dotenv": "^2.6.2",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^5.11.0",
+    "webpack-stream": "^6.1.1"
   },
   "dependencies": {
-    "config": "^3.3.2",
+    "config": "^3.3.3",
     "dotenv": "^8.2.0"
   }
 }

@@ -28,5 +28,6 @@ module.exports = {
 		purgecss: require('./vendor/purgecss'),
 		stylelint: require('./vendor/stylelint'),
 		twitter: require('./vendor/twitter'),
+		webpack: require('./vendor/webpack'),
 	},
 }
