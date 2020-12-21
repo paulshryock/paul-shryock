@@ -34,10 +34,7 @@ module.exports = {
 			config: './config/*.js',
 			entry: './src/**/js/*.js',
 			src: './src/**/*.js',
-			written: [
-				'./build/**/*.js',
-				'./build/**/*.js.map'
-			],
+			written: './build/**/*.js',
 			get assets () {
 				return [
 					this.src,

@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](semver).
 - Minify HTML in production.
 - Inline critical CSS. [#5]
 - Bundle JavaScript modules. [#11]
+- Transpile modern JavaScript to ES5. [#12]
+- Polyfill modern JavaScript to ES5. [#13]
 - Preserve JavaScript sourcemaps.
 - Add JavaScript testing. [#15]
 - Add a few gulpfile and eleventy config unit tests. [#15]

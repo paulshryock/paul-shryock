@@ -36,6 +36,7 @@ const purgecss = require('gulp-purgecss')
 const eslint = require('gulp-eslint')
 const ava = require('gulp-ava')
 const esbuild = require('esbuild')
+const babel = require('gulp-babel')
 
 /**
  * File paths.
@@ -276,11 +277,17 @@ async function javascript (cb) {
 		})
 	})
 
-	// @todo: Polyfill JavaScript.
-	// - https://github.com/evanw/esbuild/issues/297#issuecomment-695829095
-	// @todo: Transpile modern JavaScript to ES5.
-
-	return cb()
+	// Process JavaScript bundles.
+	return src(paths.javascript.written)
+		.pipe(sourcemaps.init())
+		// Polyfill and transpile modern JavaScript to ES5.
+		.pipe(babel(config.get('vendor.babel')))
+		// Rename legacy file.
+		.pipe(rename(path => {
+			path.basename += '.legacy'
+		}))
+		.pipe(sourcemaps.write('.'))
+		.pipe(dest(paths.dest))
 }
 exports.javascript = javascript
 
