@@ -1,4 +1,5 @@
-import { init } from './components/component'
+import { result } from './es2020/string-match-all'
+import { forIn } from './es2020/for-in'
 
-console.log('hello world')
-init()
+console.log('result:', result)
+console.log('forIn:', forIn)
