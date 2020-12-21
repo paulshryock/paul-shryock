@@ -17,6 +17,7 @@ module.exports = {
 	},
 	vendor: {
 		ava: require('./vendor/ava'),
+		babel: require('./vendor/babel'),
 		beautify: require('./vendor/beautify'),
 		critical: require('./vendor/critical'),
 		cssnano: require('./vendor/cssnano'),

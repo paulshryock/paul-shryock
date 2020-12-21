@@ -18,6 +18,11 @@ module.exports = {
 					.replace(
 						/(\.min)?\.js/g,
 						config.get('isProduction') ? '.min.js' : '.js'
+					),
+				legacy: script.src
+					.replace(
+						/(\.min)?\.js/g,
+						config.get('isProduction') ? '.legacy.min.js' : '.legacy.js'
 					)
 			}
 		}),
