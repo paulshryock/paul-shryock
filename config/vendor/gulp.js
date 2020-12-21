@@ -28,7 +28,7 @@ module.exports = {
 			}
 		},
 		css: {
-			written: './build/**/*.css',
+			written: './build/**/*.css'
 		},
 		javascript: {
 			config: './config/*.js',
