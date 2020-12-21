@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Beautify HTML.
 - Minify HTML in production.
 - Inline critical CSS. [#5]
+- Bundle JavaScript modules. [#11]
 - Preserve JavaScript sourcemaps.
 - Add JavaScript testing. [#15]
 - Add a few gulpfile and eleventy config unit tests. [#15]
