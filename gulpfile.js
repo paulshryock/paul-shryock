@@ -55,8 +55,8 @@ exports.paths = paths
  *
  * @return {Promise}
  */
-async function clean () {
-	return await del([paths.dest])
+function clean () {
+	return del([paths.dest])
 }
 exports.clean = clean
 
