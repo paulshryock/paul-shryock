@@ -1,0 +1,7 @@
+{% for script in scripts %}
+<script src="{{ script.src }}"
+	{%- if script.async %} async{% endif %}
+	{%- unless script.type == "module" or script.defer == false %} defer
+	{%- endunless %}
+	{%- if script.type %} type="{{ script.type }}"{% endif %}></script>
+{% endfor %}
