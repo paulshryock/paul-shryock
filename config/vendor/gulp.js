@@ -11,12 +11,7 @@ module.exports = {
 		dest: './build',
 		html: {
 			src: './src/**/*.html',
-			get lint () {
-				return [
-					this.src,
-					this.written
-				]
-			},
+			get lint () { return this.src },
 			written: './build/**/*.html'
 		},
 		svg: {
@@ -37,7 +32,12 @@ module.exports = {
 		},
 		javascript: {
 			config: './config/*.js',
+			entry: './src/**/js/*.js',
 			src: './src/**/*.js',
+			written: [
+				'./build/**/*.js',
+				'./build/**/*.js.map'
+			],
 			get assets () {
 				return [
 					this.src,

@@ -15,6 +15,7 @@ const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
 const log = require('fancylog')
+const fg = require('fast-glob')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
@@ -34,6 +35,7 @@ const purgecss = require('gulp-purgecss')
 // JavaScript
 const eslint = require('gulp-eslint')
 const ava = require('gulp-ava')
+const esbuild = require('esbuild')
 
 /**
  * File paths.
@@ -73,7 +75,7 @@ function lint () {
 			.pipe(htmllint(config.get('vendor.htmllint'))),
 
 		// Lint Sass.
-	  src(paths.sass.lint.src)
+		src(paths.sass.lint.src)
 			.pipe(gulpStylelint(config.get('vendor.stylelint')))
 			.pipe(dest(paths.sass.lint.dest)),
 
@@ -118,16 +120,12 @@ async function html () {
 	// Delete previously written HTML files.
 	del([paths.html.written])
 
-	// Start SSG.
-	await ssg.init()
-
 	// Write HTML files.
+	await ssg.init()
 	await ssg.write()
 
 	// Post-process HTML.
 	return src(paths.html.written)
-		// Inline critical CSS.
-		.pipe(critical.stream(config.get('vendor.critical')))
 		// Beautify HTML.
 		.pipe(beautify.html(config.get('vendor.beautify')))
 		// Minify HTML in production.
@@ -143,6 +141,32 @@ async function html () {
 exports.html = html
 
 /**
+ * Handle inline tasks.
+ * Usave: `gulp inline`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function inline () {
+	return src(paths.html.written)
+		// Inline critical CSS.
+		.pipe(critical.stream(config.get('vendor.critical')))
+		// Beautify HTML.
+		.pipe(beautify.html(config.get('vendor.beautify')))
+		// Minify HTML in production.
+		.pipe(
+			gulpif(
+				config.get('isProduction'),
+				htmlmin(config.get('vendor.htmlmin'))
+			)
+		)
+		.pipe(dest(paths.dest))
+		.pipe(connect.reload())
+}
+exports.inline = inline
+
+/**
  * Handle SVG tasks.
  * Usage: `gulp svg`
  *
@@ -151,8 +175,8 @@ exports.html = html
  * @return {Object} Gulp stream
  */
 function svg (cb) {
-	log.info('@todo [#9]: Optimize SVG.')
-	log.info('@todo [#10]: Minify SVG.')
+	// @todo [#9]: Optimize SVG.
+	// @todo [#10]: Minify SVG.
 	return cb()
 }
 exports.svg = svg
@@ -166,6 +190,9 @@ exports.svg = svg
  * @return {Object} Gulp stream
  */
 function css () {
+	// Delete previously written CSS files.
+	del(paths.css.written)
+
 	return src(paths.sass.src)
 		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
@@ -200,8 +227,8 @@ function css () {
 		// Rewrite directory path.
 		.pipe(rename(path => {
 			path.dirname = path.dirname
-		  	.replace('/assets', '')
-		  	.replace('/sass', '/css')
+				.replace('/assets', '')
+				.replace('/sass', '/css')
 		}))
 		// Write sourcemaps.
 		.pipe(sourcemaps.write('.'))
@@ -217,17 +244,43 @@ exports.css = css
  *
  * @return {Object} Gulp stream
  */
-function javascript () {
-	log.info('@todo [#11]: Bundle JavaScript modules.')
-	log.info('@todo [#12]: Transpile modern JavaScript.')
-	log.info('@todo [#13]: Polyfill modern JavaScript.')
+async function javascript (cb) {
+	// Delete previously written JavaScript files.
+	del(paths.javascript.written)
 
-	return src(paths.javascript.assets)
-		// Initialize sourcemaps.
-		.pipe(sourcemaps.init())
-		// Write sourcemaps.
-		.pipe(sourcemaps.write('.'))
-		.pipe(dest(paths.dest))
+	// Bundle JavaScript modules.
+	const entries = await fg([paths.javascript.entry])
+	entries.forEach(entry => {
+		esbuild.buildSync({
+			bundle: true,
+			color: true,
+			entryPoints: [entry],
+			format: 'iife',
+		  get metafile () {
+		  	return config.get('isProduction') ? '' : this.outfile
+		  		.replace('.js', '.log.json')
+		  },
+			// Minify JavaScript in production.
+			minify: config.get('isProduction'),
+			outfile: entry
+				.replace('src/', 'build/')
+				.replace('assets/', '')
+				.replace(
+					/(\.min)?\.js/g,
+					config.get('isProduction') ? '.min.js' : '.js'
+				),
+			// Write sourcemaps.
+			sourcemap: true,
+			// Transpile modern JavaScript to ES2015.
+			target: 'es2015',
+		})
+	})
+
+	// @todo: Polyfill JavaScript.
+	// - https://github.com/evanw/esbuild/issues/297#issuecomment-695829095
+	// @todo: Transpile modern JavaScript to ES5.
+
+	return cb()
 }
 exports.javascript = javascript
 
@@ -286,11 +339,16 @@ exports.test = test
  * @type {Object} Gulp series
  */
 const build = series(
-	clean,
-	lint,
-	css,
-	parallel(html, javascript, svg),
-	validate
+	parallel(lint, clean),
+	parallel(
+		series(
+			css,
+			html,
+			parallel(inline, validate),
+		),
+		svg,
+		javascript
+	),
 )
 exports.build = build
 

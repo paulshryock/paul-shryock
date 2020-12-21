@@ -1,8 +1,4 @@
-  <head>
-    <title>{{ site.title }}</title>
-    {%- if env.isProduction %}
-    <link rel="stylesheet" href="/css/bundle.min.css">
-    {%- else %}
-    <link rel="stylesheet" href="/css/bundle.css">
-    {%- endif %}
-  </head>
+<head>
+  <title>{{ site.title }}</title>
+  {% include meta/styles %}
+</head>
