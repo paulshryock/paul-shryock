@@ -18,16 +18,11 @@
   "homepage": "https://github.com/paulshryock/paul-shryock#readme",
   "scripts": {
     "prerebase": "HUSKY_SKIP_HOOKS=1",
-    "start": "npm run build",
-    "clean": "gulp clean",
+    "start": "npm run serve",
     "lint": "gulp lint",
-    "html": "gulp html",
-    "svg": "gulp svg",
-    "css": "gulp css",
-    "javascript": "gulp javascript",
-    "validate": "gulp validate",
     "test": "gulp test",
     "build": "gulp build",
+    "serve": "gulp serve",
     "version": "gulp version && git add .",
     "postversion": "git push && git push --tags"
   },

@@ -9,9 +9,14 @@ module.exports = {
 	paths: {
 		changelog: './CHANGELOG.md',
 		dest: './build',
+		temp: './build/temp',
+		markdown: {
+			src: './src/**/*.md',
+		},
 		html: {
 			src: './src/**/*.html',
 			get lint () { return this.src },
+			temp: './build/temp/**/*.html',
 			written: './build/**/*.html'
 		},
 		svg: {

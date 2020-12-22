@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Polyfill modern JavaScript to ES5. [#13]
 - Preserve JavaScript sourcemaps.
 - Add JavaScript testing. [#15]
-- Add a few gulpfile and eleventy config unit tests. [#15]
+- Add local development server. [#46]/[#47]
 - Bump docblock and Changelog versions during new version.
 - Setup CI/CD. [#38]
 

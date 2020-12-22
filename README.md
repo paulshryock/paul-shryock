@@ -6,9 +6,52 @@
 
 [![Netlify Status][netlify-status]][netlify-deploys]
 
-# pshry.com
+# Paul Shryock
 
-I [aspire][aspire] to make this project Accessible, Secure, Performant, Inclusive, Responsive, and Ethical.
+I [aspire][aspire] to make Accessible, Secure, Performant, Inclusive, Responsive, and Ethical websites.
+
+## Websites
+
+This monorepo contains source code for the following websites:
+
+- pshry.com
+
+## Development
+
+Clone this repository, run `npm install`, and you're all ready to get started. Run `npm start` to build and serve all websites, and watch for changes. Each site will be served to a different `localhost` port beginning with `8000`, incremented alphabetically upwards by `1`.
+
+When you're ready to commit changes, git will automatically lint and test your code before committing or pushing to remote.
+
+When it's time to release a new code version, run `npm version`, select `major`, `minor`, or `patch`, and Gulp and npm will handle the rest of the version update.
+
+### npm scripts
+
+- `npm start`: Build and serve all sites, and watch for changes.
+- `npm run lint`: Handle linting tasks.
+- `npm test`: Handle testing tasks.
+- `npm run build`: Build all sites.
+- `npm version`: Handle version tasks.
+
+### Gulp tasks
+
+- `gulp clean`: Clean the build directory.
+- `gulp finish`: Clean the temp directory.
+- `gulp lint`: Handle linting tasks.
+- `gulp html`: Handle HTML tasks.
+- `gulp postHtml`: Handle HTML post-processing tasks.
+- `gulp svg`: Handle SVG tasks.
+- `gulp css`: Handle CSS tasks.
+- `gulp javascript`: Handle JavaScript tasks.
+- `gulp validate`: Handle validation tasks.
+- `gulp test`: Handle testing tasks.
+- `gulp build`: Handle build tasks.
+- `gulp serve`: Handle serve tasks.
+- `gulp version`: Handle version tasks.
+
+### HTTP headers and redirects
+
+Set HTTP headers and redirects in `netlify.toml` using `[[headers]]` and `[[redirects]]` array tables.
+
 
 ## Open Source
 

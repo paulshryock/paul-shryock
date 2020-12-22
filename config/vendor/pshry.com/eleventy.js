@@ -17,7 +17,7 @@ module.exports = function (eleventyConfig) {
       includes: 'includes',
       input: 'src/pshry.com',
       layouts: 'layouts',
-      output: 'build/pshry.com'
+      output: 'build/temp/pshry.com'
     }
   }
 }
