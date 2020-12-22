@@ -3,9 +3,10 @@ require('dotenv').config()
 const config = require('config')
 
 // Gulp
-const { src, dest, series, parallel } = require('gulp')
+const { src, dest, series, parallel, watch } = require('gulp')
 const gulpif = require('gulp-if')
 const merge = require('merge-stream')
+let isWatching = false
 
 // Utilities
 const path = require('path')
@@ -19,7 +20,6 @@ const fg = require('fast-glob')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
-const ssg = new Eleventy()
 const htmllint = require('gulp-htmllint')
 const critical = require('critical')
 const beautify = require('gulp-beautify')
@@ -37,6 +37,20 @@ const eslint = require('gulp-eslint')
 const ava = require('gulp-ava')
 const esbuild = require('esbuild')
 const babel = require('gulp-babel')
+
+/**
+ * Set isWatching state.
+ *
+ * @since unreleased
+ *
+ * @param  {Function} cb Callback function.
+ * @return {Object}      Gulp stream.
+ */
+function watching (cb) {
+	isWatching = true
+
+	return cb()
+}
 
 /**
  * File paths.
@@ -60,6 +74,19 @@ function clean () {
 	return del([paths.dest])
 }
 exports.clean = clean
+
+/**
+ * Clean the temp directory.
+ * Usage: `gulp finish`
+ *
+ * @since unreleased
+ *
+ * @return {Promise}
+ */
+function finish () {
+	return del([paths.temp])
+}
+exports.finish = finish
 
 /**
  * Handle linting tasks.
@@ -115,42 +142,45 @@ exports.lint = lint
  *
  * @since unreleased
  *
- * @return {Object} Gulp stream
+ * @param  {Function} cb Callback function.
+ * @return {Object}      Gulp stream.
  */
-async function html () {
-	// Delete previously written HTML files.
-	del([paths.html.written])
+async function html (cb) {
+	// Generate a list of sites.
+	const files = await fg([paths.markdown.src])
+	const sites = [...new Set(
+		files.map(site => {
+			return site
+				.replace('./src/', '')
+				.replace(/\/.*/g, '')
+		})
+	)]
 
-	// Write HTML files.
-	await ssg.init()
-	await ssg.write()
+	// Generate HTML for all sites.
+	sites.forEach(async site => {
+		// Initialize static site generator.
+		const ssg = new Eleventy()
+		ssg.setConfigPathOverride(`./config/vendor/${site}/eleventy.js`)
+		await ssg.init()
 
-	// Post-process HTML.
-	return src(paths.html.written)
-		// Beautify HTML.
-		.pipe(beautify.html(config.get('vendor.beautify')))
-		// Minify HTML in production.
-		.pipe(
-			gulpif(
-				config.get('isProduction'),
-				htmlmin(config.get('vendor.htmlmin'))
-			)
-		)
-		.pipe(dest(paths.dest))
-		.pipe(connect.reload())
+		// Write HTML files and maybe watch for changes.
+		await isWatching ? ssg.watch() : ssg.write()
+	})
+
+	cb()
 }
 exports.html = html
 
 /**
- * Handle inline tasks.
- * Usave: `gulp inline`
+ * Handle HTML post-processing tasks.
+ * Usave: `gulp postHtml`
  *
  * @since unreleased
  *
  * @return {Object} Gulp stream
  */
-function inline () {
-	return src(paths.html.written)
+function postHtml () {
+	return src(paths.html.temp)
 		// Inline critical CSS.
 		.pipe(critical.stream(config.get('vendor.critical')))
 		// Beautify HTML.
@@ -165,7 +195,7 @@ function inline () {
 		.pipe(dest(paths.dest))
 		.pipe(connect.reload())
 }
-exports.inline = inline
+exports.postHtml = postHtml
 
 /**
  * Handle SVG tasks.
@@ -173,7 +203,8 @@ exports.inline = inline
  *
  * @since unreleased
  *
- * @return {Object} Gulp stream
+ * @param  {Function} cb Callback function.
+ * @return {Object}      Gulp stream.
  */
 function svg (cb) {
 	// @todo [#9]: Optimize SVG.
@@ -191,9 +222,6 @@ exports.svg = svg
  * @return {Object} Gulp stream
  */
 function css () {
-	// Delete previously written CSS files.
-	del(paths.css.written)
-
 	return src(paths.sass.src)
 		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
@@ -234,6 +262,8 @@ function css () {
 		// Write sourcemaps.
 		.pipe(sourcemaps.write('.'))
 		.pipe(dest(paths.dest))
+		.pipe(dest(paths.temp))
+		.pipe(connect.reload())
 }
 exports.css = css
 
@@ -245,10 +275,7 @@ exports.css = css
  *
  * @return {Object} Gulp stream
  */
-async function javascript (cb) {
-	// Delete previously written JavaScript files.
-	del(paths.javascript.written)
-
+async function javascript () {
 	// Bundle JavaScript modules.
 	const entries = await fg([paths.javascript.entry])
 	entries.forEach(entry => {
@@ -288,6 +315,7 @@ async function javascript (cb) {
 		}))
 		.pipe(sourcemaps.write('.'))
 		.pipe(dest(paths.dest))
+		.pipe(connect.reload())
 }
 exports.javascript = javascript
 
@@ -349,15 +377,54 @@ const build = series(
 	parallel(lint, clean),
 	parallel(
 		series(
-			css,
-			html,
-			parallel(inline, validate),
+			parallel(html, css),
+			parallel(postHtml, validate),
 		),
 		svg,
 		javascript
 	),
 )
-exports.build = build
+exports.build = series(build, finish)
+
+/**
+ * Handle serve tasks.
+ * Usage: `gulp serve`
+ *
+ * @since unreleased
+ *
+ * @param  {Function} cb Callback function.
+ * @return {Object}      Gulp stream.
+ */
+async function serve (cb) {
+	// Watch written files and re-run tasks.
+	watch(paths.sass.src, css)
+	watch(paths.javascript.src, javascript)
+	watch([paths.html.temp, paths.css.written], postHtml)
+
+	// Generate a list of sites.
+	const files = await fg([paths.html.written])
+	const sites = [...new Set(
+		files
+			.filter(site => !site.includes('temp/'))
+			.map(site => {
+				return site
+					.replace('./build/', '')
+					.replace(/\/.*/g, '')
+			})
+	)]
+
+	// Serve each site to a unique port.
+	sites.forEach((site, index) => {
+		connect.server({
+			livereload: true,
+			port: 8000 + index,
+			root: `${paths.dest}/${site}`,
+		})
+	})
+
+	return cb()
+}
+exports.serve = series(watching, build, serve)
 
 /**
  * Handle version tasks.
