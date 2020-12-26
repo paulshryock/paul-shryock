@@ -9,20 +9,20 @@ const merge = require('merge-stream')
 let isWatching = false
 
 // Utilities
-const path = require('path')
 const del = require('del')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
-const log = require('fancylog')
 const fg = require('fast-glob')
+const log = require('fancylog')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
 const htmllint = require('gulp-htmllint')
 const critical = require('critical')
 const beautify = require('gulp-beautify')
+const beautifyConfig = config.get('vendor.beautify')
 const htmlmin = require('gulp-htmlmin')
 
 // CSS
@@ -34,6 +34,7 @@ const purgecss = require('gulp-purgecss')
 
 // JavaScript
 const eslint = require('gulp-eslint')
+const eslintConfig = config.get('vendor.eslint')
 const ava = require('gulp-ava')
 const esbuild = require('esbuild')
 const babel = require('gulp-babel')
@@ -43,13 +44,13 @@ const babel = require('gulp-babel')
  *
  * @since unreleased
  *
- * @param  {Function} cb Callback function.
- * @return {Object}      Gulp stream.
+ * @param  {Function} callback Callback function.
+ * @return {Object}            Gulp stream.
  */
-function watching (cb) {
+function watching (callback) {
 	isWatching = true
 
-	return cb()
+	return callback()
 }
 
 /**
@@ -112,27 +113,27 @@ function lint () {
 
 		// Lint JavaScript config files.
 		src(paths.javascript.config)
-			.pipe(eslint(config.get('vendor.eslint')))
+			.pipe(eslint(eslintConfig))
 			.pipe(eslint.format())
 			.pipe(eslint.failAfterError())
 			.pipe(dest('./config/')),
 
 		// Lint JavaScript source files.
 		src(paths.javascript.src)
-			.pipe(eslint(config.get('vendor.eslint')))
+			.pipe(eslint(eslintConfig))
 			.pipe(eslint.format())
 			.pipe(eslint.failAfterError())
 			.pipe(dest('./src/')),
 
 		// Lint JavaScript root files.
 		src(paths.javascript.root.all)
-			.pipe(eslint(config.get('vendor.eslint')))
+			.pipe(eslint(eslintConfig))
 			.pipe(eslint.format())
 			.pipe(eslint.failAfterError())
 			.pipe(dest('./'))
 	)
 
-	return merged.isEmpty() ? null : merged
+	return merged.isEmpty() ? undefined : merged
 }
 exports.lint = lint
 
@@ -142,10 +143,10 @@ exports.lint = lint
  *
  * @since unreleased
  *
- * @param  {Function} cb Callback function.
- * @return {Object}      Gulp stream.
+ * @param  {Function} callback Callback function.
+ * @return {Object}            Gulp stream.
  */
-async function html (cb) {
+async function html (callback) {
 	// Generate a list of sites.
 	const files = await fg([paths.markdown.src])
 	const sites = [...new Set(
@@ -167,7 +168,7 @@ async function html (cb) {
 		await isWatching ? ssg.watch() : ssg.write()
 	})
 
-	cb()
+	callback()
 }
 exports.html = html
 
@@ -181,11 +182,11 @@ exports.html = html
  */
 function postHtml () {
 	return src(paths.html.temp)
-		// Inline critical CSS.
+	// Inline critical CSS.
 		.pipe(critical.stream(config.get('vendor.critical')))
-		// Beautify HTML.
-		.pipe(beautify.html(config.get('vendor.beautify')))
-		// Minify HTML in production.
+	// Beautify HTML.
+		.pipe(beautify.html(beautifyConfig))
+	// Minify HTML in production.
 		.pipe(
 			gulpif(
 				config.get('isProduction'),
@@ -203,13 +204,13 @@ exports.postHtml = postHtml
  *
  * @since unreleased
  *
- * @param  {Function} cb Callback function.
- * @return {Object}      Gulp stream.
+ * @param  {Function} callback Callback function.
+ * @return {Object}            Gulp stream.
  */
-function svg (cb) {
+function svg (callback) {
 	// @todo [#9]: Optimize SVG.
 	// @todo [#10]: Minify SVG.
-	return cb()
+	return callback()
 }
 exports.svg = svg
 
@@ -223,11 +224,11 @@ exports.svg = svg
  */
 function css () {
 	return src(paths.sass.src)
-		// Initialize sourcemaps.
+	// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
-		// Process Sass.
+	// Process Sass.
 		.pipe(sass(config.get('vendor.node_sass')).on('error', sass.logError))
-		// Post-process CSS.
+	// Post-process CSS.
 		.pipe(postcss([
 			require('postcss-import'), // Inline @import rules content
 			require('precss'), // Use Sass-like markup and staged CSS features
@@ -235,31 +236,31 @@ function css () {
 			require('pixrem')(), // Add fallbacks for rem units
 			require('autoprefixer') // Add vendor prefixes
 		]))
-		// Purge unused CSS.
+	// Purge unused CSS.
 		.pipe(purgecss(config.get('vendor.purgecss')))
-		// Beautify CSS.
-		.pipe(beautify.css(config.get('vendor.beautify')))
-		// Minify CSS in production.
+	// Beautify CSS.
+		.pipe(beautify.css(beautifyConfig))
+	// Minify CSS in production.
 		.pipe(gulpif(
 			config.get('isProduction'),
 			postcss([
 				require('cssnano')(config.get('vendor.cssnano'))
 			])
 		))
-		// Rewrite file name in production.
+	// Rewrite file name in production.
 		.pipe(gulpif(
 			config.get('isProduction'),
 			rename(path => {
 				path.basename += '.min'
 			})
 		))
-		// Rewrite directory path.
+	// Rewrite directory path.
 		.pipe(rename(path => {
 			path.dirname = path.dirname
 				.replace('/assets', '')
 				.replace('/sass', '/css')
 		}))
-		// Write sourcemaps.
+	// Write sourcemaps.
 		.pipe(sourcemaps.write('.'))
 		.pipe(dest(paths.dest))
 		.pipe(dest(paths.temp))
@@ -284,10 +285,12 @@ async function javascript () {
 			color: true,
 			entryPoints: [entry],
 			format: 'iife',
-		  get metafile () {
-		  	return config.get('isProduction') ? '' : this.outfile
-		  		.replace('.js', '.log.json')
-		  },
+			get metafile () {
+				return config.get('isProduction')
+					? ''
+					: this.outfile
+						.replace('.js', '.log.json')
+			},
 			// Minify JavaScript in production.
 			minify: config.get('isProduction'),
 			outfile: entry
@@ -300,16 +303,16 @@ async function javascript () {
 			// Write sourcemaps.
 			sourcemap: true,
 			// Transpile modern JavaScript to ES2015.
-			target: 'es2015',
+			target: 'es2015'
 		})
 	})
 
 	// Process JavaScript bundles.
 	return src(paths.javascript.written)
 		.pipe(sourcemaps.init())
-		// Polyfill and transpile modern JavaScript to ES5.
+	// Polyfill and transpile modern JavaScript to ES5.
 		.pipe(babel(config.get('vendor.babel')))
-		// Rename legacy file.
+	// Rename legacy file.
 		.pipe(rename(path => {
 			path.basename += '.legacy'
 		}))
@@ -336,9 +339,9 @@ function validate () {
 		// Validate CSS.
 		src(paths.css.written)
 			.pipe(require('gulp-w3c-css')())
-			// Beautify
-			.pipe(beautify.js(config.get('vendor.beautify')))
-			// Write to JSON log file.
+		// Beautify
+			.pipe(beautify.js(beautifyConfig))
+		// Write to JSON log file.
 			.pipe(rename(path => {
 				path.basename += '.log'
 				path.extname = '.json'
@@ -346,7 +349,7 @@ function validate () {
 			.pipe(dest(paths.dest))
 	)
 
-	return merged.isEmpty() ? null : merged
+	return merged.isEmpty() ? undefined : merged
 }
 exports.validate = validate
 
@@ -378,11 +381,11 @@ const build = series(
 	parallel(
 		series(
 			parallel(html, css),
-			parallel(postHtml, validate),
+			parallel(postHtml, validate)
 		),
 		svg,
 		javascript
-	),
+	)
 )
 exports.build = series(build, finish)
 
@@ -392,10 +395,10 @@ exports.build = series(build, finish)
  *
  * @since unreleased
  *
- * @param  {Function} cb Callback function.
- * @return {Object}      Gulp stream.
+ * @param  {Function} callback Callback function.
+ * @return {Object}            Gulp stream.
  */
-async function serve (cb) {
+async function serve (callback) {
 	// Watch written files and re-run tasks.
 	watch(paths.sass.src, css)
 	watch(paths.javascript.src, javascript)
@@ -418,11 +421,11 @@ async function serve (cb) {
 		connect.server({
 			livereload: true,
 			port: 8000 + index,
-			root: `${paths.dest}/${site}`,
+			root: `${paths.dest}/${site}`
 		})
 	})
 
-	return cb()
+	return callback()
 }
 exports.serve = series(watching, build, serve)
 
@@ -469,36 +472,32 @@ function version () {
 
 		// Changelog.
 		src(paths.changelog)
-			// Bump unreleased version.
+		// Bump unreleased version.
 			.pipe(replace('## [Unreleased]', `## [${version}] - ${today}`))
-			// Remove empty changelog subheads.
+		// Remove empty changelog subheads.
 			.pipe(replace(
-				new RegExp(
-					'### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n',
-					'g'
-				),
+				/### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n/g,
 				''
 			))
-			// Add default unreleased section.
+		// Add default unreleased section.
 			.pipe(replace(
 				`## [${version}] - ${today}`,
 				'## [Unreleased]\n\n' +
-					'### Added\n\n' +
-					'### Changed\n\n' +
-					'### Deprecated\n\n' +
-					'### Removed\n\n' +
-					'### Fixed\n\n' +
-					'### Security\n\n' +
-					`## [${version}] - ${today}`
+				'### Added\n\n' +
+				'### Changed\n\n' +
+				'### Deprecated\n\n' +
+				'### Removed\n\n' +
+				'### Fixed\n\n' +
+				'### Security\n\n' +
+				`## [${version}] - ${today}`
 			))
-			// Bump unreleased link and add new release link.
+		// Bump unreleased link and add new release link.
 			.pipe(replace(
-				new RegExp('/compare/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)', 'g'),
-				`/compare/HEAD..${version}\n[${version}]: ${url}/commits/${version}`)
-			)
+				/\/compare\/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)/g,
+				`/compare/HEAD..${version}\n[${version}]: ${url}/commits/${version}`))
 			.pipe(dest('./'))
 	)
 
-	return merged.isEmpty() ? null : merged
+	return merged.isEmpty() ? undefined : merged
 }
 exports.version = version

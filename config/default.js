@@ -28,6 +28,6 @@ module.exports = {
 		node_sass: require('./vendor/node-sass'),
 		purgecss: require('./vendor/purgecss'),
 		stylelint: require('./vendor/stylelint'),
-		twitter: require('./vendor/twitter'),
-	},
+		twitter: require('./vendor/twitter')
+	}
 }
