@@ -383,7 +383,8 @@ const build = series(
 	parallel(
 		series(
 			parallel(html, css),
-			parallel(postHtml, validate)
+			validate,
+			postHtml
 		),
 		svg,
 		javascript
