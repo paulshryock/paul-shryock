@@ -15,7 +15,6 @@ const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
 const fg = require('fast-glob')
-const log = require('fancylog')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
@@ -39,6 +38,9 @@ const eslintConfig = config.get('vendor.eslint')
 const ava = require('gulp-ava')
 const esbuild = require('esbuild')
 const babel = require('gulp-babel')
+
+// SVG
+const svgmin = require('gulp-svgmin')
 
 /**
  * Set isWatching state.
@@ -183,11 +185,11 @@ exports.html = html
  */
 function postHtml () {
 	return src(paths.html.temp)
-	// Inline critical CSS.
+		// Inline critical CSS.
 		.pipe(critical.stream(config.get('vendor.critical')))
-	// Beautify HTML.
+		// Beautify HTML.
 		.pipe(beautify.html(beautifyConfig))
-	// Minify HTML in production.
+		// Minify HTML in production.
 		.pipe(
 			gulpif(
 				config.get('isProduction'),
@@ -205,13 +207,30 @@ exports.postHtml = postHtml
  *
  * @since unreleased
  *
- * @param  {Function} callback Callback function.
- * @return {Object}            Gulp stream.
+ * @return {Object} Gulp stream.
  */
-function svg (callback) {
-	// @todo [#9]: Optimize SVG.
-	// @todo [#10]: Minify SVG.
-	return callback()
+function svg () {
+	return src(paths.svg.src)
+		// Minify SVG in production; beautify in development.
+		.pipe(svgmin({
+			js2svg: {
+				pretty: !config.get('isProduction')
+			}
+		}))
+		// Rewrite directory path.
+		.pipe(rename(path => {
+			path.dirname = path.dirname
+				.replace('/assets', '')
+		}))
+		// Rewrite file name in production.
+		.pipe(gulpif(
+			config.get('isProduction'),
+			rename(path => {
+				path.basename += '.min'
+			})
+		))
+		.pipe(dest(paths.dest))
+		.pipe(connect.reload())
 }
 exports.svg = svg
 
@@ -225,11 +244,11 @@ exports.svg = svg
  */
 function css () {
 	return src(paths.sass.src)
-	// Initialize sourcemaps.
+		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
-	// Process Sass.
+		// Process Sass.
 		.pipe(sass(config.get('vendor.node_sass')).on('error', sass.logError))
-	// Post-process CSS.
+		// Post-process CSS.
 		.pipe(postcss([
 			require('postcss-import'), // Inline @import rules content
 			require('precss'), // Use Sass-like markup and staged CSS features
@@ -237,31 +256,31 @@ function css () {
 			require('pixrem')(), // Add fallbacks for rem units
 			require('autoprefixer') // Add vendor prefixes
 		]))
-	// Purge unused CSS.
+		// Purge unused CSS.
 		.pipe(purgecss(config.get('vendor.purgecss')))
-	// Beautify CSS.
+		// Beautify CSS.
 		.pipe(beautify.css(beautifyConfig))
-	// Minify CSS in production.
+		// Minify CSS in production.
 		.pipe(gulpif(
 			config.get('isProduction'),
 			postcss([
 				require('cssnano')(config.get('vendor.cssnano'))
 			])
 		))
-	// Rewrite file name in production.
+		// Rewrite file name in production.
 		.pipe(gulpif(
 			config.get('isProduction'),
 			rename(path => {
 				path.basename += '.min'
 			})
 		))
-	// Rewrite directory path.
+		// Rewrite directory path.
 		.pipe(rename(path => {
 			path.dirname = path.dirname
 				.replace('/assets', '')
 				.replace('/sass', '/css')
 		}))
-	// Write sourcemaps.
+		// Write sourcemaps.
 		.pipe(sourcemaps.write('.'))
 		.pipe(dest(paths.dest))
 		.pipe(dest(paths.temp))
@@ -311,9 +330,9 @@ async function javascript () {
 	// Process JavaScript bundles.
 	return src(paths.javascript.written)
 		.pipe(sourcemaps.init())
-	// Polyfill and transpile modern JavaScript to ES5.
+		// Polyfill and transpile modern JavaScript to ES5.
 		.pipe(babel(config.get('vendor.babel')))
-	// Rename legacy file.
+		// Rename legacy file.
 		.pipe(rename(path => {
 			path.basename += '.legacy'
 		}))
@@ -341,9 +360,9 @@ function validate () {
 		// Validate CSS.
 		src(paths.css.written)
 			.pipe(require('gulp-w3c-css')())
-		// Beautify
+			// Beautify
 			.pipe(beautify.js(beautifyConfig))
-		// Write to JSON log file.
+			// Write to JSON log file.
 			.pipe(rename(path => {
 				path.basename += '.log'
 				path.extname = '.json'
@@ -404,8 +423,9 @@ exports.build = series(build, finish)
 async function serve (callback) {
 	// Watch written files and re-run tasks.
 	watch(paths.sass.src, css)
-	watch(paths.javascript.src, javascript)
 	watch([paths.html.temp, paths.css.written], postHtml)
+	watch(paths.svg.src, svg)
+	watch(paths.javascript.src, javascript)
 
 	// Generate a list of sites.
 	const files = await fg([paths.html.written])

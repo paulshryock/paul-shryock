@@ -1,7 +1,13 @@
     <header class="masthead">
-      {%- if slug == '.' %}
-      <h1 class="masthead__title">{{ masthead.title }}</h1>
-      {%- else %}
-      <p class="masthead__title">{{ masthead.title }}</p>
-      {%- endif %}
+      {%- if slug == '.' %}<h1 class="masthead__title">
+      {%- else %}<p class="masthead__title">{%- endif %}
+	      {%- if masthead.logo.src %}
+	      	<img
+	      		src="{{ masthead.logo.src }}"
+	      		alt="{{ masthead.logo.alt }}"
+	      		width="{{ masthead.logo.width }}"
+	      		height="{{ masthead.logo.height }}">
+	      {%- else %}{{ masthead.title }}
+	      {%- endif %}
+      {%- if slug == '.' %}</h1>{%- else %}</p>{%- endif %}
     </header>
