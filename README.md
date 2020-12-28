@@ -1,10 +1,9 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/paulshryock/paul-shryock/main/legacy/assets/paul-shryock-logos/paul-shryock-logo-4c.png" alt="Paul Shryock" width="96" height="96">
+  <p><img src="https://raw.githubusercontent.com/paulshryock/paul-shryock/main/src/pshry.com/assets/img/logos/ps-monogram-2021-4c.svg" alt="Paul Shryock" width="96" height="96"></p>
+	<p><strong>2021 reboot of my personal website.</strong></p>
+	<p><a href="https://app.netlify.com/sites/pshry-com/deploys"><img src="https://api.netlify.com/api/v1/badges/99675821-ec9f-46d6-a6b4-c47a0104b756/deploy-status" alt="Netlify status"></a></p>
+	<br /><br />
 </div>
-<p align="center"><strong>2020 reboot of my personal website.</strong></p>
-
-
-[![Netlify Status][netlify-status]][netlify-deploys]
 
 # Paul Shryock
 

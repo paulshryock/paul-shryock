@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Configure Gulp and Eleventy.
 - Add legacy content.
 - Add pshry.com content, data, and layouts.
+- Add background-agnostic logo. [#1]
 - Lint HTML. [#2]
 - Lint Sass. [#7]/[#3]
 - Lint JavaScript.
