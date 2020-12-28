@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](semver).
 - Minify HTML in production.
 - Inline critical CSS. [#5]
 - Validate HTML. [#6]
+- Optimize SVG. [#9]
+- Minify SVG in production. [#10]
 - Bundle JavaScript modules. [#11]
 - Transpile modern JavaScript to ES5. [#12]
 - Polyfill modern JavaScript to ES5. [#13]
