@@ -11,7 +11,7 @@ I [aspire][aspire] to make Accessible, Secure, Performant, Inclusive, Responsive
 
 ## Websites
 
-This monorepo contains source code for the following websites:
+This repository contains source code for the following websites:
 
 - pshry.com
 

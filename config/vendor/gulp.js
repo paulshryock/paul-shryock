@@ -22,6 +22,18 @@ module.exports = {
 		svg: {
 			src: './src/**/*.svg',
 		},
+		images: {
+			src: './src/**/*.+(png|jpg|gif)',
+		},
+		webManifest: {
+			temp: './build/temp/**/*.webmanifest',
+		},
+		xml: {
+			temp: './build/temp/**/*.xml',
+		},
+		favicon: {
+			src: './src/**/favicon.ico',
+		},
 		sass: {
 			src: './src/**/sass/*.s+(a|c)ss',
 			lint: {

@@ -15,6 +15,7 @@ const rename = require('gulp-rename')
 const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
 const fg = require('fast-glob')
+const log = require('fancy-log')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
@@ -41,6 +42,9 @@ const babel = require('gulp-babel')
 
 // SVG
 const svgmin = require('gulp-svgmin')
+
+// Images
+const imagemin = require('gulp-imagemin')
 
 /**
  * Set isWatching state.
@@ -150,26 +154,38 @@ exports.lint = lint
  * @return {Object}            Gulp stream.
  */
 async function html (callback) {
-	// Generate a list of sites.
-	const files = await fg([paths.markdown.src])
-	const sites = [...new Set(
-		files.map(site => {
-			return site
-				.replace('./src/', '')
-				.replace(/\/.*/g, '')
+	try {
+		// Generate a list of sites.
+		const files = await fg([paths.markdown.src])
+		const sites = [...new Set(
+			files.map(site => {
+				return site
+					.replace('./src/', '')
+					.replace(/\/.*/g, '')
+			})
+		)]
+
+		// Generate HTML for all sites.
+		sites.forEach(async site => {
+			try {
+				// Initialize static site generator.
+				const ssg = new Eleventy()
+				ssg.setConfigPathOverride(`./config/vendor/${site}/eleventy.js`)
+				await ssg.init()
+
+				// Write HTML files and maybe watch for changes.
+				await isWatching ? ssg.watch() : ssg.write()
+			}
+
+			catch (error) {
+				log.error(error)
+			}
 		})
-	)]
+	}
 
-	// Generate HTML for all sites.
-	sites.forEach(async site => {
-		// Initialize static site generator.
-		const ssg = new Eleventy()
-		ssg.setConfigPathOverride(`./config/vendor/${site}/eleventy.js`)
-		await ssg.init()
-
-		// Write HTML files and maybe watch for changes.
-		await isWatching ? ssg.watch() : ssg.write()
-	})
+	catch (error) {
+		log.error(error)
+	}
 
 	return callback()
 }
@@ -235,6 +251,61 @@ function svg () {
 exports.svg = svg
 
 /**
+ * Handle pass through tasks.
+ * Usage: `gulp passThrough`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream.
+ */
+function passThrough () {
+	const merged = merge(
+		// XML files.
+		src(paths.xml.temp)
+			.pipe(dest(paths.dest))
+			.pipe(connect.reload()),
+
+		// Web manifest.
+		src(paths.webManifest.temp)
+			.pipe(dest(paths.dest))
+			.pipe(connect.reload()),
+
+		// Favicons.
+		src(paths.favicon.src)
+			.pipe(rename(path => {
+				path.dirname = path.dirname
+					.replace('/assets/img/favicon', '')
+			}))
+			.pipe(dest(paths.dest))
+			.pipe(connect.reload())
+	)
+
+	return merged.isEmpty() ? undefined : merged
+}
+exports.passThrough = passThrough
+
+/**
+ * Handle image tasks.
+ * Usage: `gulp images`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream.
+ */
+function images () {
+	return src(paths.images.src)
+		.pipe(imagemin())
+		.pipe(rename(path => {
+			path.dirname = path.dirname
+				.replace('/assets', '')
+		}))
+		.pipe(dest(paths.dest))
+		.pipe(dest(paths.dest))
+		.pipe(connect.reload())
+}
+exports.images = images
+
+/**
  * Handle CSS tasks.
  * Usage: `gulp css`
  *
@@ -297,35 +368,41 @@ exports.css = css
  * @return {Object} Gulp stream
  */
 async function javascript () {
-	// Bundle JavaScript modules.
-	const entries = await fg([paths.javascript.entry])
-	entries.forEach(entry => {
-		esbuild.buildSync({
-			bundle: true,
-			color: true,
-			entryPoints: [entry],
-			format: 'iife',
-			get metafile () {
-				return config.get('isProduction')
-					? ''
-					: this.outfile
-						.replace('.js', '.log.json')
-			},
-			// Minify JavaScript in production.
-			minify: config.get('isProduction'),
-			outfile: entry
-				.replace('src/', 'build/')
-				.replace('assets/', '')
-				.replace(
-					/(\.min)?\.js/g,
-					config.get('isProduction') ? '.min.js' : '.js'
-				),
-			// Write sourcemaps.
-			sourcemap: true,
-			// Transpile modern JavaScript to ES2015.
-			target: 'es2015'
+	try {
+		// Bundle JavaScript modules.
+		const entries = await fg([paths.javascript.entry])
+		entries.forEach(entry => {
+			esbuild.buildSync({
+				bundle: true,
+				color: true,
+				entryPoints: [entry],
+				format: 'iife',
+				get metafile () {
+					return config.get('isProduction')
+						? ''
+						: this.outfile
+							.replace('.js', '.log.json')
+				},
+				// Minify JavaScript in production.
+				minify: config.get('isProduction'),
+				outfile: entry
+					.replace('src/', 'build/')
+					.replace('assets/', '')
+					.replace(
+						/(\.min)?\.js/g,
+						config.get('isProduction') ? '.min.js' : '.js'
+					),
+				// Write sourcemaps.
+				sourcemap: true,
+				// Transpile modern JavaScript to ES2015.
+				target: 'es2015'
+			})
 		})
-	})
+	}
+
+	catch (error) {
+		log.error(error)
+	}
 
 	// Process JavaScript bundles.
 	return src(paths.javascript.written)
@@ -403,9 +480,11 @@ const build = series(
 		series(
 			parallel(html, css),
 			validate,
-			postHtml
+			postHtml,
+			passThrough
 		),
 		svg,
+		images,
 		javascript
 	)
 )
@@ -425,28 +504,36 @@ async function serve (callback) {
 	watch(paths.sass.src, css)
 	watch([paths.html.temp, paths.css.written], postHtml)
 	watch(paths.svg.src, svg)
+	watch(paths.images.src, images)
 	watch(paths.javascript.src, javascript)
+	watch([paths.xml.temp, paths.favicon.src], passThrough)
 
-	// Generate a list of sites.
-	const files = await fg([paths.html.written])
-	const sites = [...new Set(
-		files
-			.filter(site => !site.includes('temp/'))
-			.map(site => {
-				return site
-					.replace('./build/', '')
-					.replace(/\/.*/g, '')
+	try {
+		// Generate a list of sites.
+		const files = await fg([paths.html.written])
+		const sites = [...new Set(
+			files
+				.filter(site => !site.includes('temp/'))
+				.map(site => {
+					return site
+						.replace('./build/', '')
+						.replace(/\/.*/g, '')
+				})
+		)]
+
+		// Serve each site to a unique port.
+		sites.forEach((site, index) => {
+			connect.server({
+				livereload: true,
+				port: 8000 + index,
+				root: `${paths.dest}/${site}`
 			})
-	)]
-
-	// Serve each site to a unique port.
-	sites.forEach((site, index) => {
-		connect.server({
-			livereload: true,
-			port: 8000 + index,
-			root: `${paths.dest}/${site}`
 		})
-	})
+	}
+
+	catch (error) {
+		log.error(error)
+	}
 
 	return callback()
 }
