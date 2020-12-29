@@ -25,11 +25,13 @@ and this project adheres to [Semantic Versioning](semver).
 - Minify CSS in production. [#26]
 - Preserve CSS sourcemaps.
 - Validate CSS. [#8]
+- Add HTML head elements. [#60]
 - Build HTML.
 - Beautify HTML.
 - Minify HTML in production.
 - Inline critical CSS. [#5]
 - Validate HTML. [#6]
+- Add favicons. [#42]
 - Optimize SVG. [#9]
 - Minify SVG in production. [#10]
 - Bundle JavaScript modules. [#11]
