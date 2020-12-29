@@ -1,0 +1,7 @@
+{%- if excerpt or site.excerpt %}
+<!--
+	Short description of the document (limit to 150 characters). This content
+	*may* be used as a part of search engine results.
+-->
+<meta name="description" content="{{ excerpt | default: site.excerpt }}">
+{%- endif %}

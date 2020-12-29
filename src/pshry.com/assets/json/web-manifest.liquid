@@ -1,0 +1,21 @@
+---
+permalink: ./site.webmanifest
+---
+{
+	"name": "{{ site.title }}",
+	"short_name": "{{ site.title }}",
+	"description": "{{ site.excerpt }}",
+	"start_url": "/?utm_source=homescreen",
+	"background_color": "{{ site.colors.white }}",
+	"theme_color": "{{ site.colors.primary }}",
+	"icons": [
+		{%- assign sizes = '48,96,144,192' | split: ',' %}
+		{%- for size in sizes %}
+		{
+			"src": "{{ site.favicon }}-{{ size }}.png",
+			"type": "image/png",
+			"sizes": "{{ size }}x{{ size }}"
+		}{%- unless forloop.last == true %},{% endunless %}
+		{%- endfor %}
+	]
+}

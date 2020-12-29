@@ -1,4 +1,26 @@
 <head>
-  <title>{{ site.title }}</title>
+	<!--
+		Set the character encoding for this document, so that all characters within
+		the UTF-8 space (such as emoji) are rendered correctly.
+	-->
+  <meta charset="utf-8">
+  <meta
+  	name="viewport"
+  	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!--
+	  The above 2 meta tags *must* come first in the <head> to consistently ensure
+	  proper document rendering. Any other head element should come *after* these
+	  tags.
+	-->
+  {% include meta/browsers %}
+  {% include meta/csp %}
+  {% include meta/referrer %}
+  {% include meta/robots %}
+  {% include meta/title %}
+  {% include meta/description %}
+  {% include meta/canonical-url %}
+  {% include meta/pwa %}
+  {% include meta/icons %}
+  {% include meta/colors %}
   {% include meta/styles %}
 </head>
