@@ -9,7 +9,7 @@ const config = require('config')
  */
 module.exports = {
 	lang: 'en-US',
-	csp: `default-src none;
+	csp: `default-src 'none';
 		style-src 'self' 'unsafe-inline';
 		script-src 'self' 'unsafe-inline';
 		img-src 'self';`,
