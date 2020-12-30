@@ -9,6 +9,7 @@ module.exports = {
 	paths: {
 		changelog: './CHANGELOG.md',
 		dest: './build',
+		csp: './build/csp',
 		temp: './build/temp',
 		markdown: {
 			src: './src/**/*.md',
@@ -17,7 +18,17 @@ module.exports = {
 			src: './src/**/*.html',
 			get lint () { return this.src },
 			temp: './build/temp/**/*.html',
-			written: './build/**/*.html'
+			written: [
+				'./build/**/*.html',
+				'!./build/csp/**/*.html',
+				'!./build/temp/**/*.html'
+			]
+		},
+		json: {
+			csp: {
+				script: './build/csp/**.script.json',
+				style: './build/csp/**.style.json'
+			}
 		},
 		svg: {
 			src: './src/**/*.svg',
@@ -27,6 +38,9 @@ module.exports = {
 		},
 		webManifest: {
 			temp: './build/temp/**/*.webmanifest',
+		},
+		underscore: {
+			temp: './build/temp/**/_*',
 		},
 		xml: {
 			temp: './build/temp/**/*.xml',
@@ -51,7 +65,10 @@ module.exports = {
 			config: './config/*.js',
 			entry: './src/**/js/*.js',
 			src: './src/**/*.js',
-			written: './build/**/*.js',
+			written: [
+				'./build/**/*.js',
+				'!./build/**/*.legacy.js',
+			],
 			get assets () {
 				return [
 					this.src,

@@ -9,6 +9,7 @@ const merge = require('merge-stream')
 let isWatching = false
 
 // Utilities
+const fs = require('fs')
 const del = require('del')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
@@ -16,6 +17,7 @@ const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
 const fg = require('fast-glob')
 const log = require('fancy-log')
+const tap = require('gulp-tap')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
@@ -45,6 +47,10 @@ const svgmin = require('gulp-svgmin')
 
 // Images
 const imagemin = require('gulp-imagemin')
+
+// CSP
+const hashstream = require('inline-csp-hash')
+const cspHashGen = require('csp-hash-generator')
 
 /**
  * Set isWatching state.
@@ -92,7 +98,7 @@ exports.clean = clean
  * @return {Promise}
  */
 function finish () {
-	return del([paths.temp])
+	return del([paths.csp, paths.temp])
 }
 exports.finish = finish
 
@@ -218,6 +224,192 @@ function postHtml () {
 exports.postHtml = postHtml
 
 /**
+ * Handle script and style hashing tasks.
+ * Usave: `gulp hash`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function hash () {
+	const merged = merge(
+		// Script hashes.
+		src(paths.html.written)
+			.pipe(hashstream({
+				what: 'script',
+				replace_cb: (s, hashes) => {
+					return JSON.stringify({
+						script: hashes
+					})
+				}
+			}))
+			.pipe(rename(path => {
+				path.basename += '.script'
+				path.extname = '.json'
+			}))
+			.pipe(dest(paths.csp))
+			.pipe(connect.reload()),
+
+		// Style hashes.
+		src(paths.html.written)
+			.pipe(hashstream({
+				what: 'style',
+				replace_cb: (s, hashes) => {
+					return JSON.stringify({
+						style: hashes
+					})
+				}
+			}))
+			.pipe(rename(path => {
+				path.basename += '.style'
+				path.extname = '.json'
+			}))
+			.pipe(dest(paths.dest + '/csp'))
+			.pipe(connect.reload())
+	)
+
+	return merged.isEmpty() ? undefined : merged
+}
+exports.hash = hash
+
+/**
+ * Enforce stricter content security policy in HTML.
+ * Usage: `gulp csp`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream.
+ */
+function csp () {
+	/**
+	 * Add CSP markup to HTML markup.
+	 *
+	 * @since  unreleased
+	 *
+	 * @param  {string} type     CSP type.
+	 * @param  {string} contents File markup.
+	 * @return {string}          New file markup.
+	 */
+	function addCspMarkup ({type, contents}) {
+		let data = contents
+		// Add CSP meta element if there is none.
+		if (
+			!/<meta.*http-equiv="Content-Security-Policy".*>/.test(data)
+		) {
+			data = data.replace(
+				/(<meta[^>]*name="?viewport"?[^>]*>)/,
+				`$1${config.isProduction ? '' : '\n\n'}` +
+				'<meta http-equiv="Content-Security-Policy" ' +
+				`content="${type}-src 'self';">`
+			)
+		}
+		// Add CSP type if there is none.
+		if (
+			!data.includes(`${type}-src 'self'`)
+		) {
+			data = data.replace(
+				/(<meta http-equiv="?Content-Security-Policy"? content="?)([^>]*)("?>)/,
+				`$1$2 ${type}-src 'self';$3`
+			)
+		}
+		return data
+	}
+
+	/**
+	 * Add hashes to HTML markup.
+	 *
+	 * @since  unreleased
+	 *
+	 * @param  {string} options.type     CSP type.
+	 * @param  {array}  options.hashes   Hashes.
+	 * @param  {string} options.contents File markup.
+	 * @return {string}                  New file markup.
+	 */
+	function addHashes ({type, hashes, contents}) {
+		let data = contents
+		return data.replace(
+			/(script|style)-src(-elem|-attr)? ([^;]*)/g,
+			(match, p1, p2, p3, offset, string) => {
+				// Add hashes which aren't already in the markup.
+				const uniqueHashes = hashes.filter(hash => {
+					return !match.includes(hash)
+				})
+				return p1 === type
+					? `${p1}-src${p2 ? p2 : ''} ${p3} ${uniqueHashes.join(' ')}`
+					: match
+			}
+		)
+	}
+
+	return src(paths.html.written)
+		.pipe(tap((file, t) => {
+    	const path = file.dirname
+    		.replace(/(?<!\/opt)\/build/, '/build/csp') + '/' +
+    		(file.basename.replace(file.extname, ''))
+    	const types = ['script', 'style']
+    	types.forEach(type => {
+    		const extension = `.${type}.json`
+	      const hashes = JSON.parse(
+	      	fs.readFileSync(path + extension, 'UTF8')
+	      )[type]
+
+	    	// Add inline script and style hashes.
+	    	{
+	    		// Split the file contents into parts.
+	  			const parts = file.contents.toString()
+	  				.match(/(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|\s*\/?[>"']))+.)["']?/gm)
+
+	  			// Build query to find inline scripts and styles.
+					let query
+		      switch (type) {
+		      	case 'script':
+		      		query = 'onload="'
+		      		break
+		      	case 'style':
+			      	query = 'style="'
+		      		break
+		      }
+
+		      // Hash queried parts with the query removed.
+		      parts.forEach(part => {
+		      	if (part.indexOf(query) < 0) return
+			      hashes.push(
+			      	"'" +
+			      	cspHashGen(
+			      		part
+			      			.replace(query, '')
+			      			// For style, remove the ending double quote.
+			      			.slice(0, type === 'style' ? -1 : part.length)
+			      	).toString() +
+			      	"'"
+			      )
+		      })
+	    	}
+
+				// If there are no hashes, or the file contains the hashes, bail.
+				if (!hashes.length || hashes.every(hash => {
+					return file.contents.toString().includes(hash)
+				})) return
+
+				// Write new file content.
+				file.contents = Buffer.from(
+					addHashes({
+						type,
+						hashes,
+						contents: addCspMarkup({
+							type,
+							contents: file.contents.toString()
+						})
+					})
+				)
+				// @todo: Also write to _headers per route?
+    	})
+		}))
+		.pipe(dest(paths.dest))
+}
+exports.csp = csp
+
+/**
  * Handle SVG tasks.
  * Usage: `gulp svg`
  *
@@ -267,6 +459,11 @@ function passThrough () {
 
 		// Web manifest.
 		src(paths.webManifest.temp)
+			.pipe(dest(paths.dest))
+			.pipe(connect.reload()),
+
+		// Underscore files.
+		src(paths.underscore.temp)
 			.pipe(dest(paths.dest))
 			.pipe(connect.reload()),
 
@@ -479,9 +676,10 @@ const build = series(
 	parallel(
 		series(
 			parallel(html, css),
-			validate,
+			// validate,
 			postHtml,
-			passThrough
+			parallel(passThrough, hash),
+			csp
 		),
 		svg,
 		images,
@@ -502,18 +700,30 @@ exports.build = series(build, finish)
 async function serve (callback) {
 	// Watch written files and re-run tasks.
 	watch(paths.sass.src, css)
-	watch([paths.html.temp, paths.css.written], postHtml)
+	watch([
+		paths.html.temp,
+		paths.css.written
+	], postHtml)
+	watch([
+		paths.xml.temp,
+		paths.webManifest.temp,
+		paths.underscore.temp,
+		paths.favicon.src,
+	], passThrough)
+	watch(paths.html.written, hash)
+	watch([
+		paths.json.csp.script,
+		paths.json.csp.style
+	], csp)
 	watch(paths.svg.src, svg)
 	watch(paths.images.src, images)
 	watch(paths.javascript.src, javascript)
-	watch([paths.xml.temp, paths.favicon.src], passThrough)
 
 	try {
 		// Generate a list of sites.
-		const files = await fg([paths.html.written])
+		const files = await fg(paths.html.written)
 		const sites = [...new Set(
 			files
-				.filter(site => !site.includes('temp/'))
 				.map(site => {
 					return site
 						.replace('./build/', '')
