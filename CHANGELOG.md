@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Add local development server. [#46]/[#47]
 - Bump docblock and Changelog versions during new version.
 - Setup CI/CD. [#38]
+- Add Content Security Policy headers. [#65]
 
 ### Changed
 
