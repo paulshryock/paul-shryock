@@ -50,7 +50,7 @@ const imagemin = require('gulp-imagemin')
 
 // CSP
 const hashstream = require('inline-csp-hash')
-const cspHashGen = require('csp-hash-generator')
+const crypto = require('crypto')
 
 /**
  * Set isWatching state.
@@ -181,15 +181,11 @@ async function html (callback) {
 
 				// Write HTML files and maybe watch for changes.
 				await isWatching ? ssg.watch() : ssg.write()
-			}
-
-			catch (error) {
+			} catch (error) {
 				log.error(error)
 			}
 		})
-	}
-
-	catch (error) {
+	} catch (error) {
 		log.error(error)
 	}
 
@@ -273,6 +269,96 @@ function hash () {
 exports.hash = hash
 
 /**
+ * Hash inline script or style.
+ *
+ * @since  unreleased
+ *
+ * @param  {string} options.inline Inline script or style to hash.
+ * @param  {string} options.query  Query string to remove.
+ * @param  {string} options.type   Type of string ('script' or 'style').
+ * @return {string}                Hash ready to be inserted in a CSP.
+ */
+function hashInlineScriptOrStyle ({ inline, query, type }) {
+	return "'sha256-" +
+	crypto
+		.createHash('sha256')
+		.update(
+			inline
+				// Remove the query.
+				.replace(query, '')
+				// For style, remove the ending double quote.
+				.slice(
+					0,
+					(config.get('isProduction') && type !== 'style')
+						? inline.length
+						: -1
+				)
+		)
+		.digest()
+		.toString('base64') +
+	"'"
+}
+
+/**
+ * Add CSP markup to HTML markup.
+ *
+ * @since  unreleased
+ *
+ * @param  {string} type     CSP type.
+ * @param  {string} contents File markup.
+ * @return {string}          New file markup.
+ */
+function addCspMarkup ({ type, contents }) {
+	let data = contents
+	// Add CSP meta element if there is none.
+	if (
+		!/<meta.*http-equiv="Content-Security-Policy".*>/.test(data)
+	) {
+		data = data.replace(
+			/(<meta[^>]*name="?viewport"?[^>]*>)/,
+			`$1${config.isProduction ? '' : '\n\n'}` +
+			'<meta http-equiv="Content-Security-Policy" ' +
+			`content="${type}-src 'self';">`
+		)
+	}
+	// Add CSP type if there is none.
+	if (
+		!data.includes(`${type}-src 'self'`)
+	) {
+		data = data.replace(
+			/(<meta http-equiv="?Content-Security-Policy"? content="?)([^">]*)("?>)/,
+			`$1$2 ${type}-src 'self';$3`
+		)
+	}
+	return data
+}
+
+/**
+ * Add hashes to HTML markup.
+ *
+ * @since  unreleased
+ *
+ * @param  {string} options.type     CSP type.
+ * @param  {array}  options.hashes   Hashes.
+ * @param  {string} options.contents File markup.
+ * @return {string}                  New file markup.
+ */
+function addHashes ({ type, hashes, contents }) {
+	return contents.replace(
+		/(script|style)-src(-elem|-attr)? ([^;]*)/g,
+		(match, p1, p2, p3, offset, string) => {
+			// Add hashes which aren't already in the markup.
+			const uniqueHashes = hashes.filter(hash => {
+				return !match.includes(hash)
+			})
+			return p1 === type
+				? `${p1}-src${p2 || ''} ${p3} ${uniqueHashes.join(' ')}`
+				: match
+		}
+	)
+}
+
+/**
  * Enforce stricter content security policy in HTML.
  * Usage: `gulp csp`
  *
@@ -281,113 +367,45 @@ exports.hash = hash
  * @return {Object} Gulp stream.
  */
 function csp () {
-	/**
-	 * Add CSP markup to HTML markup.
-	 *
-	 * @since  unreleased
-	 *
-	 * @param  {string} type     CSP type.
-	 * @param  {string} contents File markup.
-	 * @return {string}          New file markup.
-	 */
-	function addCspMarkup ({type, contents}) {
-		let data = contents
-		// Add CSP meta element if there is none.
-		if (
-			!/<meta.*http-equiv="Content-Security-Policy".*>/.test(data)
-		) {
-			data = data.replace(
-				/(<meta[^>]*name="?viewport"?[^>]*>)/,
-				`$1${config.isProduction ? '' : '\n\n'}` +
-				'<meta http-equiv="Content-Security-Policy" ' +
-				`content="${type}-src 'self';">`
-			)
-		}
-		// Add CSP type if there is none.
-		if (
-			!data.includes(`${type}-src 'self'`)
-		) {
-			data = data.replace(
-				/(<meta http-equiv="?Content-Security-Policy"? content="?)([^>]*)("?>)/,
-				`$1$2 ${type}-src 'self';$3`
-			)
-		}
-		return data
-	}
-
-	/**
-	 * Add hashes to HTML markup.
-	 *
-	 * @since  unreleased
-	 *
-	 * @param  {string} options.type     CSP type.
-	 * @param  {array}  options.hashes   Hashes.
-	 * @param  {string} options.contents File markup.
-	 * @return {string}                  New file markup.
-	 */
-	function addHashes ({type, hashes, contents}) {
-		let data = contents
-		return data.replace(
-			/(script|style)-src(-elem|-attr)? ([^;]*)/g,
-			(match, p1, p2, p3, offset, string) => {
-				// Add hashes which aren't already in the markup.
-				const uniqueHashes = hashes.filter(hash => {
-					return !match.includes(hash)
-				})
-				return p1 === type
-					? `${p1}-src${p2 ? p2 : ''} ${p3} ${uniqueHashes.join(' ')}`
-					: match
-			}
-		)
-	}
-
 	return src(paths.html.written)
 		.pipe(tap((file, t) => {
-    	const path = file.dirname
-    		.replace(/(?<!\/opt)\/build/, '/build/csp') + '/' +
-    		(file.basename.replace(file.extname, ''))
-    	const types = ['script', 'style']
-    	types.forEach(type => {
-    		const extension = `.${type}.json`
-	      const hashes = JSON.parse(
-	      	fs.readFileSync(path + extension, 'UTF8')
-	      )[type]
+			const types = ['script', 'style']
+			types.forEach(type => {
+				const hashes = JSON.parse(
+					fs.readFileSync(
+						file.dirname.replace(/(?<!\/opt)\/build/, '/build/csp') + '/' +
+							(file.basename.replace(file.extname, '')) + `.${type}.json`,
+						'UTF8')
+				)[type]
 
-	    	// Add inline script and style hashes.
-	    	{
-	    		// Split the file contents into parts.
-	  			const parts = file.contents.toString()
-	  				.match(/(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|\s*\/?[>"']))+.)["']?/gm)
-
-	  			// Build query to find inline scripts and styles.
+				// Add inline script and style hashes.
+				{
+					// Build query to find inline scripts and styles.
 					let query
-		      switch (type) {
-		      	case 'script':
-		      		query = 'onload="'
-		      		break
-		      	case 'style':
-			      	query = 'style="'
-		      		break
-		      }
+					switch (type) {
+					case 'script':
+						query = config.get('isProduction') ? 'onload=' : 'onload="'
+						break
+					case 'style':
+						query = config.get('isProduction') ? 'style=' : 'style="'
+						break
+					}
 
-		      // Hash queried parts with the query removed.
-		      parts.forEach(part => {
-		      	if (part.indexOf(query) < 0) return
-			      hashes.push(
-			      	"'" +
-			      	cspHashGen(
-			      		part
-			      			.replace(query, '')
-			      			// For style, remove the ending double quote.
-			      			.slice(0, type === 'style' ? -1 : part.length)
-			      	).toString() +
-			      	"'"
-			      )
-		      })
-	    	}
+					// Split the file contents into parts and filter by the query.
+					const inlineFiltered = file.contents.toString()
+						.match(/(\S+)=["']?((?:.(?!["']?\s+\S+=|\s*\/?["'>]))+.)["']?/gm)
+						.filter(inline => inline.includes(query))
+					// If there are no parts matching the query, bail.
+					if (!inlineFiltered.length > 0) return
+
+					// Hash queried parts with the query removed.
+					inlineFiltered.forEach(inline => {
+						hashes.push(hashInlineScriptOrStyle({ inline, query, type }))
+					})
+				}
 
 				// If there are no hashes, or the file contains the hashes, bail.
-				if (!hashes.length || hashes.every(hash => {
+				if (!hashes.length > 0 || hashes.every(hash => {
 					return file.contents.toString().includes(hash)
 				})) return
 
@@ -402,8 +420,8 @@ function csp () {
 						})
 					})
 				)
-				// @todo: Also write to _headers per route?
-    	})
+				// @todo: Write to _headers per route instead?
+			})
 		}))
 		.pipe(dest(paths.dest))
 }
@@ -595,9 +613,7 @@ async function javascript () {
 				target: 'es2015'
 			})
 		})
-	}
-
-	catch (error) {
+	} catch (error) {
 		log.error(error)
 	}
 
@@ -708,7 +724,7 @@ async function serve (callback) {
 		paths.xml.temp,
 		paths.webManifest.temp,
 		paths.underscore.temp,
-		paths.favicon.src,
+		paths.favicon.src
 	], passThrough)
 	watch(paths.html.written, hash)
 	watch([
@@ -739,9 +755,7 @@ async function serve (callback) {
 				root: `${paths.dest}/${site}`
 			})
 		})
-	}
-
-	catch (error) {
+	} catch (error) {
 		log.error(error)
 	}
 
@@ -792,14 +806,14 @@ function version () {
 
 		// Changelog.
 		src(paths.changelog)
-		// Bump unreleased version.
+			// Bump unreleased version.
 			.pipe(replace('## [Unreleased]', `## [${version}] - ${today}`))
-		// Remove empty changelog subheads.
+			// Remove empty changelog subheads.
 			.pipe(replace(
 				/### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n/g,
 				''
 			))
-		// Add default unreleased section.
+			// Add default unreleased section.
 			.pipe(replace(
 				`## [${version}] - ${today}`,
 				'## [Unreleased]\n\n' +
@@ -811,7 +825,7 @@ function version () {
 				'### Security\n\n' +
 				`## [${version}] - ${today}`
 			))
-		// Bump unreleased link and add new release link.
+			// Bump unreleased link and add new release link.
 			.pipe(replace(
 				/\/compare\/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)/g,
 				`/compare/HEAD..${version}\n[${version}]: ${url}/commits/${version}`))
