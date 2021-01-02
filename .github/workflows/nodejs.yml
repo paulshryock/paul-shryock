@@ -1,15 +1,10 @@
-name: Node.js CI
-
+name: Node CI
 on: [pull_request]
-
 jobs:
 
   lint:
-
     name: lint
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
@@ -19,11 +14,8 @@ jobs:
     - run: npm run lint
 
   test:
-
-    name: test (Node.js ${{ matrix.node-version }})
-
+    name: test
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
