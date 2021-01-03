@@ -274,29 +274,12 @@ exports.hash = hash
  * @since  unreleased
  *
  * @param  {string} options.inline Inline script or style to hash.
- * @param  {string} options.query  Query string to remove.
- * @param  {string} options.type   Type of string ('script' or 'style').
  * @return {string}                Hash ready to be inserted in a CSP.
  */
-function hashInlineScriptOrStyle ({ inline, query, type }) {
+function hashInlineScriptOrStyle ({ inline }) {
 	return "'sha256-" +
-	crypto
-		.createHash('sha256')
-		.update(
-			inline
-				// Remove the query.
-				.replace(query, '')
-				// For style, remove the ending double quote.
-				.slice(
-					0,
-					(config.get('isProduction') && type !== 'style')
-						? inline.length
-						: -1
-				)
-		)
-		.digest()
-		.toString('base64') +
-	"'"
+		crypto.createHash('sha256').update(inline).digest().toString('base64') +
+		"'"
 }
 
 /**
@@ -400,7 +383,18 @@ function csp () {
 
 					// Hash queried parts with the query removed.
 					inlineFiltered.forEach(inline => {
-						hashes.push(hashInlineScriptOrStyle({ inline, query, type }))
+						const queryRemoved = inline
+							// Remove the query.
+							.replace(query, '')
+							// For style, remove the ending double quote.
+							.slice(
+								0,
+								(!config.get('isProduction') && type === 'style')
+									? -1
+									: inline.length
+							)
+
+						hashes.push(hashInlineScriptOrStyle({ inline: queryRemoved }))
 					})
 				}
 
