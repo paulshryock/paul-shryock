@@ -10,7 +10,9 @@ const env = require('./env')
 module.exports = {
 	lang: 'en-US',
 	csp: "default-src 'none';" +
-		"script-src 'self';" +
+		"script-src 'self' " +
+			// this.media='all'
+			"'sha256-MhtPZXr7+LpJUY5qtMutB+qWfQtMaPccfe7QXtCcEYc=';" +
 		"style-src 'self';" +
 		"img-src 'self';" +
 		"manifest-src 'self';" +

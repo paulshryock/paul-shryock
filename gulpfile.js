@@ -269,17 +269,27 @@ function hash () {
 exports.hash = hash
 
 /**
- * Hash inline script or style.
+ * Add CSP route to headers data.
  *
  * @since  unreleased
  *
- * @param  {string} options.inline Inline script or style to hash.
- * @return {string}                Hash ready to be inserted in a CSP.
+ * @param  {string} options.route   CSP route.
+ * @param  {string} options.headers headers data.
+ * @return {string}                 Modified headers data with new CSP route.
  */
-function hashInlineScriptOrStyle ({ inline }) {
-	return "'sha256-" +
-		crypto.createHash('sha256').update(inline).digest().toString('base64') +
-		"'"
+function addCspRoute ({ route, headers }) {
+	// If the route is already present, bail.
+	if (headers.includes(route)) return headers
+
+	// Get the CSP directive(s) from the headers data.
+	const csp = headers.slice(
+		headers.search(/(?<=((\/\*)(\n\t.*)*))(Content-Security-Policy: )([^\n]*)/),
+		headers.search(/(?<=(?<=((\/\*)(\n\t.*)*))(Content-Security-Policy: )([^\n]*))\n/)
+	)
+
+	return headers.trim() + '\n\n' + route + '\n\t' + csp
+		// Remove extra line breaks.
+		.replace('\n\n\n', '\n\n')
 }
 
 /**
@@ -311,28 +321,22 @@ function addCspHashes ({ route, type, hashes, headers }) {
 	)
 }
 
-/**
- * Add CSP route to headers data.
- *
- * @since  unreleased
- *
- * @param  {string} options.route   CSP route.
- * @param  {string} options.headers headers data.
- * @return {string}                 Modified headers data with new CSP route.
- */
-function addCspRoute ({ route, headers }) {
-	// If the route is already present, bail.
-	if (headers.includes(route)) return headers
+function addCspMarkup ({ type, hashes, markup }) {
+	return markup.replace(
+		/(?<=<meta http-equiv="Content-Security-Policy" content="[^"]*)(script|style)-src(-elem|-attr)? ([^;]*)/gm,
+		(match, p1, p2, p3, offset, string) => {
 
-	// Get the CSP directive(s) from the headers data.
-	const csp = headers.slice(
-		headers.search(/(?<=((\/\*)(\n\t.*)*))(Content-Security-Policy: )([^\n]*)/),
-		headers.search(/(?<=(?<=((\/\*)(\n\t.*)*))(Content-Security-Policy: )([^\n]*))\n/)
+			// If it's the wrong type, bail.
+			if (type !== p1) return match
+
+			// Filter duplicate hashes and bail if there are no unique hashes.
+			const uniqueHashes = hashes.filter(hash => !match.includes(hash))
+			if (uniqueHashes.length < 1) return match
+
+			// Return modified headers markup.
+			return `${p1}-src${p2 || ''} ${p3} ${uniqueHashes.join(' ')}`
+		}
 	)
-
-	return headers.trim() + '\n\n' + route + '\n\t' + csp
-		// Remove extra line breaks.
-		.replace('\n\n\n', '\n\n')
 }
 
 /**
@@ -355,49 +359,10 @@ function csp () {
 						'UTF8')
 				)[type]
 
-				// Add inline script and style hashes.
-				{
-					// Build query to find inline scripts and styles.
-					let query
-					switch (type) {
-					case 'script':
-						query = config.get('isProduction') ? 'onload=' : 'onload="'
-						break
-					case 'style':
-						query = config.get('isProduction') ? 'style=' : 'style="'
-						break
-					}
+				// If there are no hashes, bail.
+				if (!hashes.length > 0) return
 
-					// Split the file contents into parts and filter by the query.
-					const inlineFiltered = file.contents.toString()
-						.match(/(\S+)=["']?((?:.(?!["']?\s+\S+=|\s*\/?["'>]))+.)["']?/gm)
-						.filter(inline => inline.includes(query))
-					// If there are no parts matching the query, bail.
-					if (!inlineFiltered.length > 0) return
-
-					// Hash queried parts with the query removed.
-					inlineFiltered.forEach(inline => {
-						const queryRemoved = inline
-							// Remove the query.
-							.replace(query, '')
-							// For style, remove the ending double quote.
-							.slice(
-								0,
-								(!config.get('isProduction') && type === 'style')
-									? -1
-									: inline.length
-							)
-
-						hashes.push(hashInlineScriptOrStyle({ inline: queryRemoved }))
-					})
-				}
-
-				// If there are no hashes, or the file contains the hashes, bail.
-				if (!hashes.length > 0 || hashes.every(hash => {
-					return file.contents.toString().includes(hash)
-				})) return
-
-				// Add CSP headers for each route.
+				// Add CSP routes and hashes to headers file.
 				const directory = file.dirname
 					.slice(file.dirname.search(/(?<!\/opt)\/build/))
 					.slice('/build/'.length)
@@ -419,6 +384,13 @@ function csp () {
 					}),
 					'utf8'
 				)
+
+				// Add CSP hashes to markup in development.
+				if (!config.get('isProduction')) {
+					file.contents = Buffer.from(
+						addCspMarkup({ type, hashes, markup: file.contents.toString() })
+					)
+				}
 			})
 		}))
 		.pipe(dest(paths.dest))
