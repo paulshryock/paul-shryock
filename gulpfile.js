@@ -283,62 +283,56 @@ function hashInlineScriptOrStyle ({ inline }) {
 }
 
 /**
- * Add CSP markup to HTML markup.
+ * Add CSP hashes to headers.
  *
  * @since  unreleased
  *
- * @param  {string} type     CSP type.
- * @param  {string} contents File markup.
- * @return {string}          New file markup.
+ * @param  {string}   options.route   CSP route.
+ * @param  {string}   options.type    CSP type.
+ * @param  {string[]} options.hashes  CSP hashes.
+ * @param  {string}   options.headers headers data.
+ * @return {string}                   Modified headers data with new CSP hashes.
  */
-function addCspMarkup ({ type, contents }) {
-	let data = contents
-	// Add CSP meta element if there is none.
-	if (
-		!/<meta.*http-equiv="Content-Security-Policy".*>/.test(data)
-	) {
-		data = data.replace(
-			/(<meta[^>]*name="?viewport"?[^>]*>)/,
-			`$1${config.isProduction ? '' : '\n\n'}` +
-			'<meta http-equiv="Content-Security-Policy" ' +
-			`content="${type}-src 'self';">`
-		)
-	}
-	// Add CSP type if there is none.
-	if (
-		!data.includes(`${type}-src 'self'`)
-	) {
-		data = data.replace(
-			/(<meta http-equiv="?Content-Security-Policy"? content="?)([^">]*)("?>)/,
-			`$1$2 ${type}-src 'self';$3`
-		)
-	}
-	return data
+function addCspHashes ({ route, type, hashes, headers }) {
+	return headers.replace(
+		/(?<=((\/[^\/\n]*)*\/\*)(\n\t.*)*Content-Security-Policy: ([^\n]*))(script|style)-src(-elem|-attr)? ([^;]*)/gm,
+		(match, p1, p2, p3, p4, p5, p6, p7, offset, string) => {
+
+			// If it's the wrong route or type, bail.
+			if (route !== p1 || type !== p5) return match
+
+			// Filter duplicate hashes and bail if there are no unique hashes.
+			const uniqueHashes = hashes.filter(hash => !match.includes(hash))
+			if (uniqueHashes.length < 1) return match
+
+			// Return modified headers data.
+			return `${p5}-src${p6 || ''} ${p7} ${uniqueHashes.join(' ')}`
+		}
+	)
 }
 
 /**
- * Add hashes to HTML markup.
+ * Add CSP route to headers data.
  *
  * @since  unreleased
  *
- * @param  {string} options.type     CSP type.
- * @param  {array}  options.hashes   Hashes.
- * @param  {string} options.contents File markup.
- * @return {string}                  New file markup.
+ * @param  {string} options.route   CSP route.
+ * @param  {string} options.headers headers data.
+ * @return {string}                 Modified headers data with new CSP route.
  */
-function addHashes ({ type, hashes, contents }) {
-	return contents.replace(
-		/(script|style)-src(-elem|-attr)? ([^;]*)/g,
-		(match, p1, p2, p3, offset, string) => {
-			// Add hashes which aren't already in the markup.
-			const uniqueHashes = hashes.filter(hash => {
-				return !match.includes(hash)
-			})
-			return p1 === type
-				? `${p1}-src${p2 || ''} ${p3} ${uniqueHashes.join(' ')}`
-				: match
-		}
+function addCspRoute ({ route, headers }) {
+	// If the route is already present, bail.
+	if (headers.includes(route)) return headers
+
+	// Get the CSP directive(s) from the headers data.
+	const csp = headers.slice(
+		headers.search(/(?<=((\/\*)(\n\t.*)*))(Content-Security-Policy: )([^\n]*)/),
+		headers.search(/(?<=(?<=((\/\*)(\n\t.*)*))(Content-Security-Policy: )([^\n]*))\n/)
 	)
+
+	return headers.trim() + '\n\n' + route + '\n\t' + csp
+		// Remove extra line breaks.
+		.replace('\n\n\n', '\n\n')
 }
 
 /**
@@ -403,18 +397,28 @@ function csp () {
 					return file.contents.toString().includes(hash)
 				})) return
 
-				// Write new file content.
-				file.contents = Buffer.from(
-					addHashes({
+				// Add CSP headers for each route.
+				const directory = file.dirname
+					.slice(file.dirname.search(/(?<!\/opt)\/build/))
+					.slice('/build/'.length)
+				const path = directory.split('/').slice(1).join('/')
+				const route = (path ? '/' + path : path) + '/*'
+				const site = directory.split('/').slice(0, 1).join('/')
+				const headersFile = `${__dirname}/build/${site}/_headers`
+
+				fs.writeFileSync(
+					headersFile,
+					addCspHashes({
+						route,
 						type,
 						hashes,
-						contents: addCspMarkup({
-							type,
-							contents: file.contents.toString()
+						headers: addCspRoute({
+							route,
+							headers: fs.readFileSync(headersFile, 'utf8')
 						})
-					})
+					}),
+					'utf8'
 				)
-				// @todo: Write to _headers per route instead?
 			})
 		}))
 		.pipe(dest(paths.dest))
