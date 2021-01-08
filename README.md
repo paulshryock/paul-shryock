@@ -51,6 +51,12 @@ When it's time to release a new code version, run `npm version`, select `major`,
 
 Set HTTP headers and redirects in `netlify.toml` using `[[headers]]` and `[[redirects]]` array tables.
 
+#### Content Security Policy
+
+```bash
+# Hash some JavaScript code from the command line.
+echo -n "console.log('hello world')" | openssl sha256 -binary | openssl base64
+```
 
 ## Open Source
 
