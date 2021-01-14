@@ -20,7 +20,7 @@ module.exports = {
 		'img-src': "'self'",
 		'manifest-src': "'self'",
 		'base-uri': "'self'",
-		'form-src': "'self'",
+		'form-action': "'self'",
 		'require-trusted-types-for': "'script'"
 	},
 	get csp() {
