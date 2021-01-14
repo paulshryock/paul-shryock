@@ -7,10 +7,14 @@
  */
 module.exports = {
 	build: {
-		environment: ''
+		environment: '',
+		published: '',
 	},
 	get isProduction () {
 		return this.build.environment === 'production'
+	},
+	get isPublished () {
+		return this.build.published === 'true'
 	},
 	site: {
 		url: ''

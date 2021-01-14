@@ -274,7 +274,7 @@ exports.hash = hash
  * @since  unreleased
  *
  * @param  {string} options.route   CSP route.
- * @param  {string} options.headers headers data.
+ * @param  {string} options.headers Headers data.
  * @return {string}                 Modified headers data with new CSP route.
  */
 function addCspRoute ({ route, headers }) {
@@ -321,6 +321,16 @@ function addCspHashes ({ route, type, hashes, headers }) {
 	)
 }
 
+/**
+ * Add CSP hashes to markup in local development.
+ *
+ * @since unreleased
+ *
+ * @param {string} options.type   The type of hash to add.
+ * @param {array}  options.hashes The hashes to add.
+ * @param {string} options.markup The markup.
+ * @return {string}               The modified markup with CSP hashes added.
+ */
 function addCspMarkup ({ type, hashes, markup }) {
 	return markup.replace(
 		/(?<=<meta http-equiv="Content-Security-Policy" content="[^"]*)(script|style)-src(-elem|-attr)? ([^;]*)/gm,

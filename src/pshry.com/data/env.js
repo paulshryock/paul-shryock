@@ -8,5 +8,6 @@ const config = require('config')
  * @type {Object}
  */
 module.exports = {
-	isProduction: config.get('isProduction')
+	isProduction: config.get('isProduction'),
+	isPublished: config.get('isPublished'),
 }
