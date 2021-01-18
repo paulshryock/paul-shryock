@@ -17,7 +17,7 @@ function updateMarkup () {
 	}
 
 	// Swap .no-js for .js
-	const html = document.getElement('html')
+	const html = document.querySelector('html')
 	html.classList.toggle('no-js', 'js')
 }
 
