@@ -25,7 +25,7 @@ const htmllint = require('gulp-htmllint')
 const critical = require('critical')
 const beautify = require('gulp-beautify')
 const beautifyConfig = config.get('vendor.beautify')
-const htmlmin = require('gulp-htmlmin')
+const htmlmin = require('gulp-html-minifier-terser')
 const validator = require('gulp-html')
 
 // CSS
@@ -214,6 +214,10 @@ function postHtml () {
 				htmlmin(config.get('vendor.htmlmin'))
 			)
 		)
+		.pipe(replace(
+			/ onload=(['"]this\.media=['"]all['"]['"])/g,
+			' data-onload=$1'
+		))
 		.pipe(dest(paths.dest))
 		.pipe(connect.reload())
 }
