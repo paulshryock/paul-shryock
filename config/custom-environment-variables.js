@@ -7,7 +7,8 @@
  */
 module.exports = {
 	build: {
-		environment: 'BUILD_ENV'
+		environment: 'BUILD_ENV',
+		published: 'BUILD_PUBLISHED',
 	},
 	site: {
 		url: 'SITE_URL'

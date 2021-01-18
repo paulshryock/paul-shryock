@@ -9,6 +9,7 @@ const merge = require('merge-stream')
 let isWatching = false
 
 // Utilities
+const fs = require('fs')
 const del = require('del')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
@@ -16,6 +17,7 @@ const sourcemaps = require('gulp-sourcemaps')
 const connect = require('gulp-connect')
 const fg = require('fast-glob')
 const log = require('fancy-log')
+const tap = require('gulp-tap')
 
 // HTML
 const Eleventy = require('@11ty/eleventy')
@@ -45,6 +47,10 @@ const svgmin = require('gulp-svgmin')
 
 // Images
 const imagemin = require('gulp-imagemin')
+
+// CSP
+const hashstream = require('inline-csp-hash')
+const crypto = require('crypto')
 
 /**
  * Set isWatching state.
@@ -92,7 +98,7 @@ exports.clean = clean
  * @return {Promise}
  */
 function finish () {
-	return del([paths.temp])
+	return del([paths.csp, paths.temp])
 }
 exports.finish = finish
 
@@ -175,15 +181,11 @@ async function html (callback) {
 
 				// Write HTML files and maybe watch for changes.
 				await isWatching ? ssg.watch() : ssg.write()
-			}
-
-			catch (error) {
+			} catch (error) {
 				log.error(error)
 			}
 		})
-	}
-
-	catch (error) {
+	} catch (error) {
 		log.error(error)
 	}
 
@@ -216,6 +218,194 @@ function postHtml () {
 		.pipe(connect.reload())
 }
 exports.postHtml = postHtml
+
+/**
+ * Handle script and style hashing tasks.
+ * Usave: `gulp hash`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream
+ */
+function hash () {
+	const merged = merge(
+		// Script hashes.
+		src(paths.html.written)
+			.pipe(hashstream({
+				what: 'script',
+				replace_cb: (s, hashes) => {
+					return JSON.stringify({
+						script: hashes
+					})
+				}
+			}))
+			.pipe(rename(path => {
+				path.basename += '.script'
+				path.extname = '.json'
+			}))
+			.pipe(dest(paths.csp))
+			.pipe(connect.reload()),
+
+		// Style hashes.
+		src(paths.html.written)
+			.pipe(hashstream({
+				what: 'style',
+				replace_cb: (s, hashes) => {
+					return JSON.stringify({
+						style: hashes
+					})
+				}
+			}))
+			.pipe(rename(path => {
+				path.basename += '.style'
+				path.extname = '.json'
+			}))
+			.pipe(dest(paths.dest + '/csp'))
+			.pipe(connect.reload())
+	)
+
+	return merged.isEmpty() ? undefined : merged
+}
+exports.hash = hash
+
+/**
+ * Add CSP route to headers data.
+ *
+ * @since  unreleased
+ *
+ * @param  {string} options.route   CSP route.
+ * @param  {string} options.headers Headers data.
+ * @return {string}                 Modified headers data with new CSP route.
+ */
+function addCspRoute ({ route, headers }) {
+	// If the route is already present, bail.
+	if (headers.includes(route)) return headers
+
+	// Get the CSP directive(s) from the headers data.
+	const csp = headers.slice(
+		headers.search(/(?<=((\/\*)(\n\t.*)*))(Content-Security-Policy: )([^\n]*)/),
+		headers.search(/(?<=(?<=((\/\*)(\n\t.*)*))(Content-Security-Policy: )([^\n]*))\n/)
+	)
+
+	return headers.trim() + '\n\n' + route + '\n\t' + csp
+		// Remove extra line breaks.
+		.replace('\n\n\n', '\n\n')
+}
+
+/**
+ * Add CSP hashes to headers.
+ *
+ * @since  unreleased
+ *
+ * @param  {string}   options.route   CSP route.
+ * @param  {string}   options.type    CSP type.
+ * @param  {string[]} options.hashes  CSP hashes.
+ * @param  {string}   options.headers headers data.
+ * @return {string}                   Modified headers data with new CSP hashes.
+ */
+function addCspHashes ({ route, type, hashes, headers }) {
+	return headers.replace(
+		/(?<=((\/[^\/\n]*)*\/\*)(\n\t.*)*Content-Security-Policy: ([^\n]*))(script|style)-src(-elem|-attr)? ([^;]*)/gm,
+		(match, p1, p2, p3, p4, p5, p6, p7, offset, string) => {
+
+			// If it's the wrong route or type, bail.
+			if (route !== p1 || type !== p5) return match
+
+			// Filter duplicate hashes and bail if there are no unique hashes.
+			const uniqueHashes = hashes.filter(hash => !match.includes(hash))
+			if (uniqueHashes.length < 1) return match
+
+			// Return modified headers data.
+			return `${p5}-src${p6 || ''} ${p7} ${uniqueHashes.join(' ')}`
+		}
+	)
+}
+
+/**
+ * Add CSP hashes to markup in local development.
+ *
+ * @since unreleased
+ *
+ * @param {string} options.type   The type of hash to add.
+ * @param {array}  options.hashes The hashes to add.
+ * @param {string} options.markup The markup.
+ * @return {string}               The modified markup with CSP hashes added.
+ */
+function addCspMarkup ({ type, hashes, markup }) {
+	return markup.replace(
+		/(?<=<meta http-equiv="Content-Security-Policy" content="[^"]*)(script|style)-src(-elem|-attr)? ([^;]*)/gm,
+		(match, p1, p2, p3, offset, string) => {
+
+			// If it's the wrong type, bail.
+			if (type !== p1) return match
+
+			// Filter duplicate hashes and bail if there are no unique hashes.
+			const uniqueHashes = hashes.filter(hash => !match.includes(hash))
+			if (uniqueHashes.length < 1) return match
+
+			// Return modified headers markup.
+			return `${p1}-src${p2 || ''} ${p3} ${uniqueHashes.join(' ')}`
+		}
+	)
+}
+
+/**
+ * Enforce stricter content security policy in HTML.
+ * Usage: `gulp csp`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream.
+ */
+function csp () {
+	return src(paths.html.written)
+		.pipe(tap((file, t) => {
+			const types = ['script', 'style']
+			types.forEach(type => {
+				const hashes = JSON.parse(
+					fs.readFileSync(
+						file.dirname.replace(/(?<!\/opt)\/build/, '/build/csp') + '/' +
+							(file.basename.replace(file.extname, '')) + `.${type}.json`,
+						'UTF8')
+				)[type]
+
+				// If there are no hashes, bail.
+				if (!hashes.length > 0) return
+
+				// Add CSP routes and hashes to headers file.
+				const directory = file.dirname
+					.slice(file.dirname.search(/(?<!\/opt)\/build/))
+					.slice('/build/'.length)
+				const path = directory.split('/').slice(1).join('/')
+				const route = (path ? '/' + path : path) + '/*'
+				const site = directory.split('/').slice(0, 1).join('/')
+				const headersFile = `${__dirname}/build/${site}/_headers`
+
+				fs.writeFileSync(
+					headersFile,
+					addCspHashes({
+						route,
+						type,
+						hashes,
+						headers: addCspRoute({
+							route,
+							headers: fs.readFileSync(headersFile, 'utf8')
+						})
+					}),
+					'utf8'
+				)
+
+				// Add CSP hashes to markup in development.
+				if (!config.get('isProduction')) {
+					file.contents = Buffer.from(
+						addCspMarkup({ type, hashes, markup: file.contents.toString() })
+					)
+				}
+			})
+		}))
+		.pipe(dest(paths.dest))
+}
+exports.csp = csp
 
 /**
  * Handle SVG tasks.
@@ -267,6 +457,11 @@ function passThrough () {
 
 		// Web manifest.
 		src(paths.webManifest.temp)
+			.pipe(dest(paths.dest))
+			.pipe(connect.reload()),
+
+		// Underscore files.
+		src(paths.underscore.temp)
 			.pipe(dest(paths.dest))
 			.pipe(connect.reload()),
 
@@ -398,9 +593,7 @@ async function javascript () {
 				target: 'es2015'
 			})
 		})
-	}
-
-	catch (error) {
+	} catch (error) {
 		log.error(error)
 	}
 
@@ -479,9 +672,10 @@ const build = series(
 	parallel(
 		series(
 			parallel(html, css),
-			validate,
+			// validate,
 			postHtml,
-			passThrough
+			parallel(passThrough, hash),
+			csp
 		),
 		svg,
 		images,
@@ -502,18 +696,30 @@ exports.build = series(build, finish)
 async function serve (callback) {
 	// Watch written files and re-run tasks.
 	watch(paths.sass.src, css)
-	watch([paths.html.temp, paths.css.written], postHtml)
+	watch([
+		paths.html.temp,
+		paths.css.written
+	], postHtml)
+	watch([
+		paths.xml.temp,
+		paths.webManifest.temp,
+		paths.underscore.temp,
+		paths.favicon.src
+	], passThrough)
+	watch(paths.html.written, hash)
+	watch([
+		paths.json.csp.script,
+		paths.json.csp.style
+	], csp)
 	watch(paths.svg.src, svg)
 	watch(paths.images.src, images)
 	watch(paths.javascript.src, javascript)
-	watch([paths.xml.temp, paths.favicon.src], passThrough)
 
 	try {
 		// Generate a list of sites.
-		const files = await fg([paths.html.written])
+		const files = await fg(paths.html.written)
 		const sites = [...new Set(
 			files
-				.filter(site => !site.includes('temp/'))
 				.map(site => {
 					return site
 						.replace('./build/', '')
@@ -529,9 +735,7 @@ async function serve (callback) {
 				root: `${paths.dest}/${site}`
 			})
 		})
-	}
-
-	catch (error) {
+	} catch (error) {
 		log.error(error)
 	}
 
@@ -582,14 +786,14 @@ function version () {
 
 		// Changelog.
 		src(paths.changelog)
-		// Bump unreleased version.
+			// Bump unreleased version.
 			.pipe(replace('## [Unreleased]', `## [${version}] - ${today}`))
-		// Remove empty changelog subheads.
+			// Remove empty changelog subheads.
 			.pipe(replace(
 				/### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n/g,
 				''
 			))
-		// Add default unreleased section.
+			// Add default unreleased section.
 			.pipe(replace(
 				`## [${version}] - ${today}`,
 				'## [Unreleased]\n\n' +
@@ -601,7 +805,7 @@ function version () {
 				'### Security\n\n' +
 				`## [${version}] - ${today}`
 			))
-		// Bump unreleased link and add new release link.
+			// Bump unreleased link and add new release link.
 			.pipe(replace(
 				/\/compare\/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)/g,
 				`/compare/HEAD..${version}\n[${version}]: ${url}/commits/${version}`))

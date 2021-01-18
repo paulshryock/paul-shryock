@@ -35,6 +35,7 @@
   "sync-dotenv": {
     "preserve": [
       "BUILD_ENV",
+      "BUILD_PUBLISHED",
       "SITE_URL",
       "TWITTER_API_KEY",
       "TWITTER_API_SECRET_KEY",
@@ -52,6 +53,7 @@
     "ava": "^3.14.0",
     "core-js": "^3.8.1",
     "critical": "^2.0.6",
+    "crypto": "^1.0.1",
     "cssnano": "^4.1.10",
     "del": "^6.0.0",
     "esbuild": "^0.8.25",
@@ -84,8 +86,10 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-stylelint": "^13.0.0",
     "gulp-svgmin": "^3.0.0",
+    "gulp-tap": "^2.0.0",
     "gulp-w3c-css": "^2.0.0",
     "husky": "^4.3.0",
+    "inline-csp-hash": "^1.1.14",
     "merge-stream": "^2.0.0",
     "node-sass": "^5.0.0",
     "pixrem": "^5.0.0",
