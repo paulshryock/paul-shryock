@@ -35,6 +35,7 @@
   "sync-dotenv": {
     "preserve": [
       "BUILD_ENV",
+      "BUILD_PUBLISHED",
       "SITE_URL",
       "TWITTER_API_KEY",
       "TWITTER_API_SECRET_KEY",
