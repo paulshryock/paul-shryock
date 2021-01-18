@@ -11,14 +11,7 @@ module.exports = {
 	lang: 'en-US',
 	cspDirectives: {
 		'default-src': "'none'",
-		'script-src': [
-			"'self'",
-			env.isProduction
-				// this.media="all"
-				? "'sha256-kx8Md/dUVxiWxH0xNDfI+0jY+S4Ev2Jri3jBG4rrm9E='"
-				// this.media='all'
-				: "'sha256-MhtPZXr7+LpJUY5qtMutB+qWfQtMaPccfe7QXtCcEYc='",
-		],
+		'script-src': "'self'",
 		'style-src': "'self'",
 		'img-src': "'self'",
 		'manifest-src': "'self'",
