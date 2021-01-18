@@ -1,4 +1,4 @@
-import { fireHandlers } from './onload'
+import { handleLoad } from './onload'
 
 /**
  * Initialize main script.
@@ -6,8 +6,7 @@ import { fireHandlers } from './onload'
  * @since unreleased
  */
 function init () {
-	// Fire onload handlers.
-	fireHandlers()
+	handleLoad()
 }
 
 // Initialize main script.
