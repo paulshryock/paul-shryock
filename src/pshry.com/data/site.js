@@ -13,8 +13,11 @@ module.exports = {
 		'default-src': "'none'",
 		'script-src': [
 			"'self'",
-			// this.media='all'
-			"'sha256-MhtPZXr7+LpJUY5qtMutB+qWfQtMaPccfe7QXtCcEYc='",
+			env.isProduction
+				// this.media="all"
+				? "'sha256-kx8Md/dUVxiWxH0xNDfI+0jY+S4Ev2Jri3jBG4rrm9E='"
+				// this.media='all'
+				: "'sha256-MhtPZXr7+LpJUY5qtMutB+qWfQtMaPccfe7QXtCcEYc='",
 		],
 		'style-src': "'self'",
 		'img-src': "'self'",
