@@ -45,6 +45,9 @@ module.exports = {
 		xml: {
 			temp: './build/temp/**/*.xml',
 		},
+		txt: {
+			temp: './build/temp/**/*.txt',
+		},
 		favicon: {
 			src: './src/**/favicon.ico',
 		},

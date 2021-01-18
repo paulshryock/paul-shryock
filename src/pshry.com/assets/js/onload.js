@@ -1,9 +1,10 @@
 /**
- * Fire stylesheet onload handlers if the CSP has blocked inline scripts.
+ * Update markup after initial load.
  *
  * @since unreleased
  */
-export function fireHandlers () {
+function updateMarkup () {
+	// Swap media=print for media=all for deferred stylesheet loading.
 	const links = document.querySelectorAll(
 		'[media="print"][data-onload="this.media=\'all\'"]'
 	)
@@ -14,4 +15,17 @@ export function fireHandlers () {
 		link.setAttribute('media', 'all')
 		link.removeAttribute('data-onload')
 	}
+
+	// Swap .no-js for .js
+	const html = document.getElement('html')
+	html.classList.toggle('no-js', 'js')
+}
+
+/**
+ * Handle load.
+ *
+ * @since unreleased
+ */
+export function handleLoad () {
+	updateMarkup()
 }

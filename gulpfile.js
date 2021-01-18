@@ -459,6 +459,11 @@ function passThrough () {
 			.pipe(dest(paths.dest))
 			.pipe(connect.reload()),
 
+		// Txt files.
+		src(paths.txt.temp)
+			.pipe(dest(paths.dest))
+			.pipe(connect.reload()),
+
 		// Web manifest.
 		src(paths.webManifest.temp)
 			.pipe(dest(paths.dest))
