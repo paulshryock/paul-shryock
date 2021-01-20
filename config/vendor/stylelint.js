@@ -13,6 +13,12 @@ module.exports = {
 		],
 		rules: {
 			indentation: [ 'tab', { baseIndentLevel: 1 } ],
+			'media-feature-name-no-unknown': [
+				true,
+				{
+					ignoreMediaFeatureNames: [/^prefers-reduced-/]
+				}
+			]
 		},
 	},
 	fix: true,

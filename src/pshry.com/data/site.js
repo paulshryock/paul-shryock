@@ -14,6 +14,7 @@ module.exports = {
 		'script-src': "'self'",
 		'style-src': "'self'",
 		'img-src': "'self'",
+		'font-src': "'self'",
 		'manifest-src': "'self'",
 		'base-uri': "'self'",
 		'form-action': "'self'",
