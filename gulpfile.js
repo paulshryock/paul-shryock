@@ -48,6 +48,9 @@ const svgmin = require('gulp-svgmin')
 // Images
 const imagemin = require('gulp-imagemin')
 
+// Fonts
+const GetGoogleFonts = require('get-google-fonts')
+
 // CSP
 const hashstream = require('inline-csp-hash')
 const crypto = require('crypto')
@@ -214,10 +217,13 @@ function postHtml () {
 				htmlmin(config.get('vendor.htmlmin'))
 			)
 		)
+		// Remove unsafe inline event handlers.
 		.pipe(replace(
 			/ onload=(['"]this\.media=['"]all['"]['"])/g,
 			' data-onload=$1'
 		))
+		// Remove inlined @font-face declarations to avoid double HTTP requests.
+		.pipe(replace(/\s*@font-face {[^\}]*}/g, ''))
 		.pipe(dest(paths.dest))
 		.pipe(connect.reload())
 }
@@ -443,6 +449,68 @@ function svg () {
 		.pipe(connect.reload())
 }
 exports.svg = svg
+
+/**
+ * Handle font tasks.
+ * Usage: `gulp fonts`
+ *
+ * @since unreleased
+ *
+ * @return {Object} Gulp stream.
+ */
+async function fonts () {
+	// Download Google fonts.
+	await new GetGoogleFonts()
+		.download(
+			[{ Inter: [400, 700] }, ['latin']],
+			{
+				// @todo: Get site(s) dynamically.
+		    outputDir:  `./src/pshry.com/assets/fonts/vendor`,
+		    path:       '/fonts/vendor/',
+		    template:   '{_family}-{weight}-{comment}.{ext}',
+		    cssFile:    '_fonts.scss',
+		    userAgent:  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+		                '(KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
+		    base64:      false,
+		    strictSSL:   true,
+		    overwriting: true,
+		    verbose:     false,
+		    simulate:    false
+			}
+		)
+
+	// Remove non-latin subset font files from /src.
+	del([
+		'./src/**/assets/fonts/vendor/*.woff2',
+		'!./src/**/assets/fonts/vendor/*-latin.woff2',
+	])
+
+	const merged = merge(
+		// Remove non-latin subset @font-face declarations.
+		src('./src/**/assets/fonts/vendor/_fonts.scss')
+			.pipe(replace(/\/\*((?! latin ).)*\*\/\n@font-face \{[^\}]*\}\n/g, ''))
+			.pipe(replace(
+				/(font-family: '[^']*';)/g,
+				'/* Almost imperceptible block period (<= 100ms) + no swap. Great ' +
+				'for best user experience where content is preferential to ' +
+				'aesthetics. */\n  ' +
+				// 'font-display: optional;\n  ' +
+				'$1'
+			))
+			.pipe(dest('./src')),
+
+		// Copy latin subset font files to /build.
+		src('./src/**/assets/fonts/vendor/*-latin.woff2')
+			// Rewrite directory path.
+			.pipe(rename(path => {
+				path.dirname = path.dirname
+					.replace('/assets', '')
+			}))
+			.pipe(dest(paths.dest))
+	)
+	return merged.isEmpty() ? undefined : merged
+}
+exports.fonts = fonts
 
 /**
  * Handle pass through tasks.
@@ -677,7 +745,7 @@ exports.test = test
  * @type {Object} Gulp series
  */
 const build = series(
-	parallel(lint, clean),
+	parallel(lint, clean, fonts),
 	parallel(
 		series(
 			parallel(html, css),
@@ -726,6 +794,7 @@ async function serve (callback) {
 
 	try {
 		// Generate a list of sites.
+		// @todo: Abstract this to a reusable function.
 		const files = await fg(paths.html.written)
 		const sites = [...new Set(
 			files
@@ -739,7 +808,7 @@ async function serve (callback) {
 		// Serve each site to a unique port.
 		sites.forEach((site, index) => {
 			connect.server({
-				livereload: true,
+				livereload: false,
 				port: 8000 + index,
 				root: `${paths.dest}/${site}`
 			})

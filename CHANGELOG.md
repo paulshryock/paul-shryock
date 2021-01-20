@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Add favicons. [#42]
 - Optimize SVG. [#9]
 - Minify SVG in production. [#10]
+- Add fonts. [#48]
 - Bundle JavaScript modules. [#11]
 - Transpile modern JavaScript to ES5. [#12]
 - Polyfill modern JavaScript to ES5. [#13]
