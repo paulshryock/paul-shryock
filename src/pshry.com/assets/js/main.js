@@ -1,13 +1,9 @@
-import { handleLoad } from './onload'
+import { handleLoad } from './utilities/onload'
+import { Table } from './components/table'
 
-/**
- * Initialize main script.
- *
- * @since unreleased
- */
 function init () {
 	handleLoad()
+	new Table()
 }
 
-// Initialize main script.
 init()

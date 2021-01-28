@@ -8,7 +8,7 @@ const config = require('config')
  * @type {Object}
  */
 module.exports = {
-	layout: 'scaffold',
+	layout: 'main',
 	permalink: './{{ slug }}/index.html',
 	scripts: [{ src: '/js/main.js' }]
 		.map(script => {

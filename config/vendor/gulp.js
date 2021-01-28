@@ -25,10 +25,10 @@ module.exports = {
 			]
 		},
 		json: {
-			csp: {
-				script: './build/csp/**.script.json',
-				style: './build/csp/**.style.json'
-			}
+			csp: [
+				'./build/csp/**/*.json',
+				'./build/csp/**/*.*.json',
+			]
 		},
 		svg: {
 			src: './src/**/*.svg',

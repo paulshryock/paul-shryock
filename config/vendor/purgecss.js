@@ -7,8 +7,7 @@
  */
 module.exports = {
 	content: [
-		'./src/**/*.md',
-		'./src/**/*.liquid',
-		'./src/**/*.html',
+		'./build/temp/**/*.html',
+		'./src/**/assets/js/**/*.js',
 	]
 }

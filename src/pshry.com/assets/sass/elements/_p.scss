@@ -1,0 +1,8 @@
+p {
+	margin: 0;
+	max-width: 65ch;
+
+	* + & {
+		margin-top: 1em;
+	}
+}

@@ -1,0 +1,8 @@
+td {
+	padding: 0.25em 0.5em;
+	text-align: left;
+
+	&:first-child {
+		padding-left: 0;
+	}
+}
