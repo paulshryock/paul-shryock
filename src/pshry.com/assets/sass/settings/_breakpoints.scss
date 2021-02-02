@@ -1,0 +1,41 @@
+/* Tablet Portrait / 600px / 37.5rem */
+$breakpoint-600: 37.5rem;
+
+@mixin mq-600() {
+	@media screen and (min-width: $breakpoint-600) {
+		@content;
+	}
+}
+
+@mixin mq-max-600() {
+	@media screen and (max-width: $breakpoint-600) {
+		@content;
+	}
+}
+
+/* Tablet Landscape / 900px / 56.25rem */
+$breakpoint-900: 56.25rem;
+
+@mixin mq-900() {
+	@media screen and (min-width: $breakpoint-900) {
+		@content;
+	}
+}
+
+/* Desktop / 1200px / 75rem */
+$breakpoint-1200: 75rem;
+
+@mixin mq-1200() {
+	@media screen and (min-width: $breakpoint-1200) {
+		@content;
+	}
+}
+
+/* Big Desktop / 1800px / 112.5rem */
+$breakpoint-1800: 112.5rem;
+
+@mixin mq-1800() {
+	@media screen and (min-width: $breakpoint-1800) {
+		@content;
+	}
+}

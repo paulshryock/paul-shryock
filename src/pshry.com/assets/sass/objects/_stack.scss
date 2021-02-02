@@ -1,0 +1,20 @@
+.stack {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+
+	&_stretch_center {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		min-height: 100vh;
+	}
+}
+
+.stack > * {
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+.stack > * + * {
+	margin-top: $space;
+}

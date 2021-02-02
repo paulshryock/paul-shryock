@@ -41,7 +41,7 @@ module.exports = {
 		: 'noindex,nofollow',
 	title: 'Paul Shryock',
 	excerpt: '2021 reboot of my personal website.',
-	url: env.isProduction ? 'https://pshry.com' : 'http://localhost:8080',
+	url: env.isProduction ? 'https://pshry.com' : 'http://localhost:8000',
 	favicon: '/img/favicon/favicon',
 	colors: {
 		primary: '#0085ca',

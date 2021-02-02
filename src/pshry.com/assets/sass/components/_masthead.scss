@@ -1,0 +1,12 @@
+.masthead {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: $space;
+
+	> :last-child {
+		@include mq-600 {
+			margin-left: auto;
+		}
+	}
+}

@@ -1,0 +1,13 @@
+.constrain {
+	max-width: $width-constrain;
+
+	&.pad,
+	&.pad-x {
+		max-width: calc(#{$width-constrain} + (2 * #{$space}));
+	}
+
+	&.pad-left:not(.pad-right),
+	&.pad-right:not(.pad-left) {
+		max-width: calc(#{$width-constrain} + #{$space});
+	}
+}

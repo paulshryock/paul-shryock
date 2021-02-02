@@ -1,0 +1,9 @@
+{%- if navigation.items %}
+<nav class="navigation" data-component="navigation" data-navigation="nav">
+	<ul class="navigation__list">
+		{%- for item in navigation.items %}
+		<li class="navigation__item"><a class="navigation__link" href="{{ item.href }}"{%- if item.href == page.url %} aria-current="page"{%- endif %}>{{ item.title }}</a></li>
+		{%- endfor %}
+	</ul>
+</nav>
+{%- endif %}

@@ -30,6 +30,7 @@ const validator = require('gulp-html')
 
 // CSS
 const gulpStylelint = require('gulp-stylelint')
+const sassGlob = require('gulp-sass-glob')
 const sass = require('gulp-sass')
 sass.compiler = require('node-sass')
 const postcss = require('gulp-postcss')
@@ -590,6 +591,7 @@ function css () {
 		// Initialize sourcemaps.
 		.pipe(sourcemaps.init())
 		// Process Sass.
+		.pipe(sassGlob())
 		.pipe(sass(config.get('vendor.node_sass')).on('error', sass.logError))
 		// Post-process CSS.
 		.pipe(postcss([
@@ -702,6 +704,7 @@ function validate () {
 		// Validate HTML.
 		src(paths.html.temp)
 			.pipe(validator())
+			// @todo: Change dest, or do something else with the output.
 			.pipe(dest(paths.dest)),
 
 		// Validate CSS.
@@ -748,9 +751,10 @@ const build = series(
 	parallel(lint, clean, fonts),
 	parallel(
 		series(
-			parallel(html, css),
-			// validate,
+			html,
+			css,
 			postHtml,
+			// validate,
 			parallel(passThrough, hash),
 			csp
 		),
@@ -772,22 +776,18 @@ exports.build = series(build, finish)
  */
 async function serve (callback) {
 	// Watch written files and re-run tasks.
-	watch(paths.sass.src, css)
+	watch(paths.sass.lint.src, css)
 	watch([
 		paths.html.temp,
 		paths.css.written
-	], postHtml)
+	], series(postHtml, parallel(passThrough, hash), csp))
 	watch([
 		paths.xml.temp,
 		paths.webManifest.temp,
 		paths.underscore.temp,
 		paths.favicon.src
-	], passThrough)
-	watch(paths.html.written, hash)
-	watch([
-		paths.json.csp.script,
-		paths.json.csp.style
-	], csp)
+	], series(parallel(passThrough, hash), csp))
+	watch(paths.json.csp, csp)
 	watch(paths.svg.src, svg)
 	watch(paths.images.src, images)
 	watch(paths.javascript.src, javascript)

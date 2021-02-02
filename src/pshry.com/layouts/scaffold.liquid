@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html class="no-js" lang="{{ site.lang }}">
+<html class="no-js" lang="{{ site.lang }}" data-env="{{ env.environment }}">
 {% include meta/head %}
-  <body class="site">
+  <body class="site{% if body_classes %} {{ body_classes }}{% endif %}">
     {% include components/masthead %}
     <main>
       {{ content }}

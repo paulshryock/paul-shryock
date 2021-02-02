@@ -8,6 +8,7 @@ const config = require('config')
  * @type {Object}
  */
 module.exports = {
+	environment: config.get('build.environment'),
 	isProduction: config.get('isProduction'),
 	isPublished: config.get('isPublished'),
 }

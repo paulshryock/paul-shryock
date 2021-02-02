@@ -1,7 +1,7 @@
 {%- if title or site.title %}
 <!-- Set the document's title -->
 <title>
-	{%- unless slug == '.' %}{{ title }} | {% endunless %}
+	{%- if title %}{{ title }} | {% endif %}
 	{{- site.title -}}
 </title>
 {%- endif %}
