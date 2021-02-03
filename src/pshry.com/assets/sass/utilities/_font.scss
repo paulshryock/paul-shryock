@@ -1,0 +1,13 @@
+.font {
+	&-size {
+		&_smaller {
+			font-size: smaller;
+		}
+	}
+
+	&-weight {
+		&_400 {
+			font-weight: 400;
+		}
+	}
+}

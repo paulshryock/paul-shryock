@@ -1,6 +1,8 @@
 ---
 layout: scaffold
 ---
-<div class="pad-x constrain">
-	{{ content }}
-</div>
+{% include components/masthead %}
+<main>
+  {{ content }}
+</main>
+{% include components/colophon %}

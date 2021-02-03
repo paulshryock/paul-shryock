@@ -5,11 +5,7 @@
   	class="site{% if body_classes %} {{ body_classes }}{% endif %}"
   	{%- if title %} data-title="{{ title }}"{% endif -%}
   >
-    {% include components/masthead %}
-    <main>
-      {{ content }}
-    </main>
-    {% include components/colophon %}
+    {{ content }}
     {% include meta/scripts %}
   </body>
 </html>
