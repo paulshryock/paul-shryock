@@ -26,7 +26,7 @@ const critical = require('critical')
 const beautify = require('gulp-beautify')
 const beautifyConfig = config.get('vendor.beautify')
 const htmlmin = require('gulp-html-minifier-terser')
-const validator = require('gulp-html')
+const w3cjs = require('gulp-w3cjs')
 
 // CSS
 const gulpStylelint = require('gulp-stylelint')
@@ -181,6 +181,7 @@ async function html (callback) {
 				// Initialize static site generator.
 				const ssg = new Eleventy()
 				ssg.setConfigPathOverride(`./config/vendor/${site}/eleventy.js`)
+				if (!config.get('isProduction')) ssg.setIncrementalBuild(true)
 				await ssg.init()
 
 				// Write HTML files and maybe watch for changes.
@@ -495,7 +496,7 @@ async function fonts () {
 				'/* Almost imperceptible block period (<= 100ms) + no swap. Great ' +
 				'for best user experience where content is preferential to ' +
 				'aesthetics. */\n  ' +
-				// 'font-display: optional;\n  ' +
+				'font-display: optional;\n  ' +
 				'$1'
 			))
 			.pipe(dest('./src')),
@@ -702,10 +703,15 @@ exports.javascript = javascript
 function validate () {
 	const merged = merge(
 		// Validate HTML.
-		src(paths.html.temp)
-			.pipe(validator())
-			// @todo: Change dest, or do something else with the output.
-			.pipe(dest(paths.dest)),
+		src(paths.html.written)
+			.pipe(w3cjs({
+				showInfo: true,
+				verifyMessage: function(type, message) {
+					console.log(`Validation ${type}: ${message}`)
+					return false
+				},
+			}))
+			.pipe(w3cjs.reporter()),
 
 		// Validate CSS.
 		src(paths.css.written)
@@ -754,9 +760,9 @@ const build = series(
 			html,
 			css,
 			postHtml,
-			// validate,
 			parallel(passThrough, hash),
-			csp
+			csp,
+			validate,
 		),
 		svg,
 		images,

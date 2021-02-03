@@ -1,11 +1,9 @@
 ---
-title: Resume
+title: Professional Resume
 slug: resume
 body_classes: stack stack_stretch_center
 ---
-# Paul Shryock
-
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. Nullam mollis. Ut justo. Suspendisse potenti.
+I aspire to make Accessible, Secure, Performant, Inclusive, Responsive, and Ethical websites.
 
 ## Work History
 {%- capture table %}
