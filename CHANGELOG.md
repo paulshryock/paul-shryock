@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Validate CSS. [#8]
 - Add HTML head elements. [#60]
 - Build HTML.
+- Set incremental build in development.
 - Beautify HTML.
 - Minify HTML in production.
 - Inline critical CSS. [#5]
@@ -34,7 +35,7 @@ and this project adheres to [Semantic Versioning](semver).
 - Add favicons. [#42]
 - Optimize SVG. [#9]
 - Minify SVG in production. [#10]
-- Add fonts. [#48]
+- Add webfonts with fallbacks on slower connections or reduced data. [#48]
 - Bundle JavaScript modules. [#11]
 - Transpile modern JavaScript to ES5. [#12]
 - Polyfill modern JavaScript to ES5. [#13]
