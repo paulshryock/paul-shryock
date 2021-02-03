@@ -1,5 +1,5 @@
-import { handleLoad } from './utilities/onload'
-import { Table } from './components/table'
+import { handleLoad } from './utilities/onload.js'
+import { Table } from './components/table.js'
 
 function init () {
 	handleLoad()
