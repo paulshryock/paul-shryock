@@ -1,15 +1,18 @@
 ---
 title: High-Impact Web Developer
 slug: .
-body_classes: stack stack_stretch_center
 ---
-I work remotely from New Jersey. I've helped Fortune 500 industry leaders, award-winning global agencies, and successful small businesses build accessible, secure websites and applications [since 2009](/resume/).
+I live and work remotely in New Jersey, with my wife, [Jess](https://jessicawalch.com). I'm currently a WordPress Engineer at the [NBA](https://www.nba.com/), where I develop digital products for the league, as well as for the [WNBA](https://www.wnba.com/), [G League](https://gleague.nba.com/), and [2k League](https://2kleague.nba.com/). I'm also a part-time Web Developer at [Palantir](https://www.palantir.com/), maintaining their public-facing marketing site.
 
-Currently I'm a WordPress Engineer at the [NBA](https://www.nba.com/), where I develop digital products for the league, as well as for the [WNBA](https://www.wnba.com/), [G League](https://gleague.nba.com/), and [2k League](https://2kleague.nba.com/). I'm also a part-time Web Developer at [Palantir](https://www.palantir.com/), maintaining their public-facing marketing site.
+Previously, I led front end development on the Visual Communications team at [Realogy](https://www.realogy.com/), where I built internal and public-facing websites and apps for corporate teams and served leading real estate brands like [Coldwell Banker](https://www.coldwellbanker.com/), [Sotheby's](https://www.sothebysrealty.com), and [Century&nbsp;21](https://www.century21.com/). Some other clients I've worked for include [Johnson & Johnson](https://www.jnj.com/), [Novartis](https://www.novartis.com/), [GlaxoSmithKline](https://us.gsk.com/en-us/home/), [Pfizer](https://www.pfizer.com/), [AstraZeneca](https://www.astrazeneca.com/), and [Novo Nordisk](https://www.novonordisk.com/).
 
-Before this, I led front end development on the Visual Communications team at [Realogy](https://www.realogy.com/), where I built internal and public-facing websites and apps for both corporate teams and leading real estate brands like [Coldwell Banker](https://www.coldwellbanker.com/) and [Century&nbsp;21](https://www.century21.com/).
+## Diverse Experience and Skill Set
 
-## Not Seeking New Roles <span class="font-size_smaller font-weight_400">(as of Q3 2020)</span>
+I've helped Fortune 500 industry leaders, award-winning global agencies, and successful small businesses build accessible, secure websites and applications [since 2009](/resume/).
+
+My background is firmly rooted in design, having spent many years doubling as a graphic designer. I have often handled designing print marketing collateral in addition to designing and developing digital projects for clients with lean teams.
+
+## <span class="font-size_smaller font-weight_400">Status:</span> Not Seeking New Roles <span class="font-size_smaller font-weight_400">(as of Q3 2020)</span>
 
 - I'm not interested in discussing new job opportunities
 - I'm not accepting new consulting engagements

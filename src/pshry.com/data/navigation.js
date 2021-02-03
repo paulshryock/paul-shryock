@@ -12,8 +12,12 @@ module.exports = {
 			href: '/resume/'
 		},
 		{
+			title: 'LinkedIn',
+			href: 'https://linkedin.com/in/paulshryock'
+		},
+		{
 			title: 'GitHub',
-			href: 'https://github.com/paulshryock/paul-shryock'
+			href: 'https://github.com/paulshryock'
 		},
 	]
 }

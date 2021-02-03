@@ -1,9 +1,8 @@
 ---
 title: Professional Resume
 slug: resume
-body_classes: stack stack_stretch_center
 ---
-I aspire to make Accessible, Secure, Performant, Inclusive, Responsive, and Ethical websites.
+Status: **Not Seeking New Roles** (as of Q3 2020)
 
 ## Work History
 {%- capture table %}
@@ -28,8 +27,29 @@ I aspire to make Accessible, Secure, Performant, Inclusive, Responsive, and Ethi
 
 ## Education
 {%- capture table %}
-| School                            | Start | End  |
-| ---                               | ---   | ---  |
-| Delaware County Community College | 2008  | 2011 |
+| Course/Major                         | School/Learning Platform          | Start | End     |
+| ---                                  | ---                               | ---   | ---     |
+| Docker in Depth learning path        | Cloud Academy                     | 2020  | present |
+| The Complete Node.js Course          | CodeWithMosh.com                  | 2019  | 2019    |
+| Complete SQL Mastery                 | CodeWithMosh.com                  | 2019  | 2019    |
+| JavaScript for WordPress             | JavaScriptForWP.com               | 2016  | 2019    |
+| Command Line Power User              | WesBos.com                        | 2018  | 2018    |
+| Front End Development, WordPress     | Treehouse                         | 2013  | 2016    |
+| Associate's Degree in Graphic Design | Delaware County Community College | 2008  | 2011    |
 {%- endcapture %}
 {% include components/table table %}
+
+## Licenses & Certifications
+{%- capture table %}
+| Title                         | Provider             | Issued | Expired |
+| ---                           | ---                  | ---    | ---     |
+| Accessibility for Web Design  | LinkedIn Learning    | 2018   | N/A     |
+| HIPAA for Business Associates | OSG Billing Services | 2016   | 2017    |
+{%- endcapture %}
+{% include components/table table %}
+
+## Links
+- [LinkedIn](https://linkedin.com/in/paulshryock)
+- [GitHub](https://github.com/paulshryock)
+- [Dribbble](https://dribbble.com/pshry)
+- [Behance](https://www.behance.net/pshry)
