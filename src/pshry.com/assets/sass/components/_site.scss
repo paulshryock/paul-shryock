@@ -1,0 +1,17 @@
+.site {
+	position: relative;
+
+	&::before {
+		color: $headline-color;
+		content: attr(data-title);
+		font-size: 10em;
+		font-weight: 1;
+		line-height: 1;
+		opacity: 0.05;
+		position: absolute;
+		right: $space;
+		top: $space;
+		writing-mode: vertical-rl;
+		z-index: -1;
+	}
+}
