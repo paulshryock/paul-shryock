@@ -181,7 +181,7 @@ async function html (callback) {
 				// Initialize static site generator.
 				const ssg = new Eleventy()
 				ssg.setConfigPathOverride(`./config/vendor/${site}/eleventy.js`)
-				ssg.setIncrementalBuild(true)
+				if (!config.get('isProduction')) ssg.setIncrementalBuild(true)
 				await ssg.init()
 
 				// Write HTML files and maybe watch for changes.
