@@ -643,53 +643,67 @@ exports.css = css
  * @return {Object} Gulp stream
  */
 async function javascript () {
-	try {
-		// Bundle JavaScript modules.
-		const entries = await fg([paths.javascript.entry])
-		entries.forEach(entry => {
-			esbuild.buildSync({
-				bundle: true,
-				color: true,
-				entryPoints: [entry],
-				format: 'iife',
-				get metafile () {
-					return config.get('isProduction')
-						? ''
-						: this.outfile
-							.replace('.js', '.log.json')
-				},
-				// Minify JavaScript in production.
-				minify: config.get('isProduction'),
-				outfile: entry
-					.replace('src/', 'build/')
-					.replace('assets/', '')
-					.replace(
-						/(\.min)?\.js/g,
-						config.get('isProduction') ? '.min.js' : '.js'
-					),
-				// Write sourcemaps.
-				sourcemap: true,
-				// Transpile modern JavaScript for browsers supporting ES modules.
-				target: [
-			    'chrome61',
-			    'firefox60',
-			    'safari11',
-			    'edge16',
-			  ],
+	if (config.get('isProduction')) {
+		try {
+			// Bundle JavaScript modules.
+			const entries = await fg([paths.javascript.entry])
+			entries.forEach(entry => {
+				esbuild.buildSync({
+					bundle: true,
+					color: true,
+					entryPoints: [entry],
+					format: 'iife',
+					get metafile () {
+						return config.get('isProduction')
+							? ''
+							: this.outfile
+								.replace('.js', '.log.json')
+					},
+					// Minify JavaScript in production.
+					minify: config.get('isProduction'),
+					outfile: entry
+						.replace('src/', 'build/')
+						.replace('assets/', '')
+						.replace(
+							/(\.min)?\.js/g,
+							config.get('isProduction') ? '.min.js' : '.js'
+						),
+					// Write sourcemaps.
+					sourcemap: true,
+					// Transpile modern JavaScript for browsers supporting ES modules.
+					target: [
+				    'chrome61',
+				    'firefox60',
+				    'safari11',
+				    'edge16',
+				  ],
+				})
 			})
-		})
-	} catch (error) {
-		log.error(error)
+		} catch (error) {
+			log.error(error)
+		}
+
+		// Process JavaScript bundles.
+		return src(paths.javascript.written)
+			.pipe(sourcemaps.init())
+			// Polyfill and transpile modern JavaScript to ES5.
+			.pipe(babel(config.get('vendor.babel')))
+			// Rename legacy file.
+			.pipe(rename(path => {
+				path.basename += '.legacy'
+			}))
+			.pipe(sourcemaps.write('.'))
+			.pipe(dest(paths.dest))
+			.pipe(connect.reload())
 	}
 
-	// Process JavaScript bundles.
-	return src(paths.javascript.written)
+	// Passthrough un-bundled JavaScript.
+	return src(paths.javascript.src)
 		.pipe(sourcemaps.init())
-		// Polyfill and transpile modern JavaScript to ES5.
-		.pipe(babel(config.get('vendor.babel')))
-		// Rename legacy file.
+		// Rewrite directory path.
 		.pipe(rename(path => {
-			path.basename += '.legacy'
+			path.dirname = path.dirname
+				.replace('/assets', '')
 		}))
 		.pipe(sourcemaps.write('.'))
 		.pipe(dest(paths.dest))

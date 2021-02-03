@@ -1,4 +1,4 @@
-import { env, isProduction } from './env'
+import { env, isProduction } from './env.js'
 
 /**
  * Swap HTML element class .no-js for .js.
