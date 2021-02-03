@@ -669,8 +669,13 @@ async function javascript () {
 					),
 				// Write sourcemaps.
 				sourcemap: true,
-				// Transpile modern JavaScript to ES2015.
-				target: 'es2015'
+				// Transpile modern JavaScript for browsers supporting ES modules.
+				target: [
+			    'chrome61',
+			    'firefox60',
+			    'safari11',
+			    'edge16',
+			  ],
 			})
 		})
 	} catch (error) {

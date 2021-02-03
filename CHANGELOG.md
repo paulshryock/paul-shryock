@@ -37,11 +37,12 @@ and this project adheres to [Semantic Versioning](semver).
 - Minify SVG in production. [#10]
 - Add webfonts with fallbacks on slower connections or reduced data. [#48]
 - Bundle JavaScript modules. [#11]
-- Transpile modern JavaScript to ES5. [#12]
+- Transpile modern JavaScript for browsers supporting ES modules. [#12]
 - Polyfill modern JavaScript to ES5. [#13]
 - Preserve JavaScript sourcemaps.
 - Add JavaScript testing. [#15]
 - Add local development server. [#46]/[#47]
+- Serve unbundled JS in development. [#72]
 - Bump docblock and Changelog versions during new version.
 - Setup CI/CD. [#38]
 - Add Content Security Policy headers. [#65]
