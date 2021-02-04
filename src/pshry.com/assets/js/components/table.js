@@ -1,7 +1,7 @@
 /**
  * Table class.
  *
- * @since unreleased
+ * @since 0.0.1
  */
 export class Table {
 	constructor () {

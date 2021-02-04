@@ -1,7 +1,7 @@
 /**
  * Navigation class.
  *
- * @since unreleased
+ * @since 0.0.1
  */
 export class Navigation {
 	constructor () {
@@ -27,7 +27,7 @@ export class Navigation {
 	/**
 	 * Add button.
 	 *
-	 * @since unreleased
+	 * @since 0.0.1
 	 */
 	addButton () {
 		// Build the button.
@@ -46,7 +46,7 @@ export class Navigation {
 	/**
 	 * Toggle navigation.
 	 *
-	 * @since unreleased
+	 * @since 0.0.1
 	 */
 	toggleNavigation () {
 		// Update the expanded state.
@@ -67,7 +67,7 @@ export class Navigation {
 	/**
 	 * Add list.
 	 *
-	 * @since unreleased
+	 * @since 0.0.1
 	 */
 	addList () {
 		this.navigation.appendChild(this.list)
@@ -76,7 +76,7 @@ export class Navigation {
 	/**
 	 * Remove list.
 	 *
-	 * @since unreleased
+	 * @since 0.0.1
 	 */
 	removeList () {
 		this.list = this.navigation.removeChild(this.navigation.querySelector('ul'))

@@ -3,7 +3,7 @@ import { env, isProduction } from './env.js'
 /**
  * Swap HTML element class .no-js for .js.
  *
- * @since unreleased
+ * @since 0.0.1
  */
 function swapHtmlClass () {
 	const html = document.documentElement
@@ -14,7 +14,7 @@ function swapHtmlClass () {
 /**
  * Swap stylesheet media property value.
  *
- * @since unreleased
+ * @since 0.0.1
  */
 function swapStylesheetMedia () {
 	const links = document.querySelectorAll(
@@ -31,7 +31,7 @@ function swapStylesheetMedia () {
 /**
  * Confirm load.
  *
- * @since unreleased
+ * @since 0.0.1
  */
 function logEnv () {
 	if (isProduction) return
@@ -41,7 +41,7 @@ function logEnv () {
 /**
  * Handle load.
  *
- * @since unreleased
+ * @since 0.0.1
  */
 export function handleLoad () {
 	swapHtmlClass()
