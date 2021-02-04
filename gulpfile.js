@@ -894,8 +894,18 @@ function version () {
 			.pipe(replace(/## \[Unreleased\]\(.*\)/, header))
 			// Remove empty changelog subheads.
 			.pipe(replace(
-				/### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n/g,
+				/### (Added|Changed|Deprecated|Removed|Fixed|Security)\n\n/g,
 				''
+			))
+			// Remove last empty changelog subhead.
+			.pipe(replace(
+				/### (Added|Changed|Deprecated|Removed|Fixed|Security)\n$/g,
+				''
+			))
+			// Remove any duplicate trailing newline.
+			.pipe(replace(
+				/\n\n$/g,
+				'\n'
 			))
 			// Add unreleased section.
 			.pipe(replace(
