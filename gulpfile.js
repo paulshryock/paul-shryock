@@ -698,7 +698,7 @@ async function javascript () {
 	}
 
 	// Passthrough un-bundled JavaScript.
-	return src(paths.javascript.src)
+	return src(paths.javascript.entry)
 		.pipe(sourcemaps.init())
 		// Rewrite directory path.
 		.pipe(rename(path => {
@@ -859,6 +859,7 @@ function version () {
 	const url = repository.url.replace('git+', '').replace('.git', '')
 	const [month, date, year] = new Date().toLocaleDateString('en-US').split('/')
 	const today = `${month}/${date}/${year}`
+	const header = `## [${version}](${url}/releases/tags/v${version}) - ${today}`
 
 	/**
 	 * Bump docblock version.
@@ -889,29 +890,25 @@ function version () {
 
 		// Changelog.
 		src(paths.changelog)
-			// Bump unreleased version.
-			.pipe(replace('## [Unreleased]', `## [${version}] - ${today}`))
+			// Bump unreleased version and add today's date.
+			.pipe(replace(/## \[Unreleased\]\(.*\)/, header))
 			// Remove empty changelog subheads.
 			.pipe(replace(
 				/### \(Added|Changed|Deprecated|Removed|Fixed|Security\)\\n\\n/g,
 				''
 			))
-			// Add default unreleased section.
+			// Add unreleased section.
 			.pipe(replace(
-				`## [${version}] - ${today}`,
-				'## [Unreleased]\n\n' +
+				header,
+				`## [Unreleased](${url}/compare/HEAD..${version})\n\n` +
 				'### Added\n\n' +
 				'### Changed\n\n' +
 				'### Deprecated\n\n' +
 				'### Removed\n\n' +
 				'### Fixed\n\n' +
 				'### Security\n\n' +
-				`## [${version}] - ${today}`
+				header
 			))
-			// Bump unreleased link and add new release link.
-			.pipe(replace(
-				/\/compare\/HEAD..\(HEAD\|\\d*\.\\d*\.\\d*\)/g,
-				`/compare/HEAD..${version}\n[${version}]: ${url}/commits/${version}`))
 			.pipe(dest('./'))
 	)
 
