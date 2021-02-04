@@ -3,7 +3,7 @@ const config = require('config')
 /**
  * Environment data object.
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @type {Object}
  */

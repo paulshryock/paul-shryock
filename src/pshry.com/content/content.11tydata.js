@@ -3,7 +3,7 @@ const config = require('config')
 /**
  * Default content data for pshry.com.
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @type {Object}
  */

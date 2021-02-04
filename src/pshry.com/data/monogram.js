@@ -3,7 +3,7 @@ const site = require('./site')
 /**
  * Monogram data object.
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @type {Object}
  */

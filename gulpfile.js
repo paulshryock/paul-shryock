@@ -59,7 +59,7 @@ const crypto = require('crypto')
 /**
  * Set isWatching state.
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @param  {Function} callback Callback function.
  * @return {Object}            Gulp stream.
@@ -73,7 +73,7 @@ function watching (callback) {
 /**
  * File paths.
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @type {Object}
  */
@@ -84,7 +84,7 @@ exports.paths = paths
  * Clean the build directory.
  * Usage: `gulp clean`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Promise}
  */
@@ -97,7 +97,7 @@ exports.clean = clean
  * Clean the temp directory.
  * Usage: `gulp finish`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Promise}
  */
@@ -110,7 +110,7 @@ exports.finish = finish
  * Handle linting tasks.
  * Usage: `gulp lint`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream
  */
@@ -158,7 +158,7 @@ exports.lint = lint
  * Handle HTML tasks.
  * Usage: `gulp html`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @param  {Function} callback Callback function.
  * @return {Object}            Gulp stream.
@@ -202,7 +202,7 @@ exports.html = html
  * Handle HTML post-processing tasks.
  * Usave: `gulp postHtml`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream
  */
@@ -235,7 +235,7 @@ exports.postHtml = postHtml
  * Handle script and style hashing tasks.
  * Usave: `gulp hash`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream
  */
@@ -336,7 +336,7 @@ function addCspHashes ({ route, type, hashes, headers }) {
 /**
  * Add CSP hashes to markup in local development.
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @param {string} options.type   The type of hash to add.
  * @param {array}  options.hashes The hashes to add.
@@ -365,7 +365,7 @@ function addCspMarkup ({ type, hashes, markup }) {
  * Enforce stricter content security policy in HTML.
  * Usage: `gulp csp`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream.
  */
@@ -423,7 +423,7 @@ exports.csp = csp
  * Handle SVG tasks.
  * Usage: `gulp svg`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream.
  */
@@ -456,7 +456,7 @@ exports.svg = svg
  * Handle font tasks.
  * Usage: `gulp fonts`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream.
  */
@@ -518,7 +518,7 @@ exports.fonts = fonts
  * Handle pass through tasks.
  * Usage: `gulp passThrough`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream.
  */
@@ -562,7 +562,7 @@ exports.passThrough = passThrough
  * Handle image tasks.
  * Usage: `gulp images`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream.
  */
@@ -583,7 +583,7 @@ exports.images = images
  * Handle CSS tasks.
  * Usage: `gulp css`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream
  */
@@ -638,7 +638,7 @@ exports.css = css
  * Handle JavaScript tasks.
  * Usage: `gulp javascript`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream
  */
@@ -715,7 +715,7 @@ exports.javascript = javascript
  * Handle validation tasks.
  * Usage: `gulp validate`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream
  */
@@ -753,7 +753,7 @@ exports.validate = validate
  * Handle testing tasks.
  * Usage: `gulp test`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream
  */
@@ -768,7 +768,7 @@ exports.test = test
  * Handle build tasks.
  * Usage: `gulp build`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @type {Object} Gulp series
  */
@@ -794,7 +794,7 @@ exports.build = series(build, finish)
  * Handle serve tasks.
  * Usage: `gulp serve`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @param  {Function} callback Callback function.
  * @return {Object}            Gulp stream.
@@ -850,7 +850,7 @@ exports.serve = series(watching, build, serve)
  * Handle version tasks.
  * Usage: `gulp version`
  *
- * @since unreleased
+ * @since 0.0.1
  *
  * @return {Object} Gulp stream
  */
@@ -864,7 +864,7 @@ function version () {
 	/**
 	 * Bump docblock version.
 	 *
-	 * @since unreleased
+	 * @since 0.0.1
 	 *
 	 * @return {string} Bumped docblock version.
 	 */
