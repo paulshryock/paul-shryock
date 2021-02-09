@@ -58,6 +58,10 @@ Set HTTP headers and redirects in `netlify.toml` using `[[headers]]` and `[[redi
 echo -n "console.log('hello world')" | openssl sha256 -binary | openssl base64
 ```
 
+#### Access-Control-Allow-Methods
+
+Only `GET` requests are allowed on all routes. Other HTTP methods will need to opened up on specific routes as needed.
+
 ## Open Source
 
 This project is open source and the code is publicly [available on GitHub][github-repo].
