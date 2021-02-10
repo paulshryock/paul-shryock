@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add `.npmrc`.
 - Only allow approved HTTP methods [#69]
+- Add font utilities.
 
 ### Changed
 
