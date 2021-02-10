@@ -3,18 +3,18 @@
 	publish = "build/pshry.com/"
 	command = "npm run build"
 
-# ---------------
-# Redirects
-# ---------------
+#####################
+#     Redirects     #
+#####################
+
+[[redirects]]
+	from = "/*"
+	to = "/404?search=:splat"
+	status = 404
 
 [[redirects]]
 	from = "/github"
-	to = "https://github.com/paulshryock/paul-shryock"
+	to = "https://github.com/paulshryock"
 	status = 200
 	force = true
 	headers = {X-From = "Netlify"}
-
-[[redirects]]
-	from = "/legacy/*"
-	to = "https://pshry.com/:splat"
-	status = 307
