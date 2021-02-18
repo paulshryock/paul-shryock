@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+- Update dependencies.
 
 ## [0.0.1](https://github.com/paulshryock/paul-shryock/releases/tags/v0.0.1) - 2/4/2021
 
