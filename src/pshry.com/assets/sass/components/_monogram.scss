@@ -21,6 +21,10 @@
 		line-height: 1;
 		position: absolute;
 
+		&::before {
+			content: attr(data-monogram-letter);
+		}
+
 		&:first-child {
 			color: $monogram-first-color;
 			left: -0.0625em;
