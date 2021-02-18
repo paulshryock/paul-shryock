@@ -2,6 +2,7 @@
 	&__list {
 		display: flex;
 		flex-wrap: wrap;
+
 		/* @hack: No flexbox gap support in Safari. */
 		margin: 0 calc(-0.5 * #{$space});
 
