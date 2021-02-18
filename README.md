@@ -35,8 +35,8 @@ Each site will be served to a different `localhost` port beginning with `8000`, 
 ### Release workflow
 
 - Branch `release/vx.x.x` off `develop` and checkout locally: `git checkout develop && git pull && git checkout -B release/v0.0.1`
-- Run `npm version`, select `major`, `minor`, or `patch`, and push to remote
-- **Rebase**  `release/vx.x.x` into `main`
+- Run `npm version <major|minor|patch>` and a pull request link will appear
+- Open the pull request link and **rebase** `release/vx.x.x` into `main`
 
 ### npm scripts
 
