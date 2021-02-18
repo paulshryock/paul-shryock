@@ -2,7 +2,13 @@
 	align-items: center;
 	display: flex;
 	flex-wrap: wrap;
-	gap: $space;
+	/* @hack: No flexbox gap support in Safari. */
+	margin: calc(-0.5 * #{$space});
+
+	> * {
+		/* @hack: No flexbox gap support in Safari. */
+		margin: calc(0.5 * #{$space});
+	}
 
 	> :last-child {
 		@include mq-600 {
