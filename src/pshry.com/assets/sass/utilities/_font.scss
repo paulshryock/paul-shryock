@@ -18,4 +18,15 @@
 			font-weight: 400;
 		}
 	}
+
+	&-outline {
+		text-decoration: none;
+		-webkit-text-fill-color: transparent;
+		-webkit-text-stroke: thin currentColor;
+
+		&:hover,
+		&:focus {
+			-webkit-text-fill-color: currentColor;
+		}
+	}
 }
