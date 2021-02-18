@@ -1,32 +1,32 @@
 .font {
-  &-size {
-    &_smaller {
-      font-size: smaller;
-    }
+	&-size {
+		&_smaller {
+			font-size: smaller;
+		}
 
-    &_larger {
-      font-size: larger;
-    }
+		&_larger {
+			font-size: larger;
+		}
 
-    &_150 {
-      font-size: 1.5em;
-    }
-  }
+		&_150 {
+			font-size: 1.5em;
+		}
+	}
 
-  &-weight {
-    &_400 {
-      font-weight: 400;
-    }
-  }
+	&-weight {
+		&_400 {
+			font-weight: 400;
+		}
+	}
 
-  &-outline {
-    text-decoration: none;
-    -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: thin currentColor;
+	&-outline {
+		text-decoration: none;
+		-webkit-text-fill-color: transparent;
+		-webkit-text-stroke: thin currentColor;
 
-    &:hover,
-    &:focus {
-      -webkit-text-fill-color: currentColor;
-    }
-  }
+		&:hover,
+		&:focus {
+			-webkit-text-fill-color: currentColor;
+		}
+	}
 }
