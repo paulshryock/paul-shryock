@@ -17,11 +17,26 @@ This repository contains source code for the following websites:
 
 ## Development
 
-Clone this repository, run `npm install`, and you're all ready to get started. Run `npm start` to build and serve all websites, and watch for changes. Each site will be served to a different `localhost` port beginning with `8000`, incremented alphabetically upwards by `1`.
+### Getting started
 
-When you're ready to commit changes, git will automatically lint and test your code before committing or pushing to remote.
+- Clone this repository
+- Run `npm install`, and you're all ready to get started
+- Run `npm start` to build and serve all websites, and watch for changes
 
-When it's time to release a new code version, run `npm version`, select `major`, `minor`, or `patch`, and Gulp and npm will handle the rest of the version update.
+Each site will be served to a different `localhost` port beginning with `8000`, incremented alphabetically upwards by `1`. When you're ready to commit changes, git will automatically lint and test your code before committing or pushing to remote.
+
+### Engineering workflow
+
+- Pull latest `main` branch locally: `git checkout main && git pull`
+- Branch `issue-number/my-feature` off `main`: `git checkout -B 1/add-readme`
+- Add and commit feature, and push to remote: `git add . && git commit -m "[#1]: Add Readme" && git push -u origin HEAD`
+- **Squash or rebase** `issue-number/my-feature` into `develop` (always **squash** unless you intend to **rebase** multiple commits on purpose)
+
+### Release workflow
+
+- Branch `release/vx.x.x` off `develop` and checkout locally: `git checkout develop && git pull && git checkout -B release/v0.0.1`
+- Run `npm version`, select `major`, `minor`, or `patch`, and push to remote
+- **Rebase**  `release/vx.x.x` into `main`
 
 ### npm scripts
 

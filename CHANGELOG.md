@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/paulshryock/paul-shryock/compare/HEAD..0.0.2)
 
 ### Added
+- Add aria roles to header and footer.
+- Add engineering and release workflows to Readme.
 
 ### Changed
 
