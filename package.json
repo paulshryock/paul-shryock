@@ -24,7 +24,14 @@
     "build": "gulp build",
     "serve": "gulp serve",
     "version": "gulp version && git add .",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push -u origin HEAD && git push --tags && npm run release",
+    "release": "gh release create v$(npm run get:release:version) -n \"$(npm run get:release:notes)\" $(npm run get:release:version:pre) && npm run get:tags",
+    "get:release:version": "awk -F'\"' '/\"version\": \".+\"/{ print $4; exit; }' package.json",
+    "get:release:version:pre": "MAJOR=$(npm run get:release:version | cut -c 1); if [ $MAJOR == 0 ]; then echo \"-p\"; fi",
+    "get:release:notes": "sed -n \"$(npm run get:release:notes:start),$(npm run get:release:notes:end)p\" CHANGELOG.md",
+    "get:release:notes:start": "START=$(grep -n \"\\[$(npm run get:release:version)\\]\" CHANGELOG.md | head -n 1 | cut -d: -f1); ((START=START+2)); echo $START",
+    "get:release:notes:end": "END=$(grep -n \"\\[$(git tag | sed -n 'x;$p' | tr -d 'v')\\]\" CHANGELOG.md | head -n 1 | cut -d: -f1); ((END=END-2)); echo $END",
+    "get:tags": "git fetch --tags origin"
   },
   "husky": {
     "hooks": {
