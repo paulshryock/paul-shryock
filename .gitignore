@@ -20,7 +20,6 @@ pids
 node_modules/
 jspm_packages/
 npm-debug.log
-package-lock.json
 vendor/
 
 # Optional npm cache directory
