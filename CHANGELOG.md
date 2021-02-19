@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache CI npm dependencies. [#103]
 - Commit `package-lock.json`. [#103]
 - Automatically rebase release pull requests. [#115]
+- Ensure releases begin on `develop` branch.
 
 ### Changed
 
