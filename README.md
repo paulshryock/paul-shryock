@@ -13,38 +13,50 @@ I [aspire][aspire] to make Accessible, Secure, Performant, Inclusive, Responsive
 
 This repository contains source code for the following websites:
 
-- pshry.com
+- [pshry.com](https://pshry.com/)
 
 ## Development
 
+### Requirements
+
+- [Git](https://git-scm.com/)
+	- Check if installed: `git version`
+	- Install via [Homebrew](https://brew.sh/): `brew install git`
+- [Node](https://nodejs.org)
+	- Check if installed: `node --version`
+	- Install via [`n`](https://github.com/tj/n): `n lts`
+- [GitHub CLI](https://cli.github.com/)
+	- Check if installed: `gh --version`
+	- Install via [Homebrew](https://brew.sh/): `brew install gh`
+
 ### Getting started
 
-- Clone this repository
-- Run `npm install`, and you're all ready to get started
-- Run `npm start` to build and serve all websites, and watch for changes
+1. Run `gh repo clone paulshryock/paul-shryock` to clone this repository
+2. Run `npm install` to install dependencies
+3. Run `npm start` to build and serve all websites, and watch for changes
 
 Each site will be served to a different `localhost` port beginning with `8000`, incremented alphabetically upwards by `1`. When you're ready to commit changes, git will automatically lint and test your code before committing or pushing to remote.
 
 ### Engineering workflow
 
-- Pull latest `main` branch locally: `git checkout main && git pull`
-- Branch `issue-number/my-feature` off `main`: `git checkout -B 1/add-readme`
-- Add and commit feature, and push to remote: `git add . && git commit -m "[#1]: Add Readme" && git push -u origin HEAD`
-- **Squash or rebase** `issue-number/my-feature` into `develop` (always **squash** unless you intend to **rebase** multiple commits on purpose)
+1. Run `npm run latest` to pull latest `main` branch
+2. Run `git checkout -B <issue-number>/<feature-name>` to start a new feature branch
+3. Run `git add . && git commit -m "[#<issue-number>]: <feature-name>" && git push -u origin HEAD` to commit the feature and push to remote, and a pull request link will appear
+4. Open the pull request link and **squash** `<issue-number>/<feature-name>` into `develop`
+5. @todo: Automate pull request creation
 
-### Release workflow
+### Versioning and release workflow
 
-- Branch `release/vx.x.x` off `develop` and checkout locally: `git checkout develop && git pull && git checkout -B release/v0.0.1`
-- Run `npm version <major|minor|patch>` and a pull request link will appear
-- Open the pull request link and **rebase** `release/vx.x.x` into `main`
+- Run `git checkout develop && git pull && git checkout -B release/v<version-number>` to checkout a release branch
+- Run `npm version <major|minor|patch>` to kick off all versioning and release tasks, and a pre-populated pull request link will appear
+- Open the pull request link and **rebase** `release/v<version-number>` into `main`
 
-### npm scripts
+### npm development scripts
 
 - `npm start`: Build and serve all sites, and watch for changes.
 - `npm run lint`: Handle linting tasks.
 - `npm test`: Handle testing tasks.
 - `npm run build`: Build all sites.
-- `npm version`: Handle version tasks.
 
 ### Gulp tasks
 
@@ -64,7 +76,8 @@ Each site will be served to a different `localhost` port beginning with `8000`, 
 
 ### HTTP headers and redirects
 
-Set HTTP headers and redirects in `netlify.toml` using `[[headers]]` and `[[redirects]]` array tables.
+- Set HTTP headers in `src/<site-name>/content/headers.liquid`
+- Set redirects in `netlify.toml` using `[[redirects]]` array tables
 
 #### Content Security Policy
 
