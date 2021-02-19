@@ -23,6 +23,7 @@
     "test": "gulp test",
     "build": "gulp build",
     "serve": "gulp serve",
+    "latest": "git checkout main && git pull",
     "version": "git checkout -B release/v$(npm run get:release:version) && gulp version && git add .",
     "postversion": "git push -u origin HEAD && git push --tags && npm run release && npm run pullrequest",
     "release": "gh release create v$(npm run get:release:version) -n \"$(npm run get:release:notes)\" $(npm run get:release:version:pre) && npm run get:tags",
