@@ -25,16 +25,21 @@
     "serve": "gulp serve",
     "latest": "git checkout main && git pull",
     "version": "git checkout -B release/v$(npm run get:release:version) && gulp version && git add .",
-    "postversion": "git push -u origin HEAD && git push --tags && npm run release && npm run pullrequest",
-    "release": "gh release create v$(npm run get:release:version) -n \"$(npm run get:release:notes)\" $(npm run get:release:version:pre) && npm run get:tags",
+    "postversion": "git push -u origin HEAD && git push --tags && npm run release",
+    "release": "npm run release:create && npm run release:pullrequest && npm run release:sync",
+    "release:create": "gh release create v$(npm run get:release:version) -n \"$(npm run get:release:notes)\" $(npm run get:release:version:pre)",
+    "release:pullrequest": "gh pr merge $(npm run release:pullrequest:create) --auto --delete-branch --rebase",
+    "release:pullrequest:create": "gh pr create --title \"Release/v$(npm run get:release:version)\" --body \"$(npm run get:release:notes)\" --assignee $(npm run get:release:assignee) --base main",
+    "release:sync": "npm run release:sync:tags && npm run release:sync:develop",
+    "release:sync:tags": "git fetch --tags origin",
+    "release:sync:develop": "git checkout main && git fetch && git branch -D develop && git checkout -B develop && git push -u origin HEAD -f",
+    "clean:branches": "git branch | grep -v \"main\\|develop\" | xargs git branch -D",
     "get:release:version": "awk -F'\"' '/\"version\": \".+\"/{ print $4; exit; }' package.json",
     "get:release:version:pre": "MAJOR=$(npm run get:release:version | cut -c 1); if [ $MAJOR == 0 ]; then echo \"-p\"; fi",
     "get:release:notes": "sed -n \"$(npm run get:release:notes:start),$(npm run get:release:notes:end)p\" CHANGELOG.md",
     "get:release:notes:start": "START=$(grep -n \"\\[$(npm run get:release:version)\\]\" CHANGELOG.md | head -n 1 | cut -d: -f1); ((START=START+2)); echo $START",
     "get:release:notes:end": "END=$(grep -n \"\\[$(git tag | sed -n 'x;$p' | tr -d 'v')\\]\" CHANGELOG.md | head -n 1 | cut -d: -f1); ((END=END-2)); echo $END",
-    "get:release:assignee": "ASSIGNEE=$(node -p -e \"require('./package.json').author.url\"); PATTERN=https://github.com/; echo ${ASSIGNEE/$PATTERN/}",
-    "get:tags": "git fetch --tags origin",
-    "pullrequest": "gh pr create --title \"Release/v$(npm run get:release:version)\" --body \"$(npm run get:release:notes)\" --assignee $(npm run get:release:assignee) --base main"
+    "get:release:assignee": "ASSIGNEE=$(node -p -e \"require('./package.json').author.url\"); PATTERN=https://github.com/; echo ${ASSIGNEE/$PATTERN/}"
   },
   "husky": {
     "hooks": {
