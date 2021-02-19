@@ -25,7 +25,7 @@ This repository contains source code for the following websites:
 - [Node](https://nodejs.org)
 	- Check if installed: `node --version`
 	- Install via [`n`](https://github.com/tj/n): `n lts`
-- [GitHub CLI](https://cli.github.com/)
+- [GitHub CLI ^1.6.0](https://cli.github.com/)
 	- Check if installed: `gh --version`
 	- Install via [Homebrew](https://brew.sh/): `brew install gh`
 
