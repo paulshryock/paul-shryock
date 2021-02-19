@@ -34,7 +34,7 @@
     "release:pullrequest:rebase": "gh pr merge release/v$(npm run get:release:version) --auto --delete-branch --rebase",
     "release:sync": "npm run release:sync:tags && npm run release:sync:develop && npm run clean:release:branch",
     "release:sync:tags": "git fetch --tags origin",
-    "release:sync:develop": "git checkout main && git fetch && git branch -D develop && git checkout -B develop && git push -u origin HEAD -f",
+    "release:sync:develop": "git checkout main && git pull && git branch -D develop && git checkout -B develop && git push -u origin HEAD -f",
     "clean:branches": "git branch | grep -v \"main\\|develop\" | xargs git branch -D",
     "clean:release:branch": "git branch -D release/v$(npm run get:release:version)",
     "get:release:version": "awk -F'\"' '/\"version\": \".+\"/{ print $4; exit; }' package.json",
