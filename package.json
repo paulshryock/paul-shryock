@@ -28,7 +28,7 @@
     "postversion": "git push -u origin HEAD && git push --tags && npm run release",
     "release": "npm run release:create && npm run release:pullrequest && npm run latest && npm run clean:release:branch",
     "release:create": "gh release create v$(npm run get:release:version) -n \"$(npm run get:release:notes)\" $(npm run get:release:version:pre)",
-    "release:pullrequest": "npm run release:pullrequest:create && npm run release:pullrequest:rebase && release:pullrequest:view",
+    "release:pullrequest": "npm run release:pullrequest:create && npm run release:pullrequest:rebase && npm run release:pullrequest:view",
     "release:pullrequest:create": "gh pr create --title \"Release/v$(npm run get:release:version)\" --body \"$(npm run get:release:notes)\" --assignee $(npm run get:release:assignee) --base main",
     "release:pullrequest:rebase": "gh pr merge release/v$(npm run get:release:version) --auto --delete-branch --rebase",
     "release:pullrequest:view": "gh pr view release/v$(npm run get:release:version) --web",
