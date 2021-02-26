@@ -3,19 +3,6 @@
 	grid-template-columns: 1fr;
 	grid-template-rows: auto 1fr auto;
 	min-height: 100vh;
+	overflow-x: hidden;
 	position: relative;
-
-	&::before {
-		color: $headline-color;
-		content: attr(data-title);
-		font-size: 10em;
-		font-weight: 100;
-		line-height: 1;
-		opacity: 0.05;
-		position: absolute;
-		right: $space;
-		top: $space;
-		writing-mode: vertical-rl;
-		z-index: -1;
-	}
 }

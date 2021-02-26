@@ -4,10 +4,7 @@ body_classes: stack
 <!DOCTYPE html>
 <html class="no-js" lang="{{ site.lang }}" data-env="{{ env.environment }}">
 {% include meta/head %}
-  <body
-  	class="site{% if body_classes %} {{ body_classes }}{% endif %}"
-  	{%- if title %} data-title="{{ title }}"{% endif -%}
-  >
+  <body class="site{% if body_classes %} {{ body_classes }}{% endif %}">
     {{ content }}
     {% include meta/scripts %}
   </body>
