@@ -13,8 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 ### Removed
+- Ditch the extra page title. [#114]
 
 ### Fixed
+- Remove horizontal scroll. [#114]
 
 ### Security
 
