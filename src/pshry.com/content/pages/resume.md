@@ -1,29 +1,199 @@
 ---
 title: Professional Resume
 slug: resume
+layout: resume
+resume:
+  roles:
+    - title: WordPress Engineer
+      company: NBA
+      period:
+        from:
+          year: 2020
+          month: 7
+        to:
+          year: present
+      accomplishments:
+        - Did something
+    - title: Web Developer
+      company: Palantir
+      period:
+        from:
+          year: 2018
+          month: 9
+        to:
+          year: present
+      accomplishments:
+        - Did something
+    - title: Lead Front End Developer
+      company: Realogy
+      period:
+        from:
+          year: 2017
+          month: 8
+        to:
+          year: 2020
+          month: 7
+      accomplishments:
+        - Did something
+    - title: Interactive Art Director
+      company: Ogilvy Health
+      period:
+        from:
+          year: 2016
+          month: 12
+        to:
+          year: 2017
+          month: 5
+      accomplishments:
+        - Did something
+    - title: Graphic Designer
+      company: McCann Echo
+      period:
+        from:
+          year: 2016
+          month: 10
+        to:
+          year: 2017
+          month: 6
+      accomplishments:
+        - Did something
+    - title: Graphic Designer, Web Developer
+      company: OSG Billing Services
+      period:
+        from:
+          year: 2015
+          month: 12
+        to:
+          year: 2016
+          month: 10
+      accomplishments:
+        - Did something
+    - title: Web Designer, Web Developer
+      company: Kaast Machine Tools
+      period:
+        from:
+          year: 2014
+          month: 7
+        to:
+          year: 2015
+          month: 12
+      accomplishments:
+        - Did something
+    - title: Graphic Designer
+      company: Sports Reports Press
+      period:
+        from:
+          year: 2013
+          month: 2
+        to:
+          year: 2014
+          month: 2
+      accomplishments:
+        - Did something
+    - title: Graphic Designer
+      company: Spirit Media Group
+      period:
+        from:
+          year: 2012
+          month: 7
+        to:
+          year: 2014
+          month: 7
+      accomplishments:
+        - Did something
+    - title: Imaging Artist
+      company: Barksdale Portraits
+      period:
+        from:
+          year: 2013
+          month: 8
+        to:
+          year: 2013
+          month: 11
+      accomplishments:
+        - Did something
+    - title: Web Designer, Machine Operator
+      company: Folsom Tool
+      period:
+        from:
+          year: 2011
+          month: 6
+        to:
+          year: 2013
+          month: 2
+      accomplishments:
+        - Did something
+    - title: Graphic Designer
+      company: The Vine
+      period:
+        from:
+          year: 2010
+          month: 11
+        to:
+          year: 2013
+          month: 11
+      accomplishments:
+        - Did something
+    - title: Graphic Designer, Web Developer
+      company: The Communitarian
+      period:
+        from:
+          year: 2011
+          month: 1
+        to:
+          year: 2011
+          month: 5
+      accomplishments:
+        - Did something
+    - title: Web Designer, Web Developer
+      company: Freelance
+      period:
+        from:
+          year: 2009
+          month: 2
+        to:
+          year: present
+      accomplishments:
+        - Did something
+  education:
+    degrees:
+      - title: Associate's Degree
+        major: Graphic Design
+        school: Delaware County Community College
+        period:
+          from:
+            year: 2008
+            month: 9
+          to:
+            year: 2011
+            month: 5
+        courses:
+    courses:
+      - title: x
+        platform: x
+        url: x
+        period:
+          from:
+            year: x
+            month: x
+          to:
+            year: x
+            month: x
+    certifications:
+      - title: x
+        provider: x
+        period:
+          from:
+            year: x
+            month: x
+          to:
+            year: x
+            month: x
 ---
-Status: **Not Seeking New Roles** (as of Q3 2020)
-
-## Work History
-{%- capture table %}
-| Role                            | Company              | Start | End     |
-| ---                             | ---                  | ---   | ---     |
-| WordPress Engineer              | NBA                  | 2020  | present |
-| Web Developer                   | Palantir             | 2018  | present |
-| Lead Front End Developer        | Realogy              | 2017  | 2020    |
-| Interactive Art Director        | Ogilvy Health        | 2016  | 2017    |
-| Graphic Designer                | McCann Echo          | 2016  | 2017    |
-| Graphic Designer, Web Developer | OSG Billing Services | 2015  | 2016    |
-| Web Designer, Web Developer     | Kaast Machine Tools  | 2014  | 2015    |
-| Graphic Designer                | Sports Reports Press | 2013  | 2014    |
-| Graphic Designer                | Spirit Media Group   | 2012  | 2014    |
-| Imaging Artist                  | Barksdale Portraits  | 2013  | 2013    |
-| Web Designer, Machine Operator  | Folsom Tool          | 2011  | 2013    |
-| Graphic Designer                | The Vine             | 2010  | 2013    |
-| Graphic Designer, Web Developer | The Communitarian    | 2011  | 2011    |
-| Web Designer, Web Developer     | Freelance            | 2009  | present |
-{%- endcapture %}
-{% include components/table table %}
+<section class="resume__section" aria-labelledby="status">
+  <h2 class="resume__section-title" id="status">Status</h2>
+  <p><strong>Not Seeking New Roles</strong> (as of Q3 2020)</p>
+</section>
 
 ## Education
 {%- capture table %}

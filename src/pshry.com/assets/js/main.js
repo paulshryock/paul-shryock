@@ -1,9 +1,12 @@
-import { handleLoad } from './utilities/onload.js'
-import { Table } from './components/table.js'
+import * as settings from './settings.js'
+import * as components from './components.js'
 
 function init () {
-	handleLoad()
-	new Table()
+	// Initialize settings.
+	settings.init()
+
+	// Initialize components.
+	components.init()
 }
 
 init()

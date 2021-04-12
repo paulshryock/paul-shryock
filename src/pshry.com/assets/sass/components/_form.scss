@@ -1,0 +1,180 @@
+.form {
+	padding: $space;
+	width: 100%;
+
+	&__field {
+		&s {
+			border: 0;
+			padding: 0;
+
+			> * + * {
+				margin-top: $space;
+			}
+		}
+
+		&-note {
+			color: $blue-100;
+			font-size: 0.875em;
+			margin-top: 0.125em;
+		}
+
+		&-validation {
+			color: $blue-100;
+			font-size: 0.875em;
+			margin-bottom: 0.125em;
+			margin-top: 0;
+
+			&[data-valid='true']::after {
+				content: '✅';
+				margin-left: 0.25em;
+			}
+
+			&[data-valid='false']::after {
+				content: '❌';
+				margin-left: 0.25em;
+			}
+		}
+	}
+
+	&__title {
+		color: $blue-200;
+		font-size: 1.5em;
+		font-weight: 700;
+		line-height: 1.1;
+		margin-bottom: 0;
+		padding: 0;
+	}
+
+	&__label {
+		cursor: pointer;
+		display: block;
+		font-size: 1.125em;
+		font-weight: 700;
+	}
+
+	&__input {
+		background: $black;
+		border-color: $gray-500;
+		width: 100%;
+
+		&:focus,
+		&:active {
+			box-shadow: 0 0 0 $space-100 $body-color;
+			outline: 0;
+		}
+
+		&[data-valid='true'] {
+			border-color: $green;
+
+			&:focus,
+			&:active {
+				box-shadow: 0 0 0 $space-100 $green;
+			}
+		}
+
+		&[data-valid='false'] {
+			border-color: $red;
+
+			&:focus,
+			&:active {
+				box-shadow: 0 0 0 $space-100 $red;
+			}
+		}
+
+		&-container {
+			display: flex;
+
+			&:focus-within {
+				box-shadow: 0 0 0 $space-100 $body-color;
+				outline: 0;
+
+				&[data-valid='true'] {
+					box-shadow: 0 0 0 $space-100 $green;
+				}
+
+				&[data-valid='false'] {
+					box-shadow: 0 0 0 $space-100 $red;
+				}
+			}
+		}
+	}
+
+	&__label + &__input {
+		margin-top: $space-200;
+
+		&-container {
+			margin-top: $space-200;
+		}
+	}
+
+	&__submit {
+		background: $link-color;
+		border: 0;
+		border-radius: 1em;
+		color: $body-color;
+		font-size: 1.125em;
+		font-weight: 700;
+		padding-left: 2em;
+		padding-right: 2em;
+		transition: background 200ms ease;
+
+		&:hover,
+		&:focus,
+		&:active {
+			background: $link-hover-color;
+			box-shadow: 0 0 0 $space-100 $body-color;
+			outline: 0;
+		}
+	}
+
+	&__links {
+		list-style: none;
+		padding-left: 0;
+	}
+
+	&__fields + &__links {
+		margin-top: $space-600;
+	}
+
+	&__footer {
+		margin-top: $space-600;
+
+		&-title {
+			color: $blue-200;
+			font-size: 1.125em;
+			font-weight: 700;
+			line-height: 1.4;
+			margin-bottom: $space-200;
+		}
+	}
+
+	&__footer-title + &__links {
+		margin-top: 0;
+	}
+}
+
+[data-form-element='show-password'] {
+	background: $black;
+	border: 0.0625em solid $gray-500;
+	border-left: 0;
+	color: $body-color;
+	flex: 1 0 auto;
+	min-width: $space;
+	transition: background 200ms ease;
+
+	&:hover,
+	&:focus,
+	&:active {
+		background: $blue-700;
+		outline: 0;
+
+		/* @todo: Does this work? */
+		:not(.supports-focus-within) & {
+			box-shadow: 0 0 0 $space-100 $body-color;
+		}
+	}
+}
+
+[data-form-element='show-password-icon'] {
+	filter: invert(1);
+}

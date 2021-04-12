@@ -3,7 +3,7 @@
  *
  * @since 0.0.1
  */
-export class Table {
+export default class Table {
 	constructor () {
 		// If there are no tables, bail.
 		if (!document.querySelectorAll('.table__container table')) return false
@@ -34,7 +34,7 @@ export class Table {
 
 			// Set `--data-th-width` based on the longest header length with padding.
 			const width = headers.reduce((a, b) => a.length > b.length ? a : b).length
-			table.style.setProperty('--data-th-width', `calc(${width}ch + 0.5em)`)
+			table.style.setProperty('--data-th-width', `${width + 1}ch`)
 		}
 	}
 }

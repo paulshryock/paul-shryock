@@ -67,6 +67,7 @@ module.exports = {
 		javascript: {
 			config: './config/*.js',
 			entry: './src/**/js/*.js',
+			unbundled: './src/**/js/**/*.js',
 			src: './src/**/*.js',
 			written: [
 				'./build/**/*.js',

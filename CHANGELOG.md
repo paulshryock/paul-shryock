@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/paulshryock/paul-shryock/compare/HEAD..0.1.5)
 
 ### Added
+- Add form, field, password, logger, and resume components.
+- Add auth forms.
 
 ### Changed
+- Rearrange settings.
+- Update colors.
 
 ### Deprecated
 
@@ -17,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Remove horizontal scroll. [#114]
+- Fix table overflow. [#137]
+- Wrap font download inside try/catch block.
+- Passthrough un-bundled JavaScript.
 
 ### Security
 
