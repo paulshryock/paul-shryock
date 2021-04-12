@@ -461,55 +461,64 @@ exports.svg = svg
  * @return {Object} Gulp stream.
  */
 async function fonts () {
-	// Download Google fonts.
-	await new GetGoogleFonts()
-		.download(
-			[{ Inter: [400, 700] }, ['latin']],
-			{
-				// @todo: Get site(s) dynamically.
-		    outputDir:  `./src/pshry.com/assets/fonts/vendor`,
-		    path:       '/fonts/vendor/',
-		    template:   '{_family}-{weight}-{comment}.{ext}',
-		    cssFile:    '_fonts.scss',
-		    userAgent:  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
-		                '(KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
-		    base64:      false,
-		    strictSSL:   true,
-		    overwriting: true,
-		    verbose:     false,
-		    simulate:    false
-			}
+	let merged
+	try {
+		// Download Google fonts.
+		await new GetGoogleFonts()
+			.download(
+				[{ Inter: [400, 700] }, ['latin']],
+				{
+					// @todo: Get site(s) dynamically.
+			    outputDir:  `./src/pshry.com/assets/fonts/vendor`,
+			    path:       '/fonts/vendor/',
+			    template:   '{_family}-{weight}-{comment}.{ext}',
+			    cssFile:    '_fonts.scss',
+			    userAgent:  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+			                '(KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
+			    base64:      false,
+			    strictSSL:   true,
+			    overwriting: true,
+			    verbose:     false,
+			    simulate:    false
+				}
+			)
+
+		// Remove non-latin subset font files from /src.
+		del([
+			'./src/**/assets/fonts/vendor/*.woff2',
+			'!./src/**/assets/fonts/vendor/*-latin.woff2',
+		])
+
+		merged = merge(
+			// Remove non-latin subset @font-face declarations.
+			src('./src/**/assets/fonts/vendor/_fonts.scss')
+				.pipe(replace(/\/\*((?! latin ).)*\*\/\n@font-face \{[^\}]*\}\n/g, ''))
+				.pipe(replace(
+					/(font-family: '[^']*';)/g,
+					'/* Almost imperceptible block period (<= 100ms) + no swap. Great ' +
+					'for best user experience where content is preferential to ' +
+					'aesthetics. */\n  ' +
+					'font-display: optional;\n  ' +
+					'$1'
+				))
+				.pipe(dest('./src')),
+
+			// Copy latin subset font files to /build.
+			src('./src/**/assets/fonts/vendor/*-latin.woff2')
+				// Rewrite directory path.
+				.pipe(rename(path => {
+					path.dirname = path.dirname
+						.replace('/assets', '')
+				}))
+				.pipe(dest(paths.dest))
 		)
+	}
 
-	// Remove non-latin subset font files from /src.
-	del([
-		'./src/**/assets/fonts/vendor/*.woff2',
-		'!./src/**/assets/fonts/vendor/*-latin.woff2',
-	])
+	catch (error) {
+		console.error(error)
+		merged = merge()
+	}
 
-	const merged = merge(
-		// Remove non-latin subset @font-face declarations.
-		src('./src/**/assets/fonts/vendor/_fonts.scss')
-			.pipe(replace(/\/\*((?! latin ).)*\*\/\n@font-face \{[^\}]*\}\n/g, ''))
-			.pipe(replace(
-				/(font-family: '[^']*';)/g,
-				'/* Almost imperceptible block period (<= 100ms) + no swap. Great ' +
-				'for best user experience where content is preferential to ' +
-				'aesthetics. */\n  ' +
-				'font-display: optional;\n  ' +
-				'$1'
-			))
-			.pipe(dest('./src')),
-
-		// Copy latin subset font files to /build.
-		src('./src/**/assets/fonts/vendor/*-latin.woff2')
-			// Rewrite directory path.
-			.pipe(rename(path => {
-				path.dirname = path.dirname
-					.replace('/assets', '')
-			}))
-			.pipe(dest(paths.dest))
-	)
 	return merged.isEmpty() ? undefined : merged
 }
 exports.fonts = fonts
@@ -602,8 +611,8 @@ function css () {
 			require('pixrem')(), // Add fallbacks for rem units
 			require('autoprefixer') // Add vendor prefixes
 		]))
-		// Purge unused CSS.
-		.pipe(purgecss(config.get('vendor.purgecss')))
+		// @todo: Purge unused CSS. (Whitelist JS styles.)
+		// .pipe(purgecss(config.get('vendor.purgecss')))
 		// Beautify CSS.
 		.pipe(beautify.css(beautifyConfig))
 		// Minify CSS in production.
@@ -698,7 +707,7 @@ async function javascript () {
 	}
 
 	// Passthrough un-bundled JavaScript.
-	return src(paths.javascript.entry)
+	return src(paths.javascript.unbundled)
 		.pipe(sourcemaps.init())
 		// Rewrite directory path.
 		.pipe(rename(path => {

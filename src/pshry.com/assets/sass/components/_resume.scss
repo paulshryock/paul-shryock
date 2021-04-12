@@ -1,0 +1,56 @@
+.resume {
+	&__section {
+		& + & {
+			margin-top: 2em;
+		}
+	}
+
+	&__list {
+		border-left: 1px dashed currentColor;
+		padding-left: 1em;
+	}
+
+	&__role {
+		font-size: 1.25em;
+		font-weight: 700;
+
+		&-details {
+			margin-left: 1em;
+
+			&-list {
+				list-style: none;
+				padding: 0;
+			}
+		}
+
+		&-details + & {
+			margin-top: 1em;
+		}
+	}
+
+	&__company {
+		display: inline-block;
+		font-weight: 700;
+	}
+
+	&__period {
+		display: inline-block;
+
+		&::before {
+			content: '(';
+		}
+
+		&::after {
+			content: ')';
+		}
+	}
+
+	&__accomplishment {
+		&s {
+			&-list {
+				list-style: disc;
+				padding: 0 0 0 1em;
+			}
+		}
+	}
+}

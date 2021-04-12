@@ -1,1 +1,10 @@
 $space: 1.5rem;
+$space-100: calc(#{$space} * 0.125);
+$space-200: calc(#{$space} * 0.25);
+$space-300: calc(#{$space} * 0.5);
+$space-400: $space;
+$space-500: calc(#{$space} * 1.5);
+$space-600: calc(#{$space} * 2);
+$space-700: calc(#{$space} * 3);
+$space-800: calc(#{$space} * 4);
+$space-900: calc(#{$space} * 6);
