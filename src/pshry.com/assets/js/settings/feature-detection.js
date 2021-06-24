@@ -1,13 +1,13 @@
 /**
  * FeatureDetection class.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export default class FeatureDetection {
 	/**
 	 * FeatureDetection constructor.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	constructor () {
 		// Construct features state.
@@ -37,7 +37,7 @@ export default class FeatureDetection {
 	/**
 	 * Detect feature support.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	detect () {
 		this.detections.forEach(detection => {
@@ -48,7 +48,7 @@ export default class FeatureDetection {
 	/**
 	 * Declare feature support in the DOM.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	declare () {
 		// Declare JavaScript support.

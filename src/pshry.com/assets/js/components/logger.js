@@ -15,13 +15,13 @@
  * See https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
  * for the full interface specification.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export default class Logger {
 	/**
 	 * Logger constructor.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	constructor () {
 	}

@@ -1,13 +1,13 @@
 /**
  * Load class.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export default class Load {
 	/**
 	 * Load constructor.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	constructor () {
 		this.declare()
