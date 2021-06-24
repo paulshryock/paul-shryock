@@ -5,14 +5,14 @@ const log = new Logger()
 /**
  * Form class.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export default class Form {
 	/**
 	 * Form constructor.
 	 *
 	 * @param {HTMLElement} form The form.
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	constructor (form) {
 		// If there is no form element, bail.
@@ -119,7 +119,7 @@ export default class Form {
 	/**
 	 * Modify form markup.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	modify () {
 		// Add show password buttons.
@@ -131,7 +131,7 @@ export default class Form {
 	/**
 	 * Add event listeners.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	listen () {
 		// Listen for field changes and validate.
@@ -178,7 +178,7 @@ export default class Form {
 	 * @param {Object} options.current.input The current field input.
 	 * @param {Object} options.other         The other field.
 	 * @param {Object} options.other.input   The other field input.
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	touch ({ current, other }) {
 		// If current or other inputs are not present, bail.
@@ -205,7 +205,7 @@ export default class Form {
 	 * @param {HTMLElement} field.input   The field input element.
 	 * @param {HTMLElement} field.message The field message element.
 	 * @param {HTMLElement} field.note    The field note element.
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	validate ({ input, message, note }) {
 		// Input is valid.
@@ -242,7 +242,7 @@ export default class Form {
 	 * Validate all fields.
 	 *
 	 * @param {event} event The submit event.
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	validateAll (event) {
 		const valid = this.fields.every(field => this.validate(field))
@@ -254,7 +254,7 @@ export default class Form {
 	 *
 	 * @param {HTMLElement} options.input The field input.
 	 * @param {boolean}     options.valid Whether or not the field is valid.
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	validateContainer ({ input, valid }) {
 		if (

@@ -5,7 +5,7 @@ import Table from './components/table.js'
 /**
  * Initialize components.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export function init () {
 	// Load forms.

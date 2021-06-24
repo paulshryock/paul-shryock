@@ -1,13 +1,13 @@
 {
   "name": "paul-shryock",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "private": true,
   "description": "2021 reboot of my personal website",
   "keywords": [
-  	"personal",
-  	"personal site",
-  	"personal website",
-  	"resume"
+    "personal",
+    "personal site",
+    "personal website",
+    "resume"
   ],
   "license": "Hippocratic 2.1",
   "repository": {

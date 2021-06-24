@@ -1,7 +1,7 @@
 /**
  * Resume class.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export default class Resume {
 	constructor () {
@@ -12,7 +12,7 @@ export default class Resume {
 	/**
 	 * Update `datetime` attributes.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	updateDatetimeAttributes () {
 		this.periods.forEach(period => {

@@ -1,7 +1,7 @@
 /**
  * Field class.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export default class Field {
 	/**
@@ -9,7 +9,7 @@ export default class Field {
 	 *
 	 * @param {Object}      field       The field.
 	 * @param {HTMLElement} field.input The field input.
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	constructor (field) {
 		// If there is no field input, bail.

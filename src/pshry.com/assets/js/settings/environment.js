@@ -4,13 +4,13 @@ const log = new Logger()
 /**
  * Environment class.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export default class Environment {
 	/**
 	 * Environment constructor.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	constructor () {
 		// If there is no environment, bail.
@@ -27,7 +27,7 @@ export default class Environment {
 	/**
 	 * Declare environment.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	declare () {
 		if (this.isProduction) return

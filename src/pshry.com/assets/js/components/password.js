@@ -3,14 +3,14 @@ import Field from './field.js'
 /**
  * Password class.
  *
- * @since unreleased
+ * @since 0.2.0
  */
 export default class Password extends Field {
 	/**
 	 * Password constructor.
 	 *
 	 * @param {Object} field The field.
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	constructor (field) {
 		super(field)
@@ -35,7 +35,7 @@ export default class Password extends Field {
 	/**
 	 * Modify password markup.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	modify () {
 		// Build container element.
@@ -78,7 +78,7 @@ export default class Password extends Field {
 	/**
 	 * Add event listeners.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	listen () {
 		// If there is no show password button or password field, bail.
@@ -116,7 +116,7 @@ export default class Password extends Field {
 	/**
 	 * Toggle show/hide password.
 	 *
-	 * @since unreleased
+	 * @since 0.2.0
 	 */
 	toggle () {
 		// If there is no input or button, bail.
