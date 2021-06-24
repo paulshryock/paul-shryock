@@ -12,8 +12,6 @@ resume:
           month: 7
         to:
           year: present
-      accomplishments:
-        - Did something
     - title: Web Developer
       company: Palantir
       period:
@@ -22,8 +20,6 @@ resume:
           month: 9
         to:
           year: present
-      accomplishments:
-        - Did something
     - title: Lead Front End Developer
       company: Realogy
       period:
@@ -33,8 +29,6 @@ resume:
         to:
           year: 2020
           month: 7
-      accomplishments:
-        - Did something
     - title: Interactive Art Director
       company: Ogilvy Health
       period:
@@ -44,8 +38,6 @@ resume:
         to:
           year: 2017
           month: 5
-      accomplishments:
-        - Did something
     - title: Graphic Designer
       company: McCann Echo
       period:
@@ -55,8 +47,6 @@ resume:
         to:
           year: 2017
           month: 6
-      accomplishments:
-        - Did something
     - title: Graphic Designer, Web Developer
       company: OSG Billing Services
       period:
@@ -66,8 +56,6 @@ resume:
         to:
           year: 2016
           month: 10
-      accomplishments:
-        - Did something
     - title: Web Designer, Web Developer
       company: Kaast Machine Tools
       period:
@@ -77,8 +65,6 @@ resume:
         to:
           year: 2015
           month: 12
-      accomplishments:
-        - Did something
     - title: Graphic Designer
       company: Sports Reports Press
       period:
@@ -88,8 +74,6 @@ resume:
         to:
           year: 2014
           month: 2
-      accomplishments:
-        - Did something
     - title: Graphic Designer
       company: Spirit Media Group
       period:
@@ -99,8 +83,6 @@ resume:
         to:
           year: 2014
           month: 7
-      accomplishments:
-        - Did something
     - title: Imaging Artist
       company: Barksdale Portraits
       period:
@@ -110,8 +92,6 @@ resume:
         to:
           year: 2013
           month: 11
-      accomplishments:
-        - Did something
     - title: Web Designer, Machine Operator
       company: Folsom Tool
       period:
@@ -121,8 +101,6 @@ resume:
         to:
           year: 2013
           month: 2
-      accomplishments:
-        - Did something
     - title: Graphic Designer
       company: The Vine
       period:
@@ -132,8 +110,6 @@ resume:
         to:
           year: 2013
           month: 11
-      accomplishments:
-        - Did something
     - title: Graphic Designer, Web Developer
       company: The Communitarian
       period:
@@ -143,8 +119,6 @@ resume:
         to:
           year: 2011
           month: 5
-      accomplishments:
-        - Did something
     - title: Web Designer, Web Developer
       company: Freelance
       period:
@@ -153,8 +127,6 @@ resume:
           month: 2
         to:
           year: present
-      accomplishments:
-        - Did something
   education:
     degrees:
       - title: Associate's Degree
@@ -168,17 +140,15 @@ resume:
             year: 2011
             month: 5
         courses:
-    courses:
-      - title: x
-        platform: x
+    training:
+      - title: Docker in Depth learning path
+        platform: Cloud Academy
         url: x
         period:
           from:
-            year: x
-            month: x
+            year: 2020
           to:
-            year: x
-            month: x
+            year: present
     certifications:
       - title: x
         provider: x
@@ -190,10 +160,6 @@ resume:
             year: x
             month: x
 ---
-<section class="resume__section" aria-labelledby="status">
-  <h2 class="resume__section-title" id="status">Status</h2>
-  <p><strong>Not Seeking New Roles</strong> (as of Q3 2020)</p>
-</section>
 
 ## Education
 {%- capture table %}
