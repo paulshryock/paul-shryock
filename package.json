@@ -15,10 +15,10 @@
   "author": "Paul Shryock <paul@pshry.com> (https://github.com/paulshryock)",
   "type": "module",
   "scripts": {
-    "compile": "tsc",
-    "lint": "eslint \"./**/*.{js,tx}\" --fix",
     "prebuild": "run-s compile lint",
-    "build": "node ./scripts/build.js"
+    "build": "node ./scripts/build.js",
+    "compile": "tsc",
+    "lint": "eslint \"./**/*.{js,json,tx}\" --fix"
   },
   "husky": {
     "hooks": {
