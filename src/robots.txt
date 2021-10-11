@@ -1,0 +1,6 @@
+# Use robots.txt rules to prevent crawling, and sitemaps to encourage crawling. Block crawling of duplicate content on your site, or unimportant resources (such as small, frequently used graphics such as icons or logos) that might overload your server with requests. Don't use robots.txt as a mechanism to prevent indexing; use the noindex tag or login requirements for that.
+
+User-agent: *
+Disallow: /
+
+Sitemap: https://www.pshry.com/sitemap.xml
