@@ -2,12 +2,16 @@
   "extends": "@tsconfig/node16/tsconfig.json",
 
   "compilerOptions": {
-    "module": "esnext",
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "strict": true,
+    "target": "es2020"
   },
 
-  "include": ["**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
