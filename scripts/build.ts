@@ -9,7 +9,7 @@ import { access, copyFile, mkdir } from 'fs/promises'
  */
 const paths: {[index: string]: any} = {
 	src: 'src',
-	dest: 'build',
+	dest: 'dist',
 	files: [
 		'index.html',
 		'robots.txt',

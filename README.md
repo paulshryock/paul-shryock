@@ -44,7 +44,7 @@ Code is open-source. Content is mine.
 - Privacy: Don't track users or invade user privacy
 - Secure
 - Test-driven
-- Type-checked
+- [x] Type-checked
 
 ## Nice to have
 
@@ -74,8 +74,8 @@ Code is open-source. Content is mine.
 #### JavaScript
 
 - Maybe download or import assets
-- Lint and format TypeScript source code
-- Compile, transform and bundle TypeScript into JavaScript
+- [x] Lint and format TypeScript source code
+- [x] Compile, transform and bundle TypeScript into JavaScript
 - Lint and format JavaScript built code
 
 #### Images
