@@ -19,7 +19,8 @@
     "compile": "tsc",
     "lint": "run-s lint:*",
     "lint:js": "eslint \"./**/*.{js,json,tx}\" --fix",
-    "lint:pkg": "sort-package-json"
+    "lint:pkg": "sort-package-json",
+    "watch:compile": "tsc --watch"
   },
   "husky": {
     "hooks": {

@@ -4,51 +4,76 @@ import { access, copyFile, mkdir } from 'fs/promises'
  * File paths.
  *
  * @since unreleased
+ *
+ * @const {[index: string]: any}
  */
 const paths: {[index: string]: any} = {
 	src: 'src',
 	dest: 'build',
-	files: {
-		src: {
-			index: 'src/index.html',
-			robots: 'src/robots.txt',
-			sitemap: 'src/sitemap.xml',
-		},
-		dest: {
-			index: 'build/index.html',
-			robots: 'build/robots.txt',
-			sitemap: 'build/sitemap.xml',
-		},
-	},
+	files: [
+		'index.html',
+		'robots.txt',
+		'sitemap.xml',
+	],
 }
 
 /**
- * Creates a directory.
+ * Initializes the build.
+ *
+ * @since unreleased
+ */
+function init () {
+	// Build site.
+	build(paths)
+}
+
+/**
+ * Checks if a directory exists, and if not, creates it.
  *
  * @since unreleased
  *
- * @param  {string} path Path.
- * @return {Promise<void>}
+ * @param  {string}           path Path.
+ * @return {Promise<boolean>}      Whether or not the directory exists.
  */
-async function createDirectory (path: string) {
-	// If path is not a string, bail.
-	if (typeof path !== 'string') {
-		throw new Error(`${typeof path} passed to createDirectory`)
-	}
-
+async function createDirectory (path: string): Promise<boolean> {
 	// If path is an empty string, bail.
-	if (!path) {
-		throw new Error('empty string passed to createDirectory')
-	}
+	if (!path.length) return false
 
 	// Access directory.
 	try {
 		await access(path)
 	} catch (error) {
 		// Create directory.
-		await mkdir(path, { recursive: true })
-		console.log(`${path} created`)
+		try {
+			await mkdir(path, { recursive: true })
+		} catch (error) {
+			return false
+		}
 	}
+	return true
+}
+
+/**
+ * Copies files from one directory to another.
+ *
+ * @since  unreleased
+ *
+ * @param  {string}           from  Directory to copy from.
+ * @param  {string}           to    Directory to copy to.
+ * @param  {string[]}         files Files to copy.
+ * @return {Promise<boolean>}       Whether or not the files were copied.
+ */
+async function copyFiles (
+	from: string, to: string, files: string[],
+): Promise<boolean> {
+	try {
+		await Promise.all(files.map(async file => {
+			return copyFile(`${from}/${file}`, `${to}/${file}`)
+		}))
+	} catch (error) {
+		return false
+	}
+	return true
 }
 
 /**
@@ -58,24 +83,24 @@ async function createDirectory (path: string) {
  *
  * @return {Promise<void>}
  */
-async function build () {
+
+/**
+ * Builds the site.
+ *
+ * @since  unreleased
+ *
+ * @param  {{[index: string]: any}} paths File paths.
+ * @return {Promise<void>}
+ */
+async function build (paths: {[index: string]: any}): Promise<void> {
 	// Create build directory.
-	await createDirectory(paths.dest)
+	const hasDest: boolean = await createDirectory(paths.dest)
+	if (!hasDest) throw new Error(`could not write to ${paths.dest}`)
 
 	// Copy files.
-	try {
-		const files = Object.keys(paths.files.src)
-		await Promise.all(
-			files.map(async file => {
-				return copyFile(paths.files.src[file], paths.files.dest[file])
-			}),
-		)
-		console.log(`copied ${files.length} files`)
-	} catch (error) {
-		// If there's a problem copying files, bail.
-		throw new Error('could not copy files')
-	}
+	const copied: boolean = await copyFiles(paths.src, paths.dest, paths.files)
+	if (!copied) throw new Error(`could not copy ${paths.files.length} files`)
 }
 
-// Build site.
-await build()
+// Initialize the build.
+init()
