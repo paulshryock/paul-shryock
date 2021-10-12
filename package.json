@@ -16,15 +16,14 @@
   "type": "module",
   "scripts": {
     "build": "node --loader ts-node/esm ./scripts/build.ts",
-    "compile": "tsc",
     "lint": "run-s lint:*",
     "lint:js": "eslint \"./**/*.{ts,js,json}\" --fix",
     "lint:pkg": "sort-package-json",
+    "serve": "serve dist",
     "test": "ava",
-    "watch": "run-s watch:*",
-    "watch:compile": "tsc --watch",
-    "watch:test": "ava --watch",
-    "serve": "serve dist"
+    "test:watch": "ava --watch",
+    "typecheck": "tsc",
+    "typecheck:watch": "tsc --watch"
   },
   "husky": {
     "hooks": {
@@ -45,8 +44,10 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "ava": "^3.15.0",
+    "esbuild": "^0.13.4",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-ava": "^13.0.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-json-format": "^2.0.1",
     "eslint-plugin-node": "^11.1.0",
