@@ -7,14 +7,10 @@ import { access, copyFile, mkdir } from 'fs/promises'
  *
  * @const {[index: string]: any}
  */
-const paths: {[index: string]: any} = {
+const paths: { [index: string]: any } = {
 	src: 'src',
 	dest: 'dist',
-	files: [
-		'index.html',
-		'robots.txt',
-		'sitemap.xml',
-	],
+	files: ['index.html', 'robots.txt', 'sitemap.xml'],
 }
 
 /**
@@ -64,12 +60,16 @@ async function createDirectory (path: string): Promise<boolean> {
  * @return {Promise<boolean>}       Whether or not the files were copied.
  */
 async function copyFiles (
-	from: string, to: string, files: string[],
+	from: string,
+	to: string,
+	files: string[],
 ): Promise<boolean> {
 	try {
-		await Promise.all(files.map(async file => {
-			return copyFile(`${from}/${file}`, `${to}/${file}`)
-		}))
+		await Promise.all(
+			files.map(async (file) => {
+				return copyFile(`${from}/${file}`, `${to}/${file}`)
+			}),
+		)
 	} catch (error) {
 		return false
 	}
@@ -92,7 +92,7 @@ async function copyFiles (
  * @param  {{[index: string]: any}} paths File paths.
  * @return {Promise<void>}
  */
-async function build (paths: {[index: string]: any}): Promise<void> {
+async function build (paths: { [index: string]: any }): Promise<void> {
 	// Create build directory.
 	const hasDest: boolean = await createDirectory(paths.dest)
 	if (!hasDest) throw new Error(`could not write to ${paths.dest}`)

@@ -17,7 +17,8 @@
   "scripts": {
     "build": "node --loader ts-node/esm ./scripts/build.ts",
     "lint": "run-s lint:*",
-    "lint:js": "eslint \"./**/*.{ts,js,json}\" --fix",
+    "lint:format": "prettier --loglevel=warn --write \"./**/*.{ts,js,{m,c}js,json}\"",
+    "lint:js": "eslint \"./**/*.{ts,js,{m,c}js,json}\" --fix",
     "lint:pkg": "sort-package-json",
     "serve": "serve dist",
     "test": "ava",
@@ -31,9 +32,6 @@
     }
   },
   "lint-staged": {
-    "package.json": [
-      "sort-package-json"
-    ],
     "./**/*.{ts,js,json}": [
       "npm run lint"
     ]
@@ -56,6 +54,7 @@
     "husky": "^7.0.2",
     "lint-staged": "^11.2.2",
     "npm-run-all2": "^5.0.2",
+    "prettier": "^2.4.1",
     "serve": "^12.0.1",
     "sort-package-json": "^1.52.0",
     "ts-node": "^10.3.0",
