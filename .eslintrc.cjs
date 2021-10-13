@@ -5,6 +5,7 @@ module.exports = {
 		node: true,
 	},
 	extends: [
+		'prettier',
 		'standard',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:ava/recommended',
@@ -38,6 +39,11 @@ module.exports = {
 			},
 		],
 		'multiline-ternary': ['error', 'always-multiline'],
+		quotes: [
+			'error',
+			'single',
+			{ allowTemplateLiterals: true, avoidEscape: true },
+		],
 		'no-tabs': 'off',
 	},
 }
