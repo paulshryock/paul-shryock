@@ -1,6 +1,6 @@
 {
   "files": [
-    "./*.{ts,js}",
+    "./*.test.{ts,js}",
     "./{scripts,src}/**/*.test.{ts,js}"
   ],
   "extensions": [
