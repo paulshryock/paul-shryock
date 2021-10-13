@@ -1,4 +1,8 @@
 {
+  "files": [
+    "./*.{ts,js}",
+    "./{scripts,src}/**/*.test.{ts,js}"
+  ],
   "extensions": [
     {
       "ts": "module"
