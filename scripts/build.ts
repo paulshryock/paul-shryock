@@ -7,7 +7,7 @@ import { access, copyFile, mkdir } from 'fs/promises'
  *
  * @const {[index: string]: any}
  */
-const paths: { [index: string]: any } = {
+const paths: { src: string; dest: string; files: string[] } = {
 	src: 'src',
 	dest: 'dist',
 	files: ['index.html', 'robots.txt', 'sitemap.xml'],
@@ -79,27 +79,27 @@ async function copyFiles (
 /**
  * Builds the site.
  *
- * @since unreleased
- *
- * @return {Promise<void>}
- */
-
-/**
- * Builds the site.
- *
  * @since  unreleased
  *
- * @param  {{[index: string]: any}} paths File paths.
+ * @param  {object}        paths File paths.
  * @return {Promise<void>}
  */
-async function build (paths: { [index: string]: any }): Promise<void> {
+async function build ({
+	src,
+	dest,
+	files,
+}: {
+	src: string;
+	dest: string;
+	files: string[];
+}): Promise<void> {
 	// Create build directory.
-	const hasDest: boolean = await createDirectory(paths.dest)
-	if (!hasDest) throw new Error(`could not write to ${paths.dest}`)
+	const hasDest: boolean = await createDirectory(dest)
+	if (!hasDest) throw new Error(`could not write to ${dest}`)
 
 	// Copy files.
-	const copied: boolean = await copyFiles(paths.src, paths.dest, paths.files)
-	if (!copied) throw new Error(`could not copy ${paths.files.length} files`)
+	const copied: boolean = await copyFiles(src, dest, files)
+	if (!copied) throw new Error(`could not copy ${files.length} files`)
 }
 
 // Initialize the build.
