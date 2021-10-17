@@ -5,7 +5,6 @@ module.exports = {
 		node: true,
 	},
 	extends: [
-		'prettier',
 		'standard',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:ava/recommended',

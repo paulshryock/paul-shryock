@@ -89,9 +89,9 @@ async function build ({
 	dest,
 	files,
 }: {
-	src: string;
-	dest: string;
-	files: string[];
+	src: string
+	dest: string
+	files: string[]
 }): Promise<void> {
 	// Create build directory.
 	const hasDest: boolean = await createDirectory(dest)
