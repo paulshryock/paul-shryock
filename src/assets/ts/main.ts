@@ -3,3 +3,5 @@ function init () {
 }
 
 init()
+
+export {}
