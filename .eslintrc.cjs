@@ -24,6 +24,7 @@ module.exports = {
 	rules: {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'comma-dangle': ['error', 'always-multiline'],
+		'guard-for-in': 'error',
 		indent: [
 			'error',
 			'tab',
