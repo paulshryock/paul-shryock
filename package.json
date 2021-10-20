@@ -33,7 +33,7 @@
   },
   "lint-staged": {
     "./**/*.{ts,js,json}": [
-      "npm run lint"
+      "run-p lint typecheck test"
     ]
   },
   "devDependencies": {

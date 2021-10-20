@@ -34,7 +34,9 @@ Code is open-source. Content is mine.
   - Continuous deployment
 - Discoverable: Written for humans, optimized for machines
 - Documented: Write documentation > Write documented tests > Write documented code
-- Ethical: Earth > People > Companies
+- Ethical:
+  - Earth > People > Companies
+  - Say "no" to [these marketing practices](https://plausible.io/blog/best-marketing-practices)
 - Inclusive: Welcome everyone
 - Measured: Test all metrics and set budgets.
 - Performant: Be fast. Seem fast. Provide feedback. Smooth movement.
@@ -43,6 +45,7 @@ Code is open-source. Content is mine.
   - Smoothness and interactivity
 - Privacy: Don't track users or invade user privacy
 - Secure
+- Shareable: automatically assign ID's to headlines
 - Test-driven
 - [x] Type-checked
 

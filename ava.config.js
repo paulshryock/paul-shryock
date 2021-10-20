@@ -12,8 +12,7 @@ export default {
 	require: [],
 	typescript: {
 		rewritePaths: {
-			'scripts/': 'scripts/',
-			'src/': 'build/',
+			'src/assets/ts/': 'dist/js/',
 		},
 		compile: false,
 	},
