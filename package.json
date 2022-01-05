@@ -11,7 +11,9 @@
   "type": "module",
   "scripts": {
     "prebuild": "npm-run-all --serial format --parallel lint typecheck test",
-    "build": "node --loader ts-node/esm --experimental-specifier-resolution=node ./bin/build.ts",
+    "build": "run-p build:*",
+    "build:html": "eleventy",
+    "build:ts": "node --loader ts-node/esm --experimental-specifier-resolution=node ./bin/build.ts",
     "format": "prettier --loglevel=warn --write \"./!(vendor)/**/*.{ts,js,{m,c}js,json}\"",
     "lint": "run-p lint:*",
     "prelint:env": "touch .env",
@@ -40,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "@11ty/eleventy": "^0.12.1",
     "@swc/cli": "^0.1.51",
     "@swc/core": "^1.2.103",
     "@types/node": "^16.11.6",
