@@ -11,9 +11,10 @@ module.exports = {
 	],
 	ignorePatterns: [
 		'build',
+		'dist',
 		'node_modules',
-		'tsconfig.json',
 		'package-lock.json',
+		'tsconfig.json',
 	],
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
@@ -39,11 +40,15 @@ module.exports = {
 			},
 		],
 		'multiline-ternary': ['error', 'always-multiline'],
+		'no-tabs': 'off',
 		quotes: [
 			'error',
 			'single',
 			{ allowTemplateLiterals: true, avoidEscape: true },
 		],
-		'no-tabs': 'off',
+		'space-before-function-paren': [
+			'error',
+			{ anonymous: 'always', asyncArrow: 'always', named: 'never' },
+		],
 	},
 }
