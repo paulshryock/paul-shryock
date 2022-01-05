@@ -1,30 +1,34 @@
 {
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "include": ["./bin/**/*", "./src/**/*"],
 
   "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": ".",
-    "checkJs": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "module": "ES2020",
-    "moduleResolution": "node",
-    "noEmit": true,
-    "noEmitOnError": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noUnusedLocals": true,
-    "outDir": "dist",
-    "paths": {
-      "ava": ["./node_modules/ava"]
-    },
-    "resolveJsonModule": true,
-    "rootDir": ".",
+    "noUnusedParameters": true,
     "strict": true,
-    "target": "es2020"
-  },
 
-  "include": ["./**/*"],
-  "exclude": ["node_modules", "build", "dist", "notes"]
+    "baseUrl": "./",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+
+    "newLine": "lf",
+    "noEmit": true,
+    "outDir": "dist",
+
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+
+    "target": "es2015",
+
+    "skipLibCheck": true
+  }
 }

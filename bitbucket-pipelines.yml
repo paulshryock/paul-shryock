@@ -1,0 +1,12 @@
+pipelines:
+  default:
+    - step:
+        name: JS build
+        image: node:17.3
+        caches:
+          - node
+        script:
+          # Install project dependencies.
+          - npm install
+          # Run JS build.
+          - npm run build

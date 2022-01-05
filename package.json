@@ -3,67 +3,72 @@
   "version": "0.2.0",
   "private": true,
   "description": "Source code for my personal website.",
-  "homepage": "https://github.com/paulshryock/paul-shryock#readme",
-  "bugs": {
-    "url": "https://github.com/paulshryock/paul-shryock/issues"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/paulshryock/paul-shryock.git"
   },
-  "license": "Hippocratic 2.1",
-  "author": "Paul Shryock <paul@pshry.com> (https://github.com/paulshryock)",
+  "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "build": "node --loader ts-node/esm ./scripts/build.ts",
-    "lint": "run-s lint:*",
-    "lint:format": "prettier --loglevel=warn --write \"./**/*.{ts,js,{m,c}js,json}\"",
-    "lint:js": "eslint \"./**/*.{ts,js,{m,c}js,json}\" --fix",
+    "prebuild": "npm-run-all --serial format --parallel lint typecheck test",
+    "build": "node --loader ts-node/esm --experimental-specifier-resolution=node ./bin/build.ts",
+    "format": "prettier --loglevel=warn --write \"./!(vendor)/**/*.{ts,js,{m,c}js,json}\"",
+    "lint": "run-p lint:*",
+    "prelint:env": "touch .env",
+    "lint:env": "sync-dotenv",
+    "lint:js": "eslint \"./!(vendor)/**/*.{ts,js,{m,c}js,json}\" --fix",
     "lint:pkg": "sort-package-json",
-    "serve": "serve dist",
+    "prepare": "husky install",
+    "start": "npm run build",
     "test": "ava",
-    "test:watch": "ava --watch",
     "typecheck": "tsc",
-    "typecheck:watch": "tsc --watch"
+    "typecheck:watch": "tsc --watch",
+    "preversion": "release-bump && git add ."
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "./**/*.{ts,js,json}": [
-      "run-p lint typecheck test"
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--loader=ts-node/esm"
+    ],
+    "nonSemVerExperiments": {
+      "configurableModuleFormat": true
+    },
+    "require": [
+      "esm"
     ]
   },
   "devDependencies": {
-    "@ava/typescript": "^2.0.0",
-    "@tsconfig/node16": "^1.0.2",
-    "@types/node": "^16.10.5",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
+    "@swc/cli": "^0.1.51",
+    "@swc/core": "^1.2.103",
+    "@types/node": "^16.11.6",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
     "ava": "^3.15.0",
-    "esbuild": "^0.13.4",
-    "eslint": "^7.32.0",
+    "esbuild": "^0.13.9",
+    "eslint": "^8.1.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-ava": "^13.0.0",
-    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-ava": "^13.1.0",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-json-format": "^2.0.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "husky": "^7.0.2",
-    "lint-staged": "^11.2.2",
+    "eslint-plugin-promise": "^5.1.1",
+    "esm": "^3.2.25",
+    "husky": "^7.0.4",
     "npm-run-all2": "^5.0.2",
     "prettier": "^2.4.1",
-    "serve": "^12.0.1",
+    "release-bump": "^2.2.1",
     "sort-package-json": "^1.52.0",
-    "ts-node": "^10.3.0",
+    "sync-dotenv": "^2.6.2",
+    "ts-node": "^10.4.0",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.4",
+    "zx": "^4.2.0"
   },
   "engines": {
-    "node": "^16.11",
+    "node": "^17",
     "npm": "^8"
   }
 }
