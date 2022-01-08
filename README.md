@@ -6,7 +6,7 @@ Source code for my personal website.
 
 | Tool    | Min. version | Install command          |
 | :---    | :---         | :---                     |
-| Node.js | 17           | `nvm use 17.3`, `n 17.3` |
+| Node.js | 17.3         | `nvm use 17.3`, `n 17.3` |
 | npm     | 8            | `npm i -g npm@8.3`       |
 
 ## Development tool chain
@@ -18,7 +18,6 @@ Source code for my personal website.
 | sync-dotenv         | .env.example linting                     |
 | ESLint              | JavaScript linting                       |
 | sort-package-json   | package.json sorting                     |
-| Skeleton            | File system structure linting            |
 | TypeScript          | JavaScript type-checking and analysis    |
 | Ava                 | JavaScript unit test runner              |
 | ESbuild             | JavaScript module bundling and compiling |
