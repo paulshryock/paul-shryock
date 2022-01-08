@@ -16,7 +16,7 @@
     "lint": "run-p lint:*",
     "prelint:env": "touch .env",
     "lint:env": "sync-dotenv",
-    "lint:js": "eslint \"./!(vendor)/**/*.{ts,js,{m,c}js,json}\" --fix",
+    "lint:js": "eslint \"./!(vendor)/**/*.{ts,d.ts,js,{m,c}js,json}\" --fix",
     "lint:pkg": "sort-package-json",
     "prepare": "husky install",
     "start": "npm run build",

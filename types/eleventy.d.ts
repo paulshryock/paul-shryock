@@ -18,7 +18,7 @@ interface BrowserSyncConfig {
 				weinre?: {
 					port: number
 				}
-		  }
+			}
 
 	files?:
 		| string
@@ -27,8 +27,8 @@ interface BrowserSyncConfig {
 				| {
 						match?: string[]
 						fn?: (event: unknown, file: string) => unknown
-				  }
-		  >
+					}
+			>
 		| false
 
 	watchEvents?: string[]
@@ -48,7 +48,7 @@ interface BrowserSyncConfig {
 				directory?: boolean
 				serveStaticOptions?: ServeStaticOptions
 				routes?: Dict<string>
-		  }
+			}
 
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	proxy?:
@@ -61,7 +61,7 @@ interface BrowserSyncConfig {
 				reqHeaders?: string[]
 				proxyReq?: any
 				proxyRes?: any
-		  }
+			}
 	/* eslint-enable @typescript-eslint/no-explicit-any */
 }
 
