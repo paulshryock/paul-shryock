@@ -7,7 +7,6 @@ module.exports = {
 	extends: [
 		'standard',
 		'plugin:@typescript-eslint/recommended',
-		'plugin:ava/recommended',
 	],
 	ignorePatterns: [
 		'build',
@@ -21,7 +20,7 @@ module.exports = {
 		ecmaVersion: 13,
 		sourceType: 'module',
 	},
-	plugins: ['@typescript-eslint', 'json-format'],
+	plugins: ['@typescript-eslint', 'ava', 'json-format'],
 	rules: {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'comma-dangle': ['error', 'always-multiline'],

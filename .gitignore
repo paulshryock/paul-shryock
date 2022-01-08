@@ -1,5 +1,11 @@
+# Vendor files
+node_modules/
+vendor/
+
+# Compiled files
 build/
 dist/
 _site/
-node_modules/
-vendor/
+
+# Type definitions
+!types.d.ts

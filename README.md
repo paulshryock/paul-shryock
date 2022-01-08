@@ -30,6 +30,15 @@ Source code for my personal website.
 ## Roadmap
 - Add GitHub action to run a full build after pushing to remote.
 
+## Release tags
+
+- nightly
+- alpha
+- beta
+- rc
+- stable
+- canary
+
 ## Requirements
 
 This project should be:

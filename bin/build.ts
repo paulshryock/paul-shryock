@@ -1,3 +1,4 @@
+import Eleventy from '@11ty/eleventy'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import { $ } from 'zx'
@@ -22,44 +23,63 @@ const paths = {
  *
  * @since unreleased
  *
- * @param {string}   path Path to directory.
+ * @param  {string}        path Path to directory.
+ * @return {Promise<void>}
  */
-async function clean(path: string) {
+async function clean(path: string): Promise<void> {
 	$`rm -rf ${path}`
 }
 
 /**
  * Initializes build.
  *
- * @since unreleased
+ * @since  unreleased
+ * @return {Promise<void>}
  */
-async function build() {
+async function build(): Promise<void> {
 	try {
 		// Clean dist directory.
 		await clean(paths.dist)
 
 		// Compile assets.
-		await Promise.all([
-			// @todo: Compile HTML.
-			// @todo: Compile CSS.
-
-			// Compile JavaScript.
-			javascript(),
-
-			// @todo: Compile images.
-			// @todo: Compile webfonts.
-		])
+		await Promise.all([html(), javascript()])
 	} catch (error) {
 		console.error(error)
 	}
 }
 
 /**
- * Compiles JavaScript.
+ * Compiles HTML.
  *
  * @since unreleased
  */
-async function javascript() {
+async function html() {
+	const eleventy = new Eleventy('src', 'dist', {
+		quietMode: true,
+
+		config: () => {
+			return {
+				dir: {
+					data: 'data',
+					includes: 'includes',
+					input: 'src',
+					layouts: 'layouts',
+					output: 'dist',
+				},
+			}
+		},
+	})
+
+	return eleventy
+}
+
+/**
+ * Compiles JavaScript.
+ *
+ * @since  unreleased
+ * @return {Promise<void>}
+ */
+async function javascript(): Promise<void> {
 	// Get environment variables and pass to client-side bundle.
 	const proc = JSON.stringify({
 		env: {
