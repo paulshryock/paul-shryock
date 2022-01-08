@@ -11,32 +11,23 @@ Source code for my personal website.
 
 ## Development tool chain
 
-| Tool                | Purpose                                  |
-| :---                | :---                                     |
-| Editorconfig        | Code formatting                          |
-| Prettier            | JavaScript formatting                    |
-| sync-dotenv         | .env.example linting                     |
-| ESLint              | JavaScript linting                       |
-| sort-package-json   | package.json sorting                     |
-| TypeScript          | JavaScript type-checking and analysis    |
-| Ava                 | JavaScript unit test runner              |
-| ESbuild             | JavaScript module bundling and compiling |
-| swc                 | JavaScript legacy transpiling            |
-| Husky               | Git hooks                                |
-| release-bump        | Release version-bump automation          |
-| BitBucket pipelines | CI                                       |
+| Tool              | Purpose                                  |
+| :---              | :---                                     |
+| Editorconfig      | Code formatting                          |
+| Prettier          | JavaScript formatting                    |
+| sync-dotenv       | .env.example linting                     |
+| ESLint            | JavaScript linting                       |
+| sort-package-json | package.json sorting                     |
+| TypeScript        | JavaScript type-checking and analysis    |
+| Ava               | JavaScript unit test runner              |
+| ESbuild           | JavaScript module bundling and compiling |
+| swc               | JavaScript legacy transpiling            |
+| Husky             | Git hooks                                |
+| release-bump      | Release version-bump automation          |
+| GitHub actions    | CI                                       |
 
 ## Roadmap
-- Add GitHub action to run a full build after pushing to remote.
-
-## Release tags
-
-- nightly
-- alpha
-- beta
-- rc
-- stable
-- canary
+- Add GitHub actions to test and run a full build after pushing to remote.
 
 ## Requirements
 
@@ -57,3 +48,16 @@ This project should be:
 - Semantically versioned
 - Stable (audit, test, qa before release)
 - Test-driven (unit, integration, E2E)
+
+## Release workflow
+
+Run `npm version`
+
+### Release tags
+
+- nightly
+- alpha
+- beta
+- rc
+- stable
+- canary
