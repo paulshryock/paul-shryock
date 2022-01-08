@@ -51,9 +51,11 @@ This project should be:
 
 ## Release workflow
 
-Run `npm version`
+### Pre-release
 
-### Release tags
+Run `npm version [premajor|preminor|prepatch] --preid [prerelease-id]` where `[prerelease-id]` is one of the release tags listed below.
+
+#### Pre-release tags
 
 - nightly
 - alpha
@@ -61,3 +63,7 @@ Run `npm version`
 - rc
 - stable
 - canary
+
+### Release
+
+Run `npm version [major|minor|patch]`.
