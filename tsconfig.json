@@ -16,9 +16,6 @@
     "baseUrl": "./",
     "module": "esnext",
     "moduleResolution": "node",
-    "paths": {
-      "@11ty/eleventy": ["types/eleventy"]
-    },
     "resolveJsonModule": true,
 
     "newLine": "lf",
