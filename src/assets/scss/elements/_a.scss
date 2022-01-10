@@ -1,0 +1,16 @@
+a {
+
+	&:link,
+	&:visited {
+		color: blue;
+	}
+
+	&:hover,
+	&:focus {
+		color: darkblue;
+	}
+
+	&:active {
+		color: navy;
+	}
+}

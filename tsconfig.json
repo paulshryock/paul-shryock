@@ -1,5 +1,5 @@
 {
-  "include": ["bin/**/*", "src/**/*", "types/**/*"],
+  "include": ["bin/**/*", "src/**/*"],
 
   "compilerOptions": {
     "allowUnreachableCode": false,
@@ -14,7 +14,7 @@
     "strict": true,
 
     "baseUrl": "./",
-    "module": "esnext",
+    "module": "es2020",
     "moduleResolution": "node",
     "resolveJsonModule": true,
 

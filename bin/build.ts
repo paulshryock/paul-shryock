@@ -1,16 +1,18 @@
-import Eleventy from '@11ty/eleventy'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import { $ } from 'zx'
 import pkg from '../package.json'
 
-const { BUILD_ENV } = process.env
+const { BUILD_ENV, BUILD_ONLY, BUILD_SERVE, BUILD_WATCH } = process.env
 const { version } = pkg
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const paths = {
 	dist: 'dist',
+	config: {
+		eleventy: 'config/eleventy.config.cjs',
+	},
 	js: {
 		src: join(__dirname, '../src/assets/ts/main.ts'),
 		dist: join(__dirname, '../dist/js/main.js'),
@@ -18,17 +20,8 @@ const paths = {
 	},
 }
 
-/**
- * Cleans a directory.
- *
- * @since unreleased
- *
- * @param  {string}        path Path to directory.
- * @return {Promise<void>}
- */
-async function clean(path: string): Promise<void> {
-	$`rm -rf ${path}`
-}
+const serve = BUILD_SERVE === 'true'
+const watch = BUILD_WATCH === 'true'
 
 /**
  * Initializes build.
@@ -38,11 +31,8 @@ async function clean(path: string): Promise<void> {
  */
 async function build(): Promise<void> {
 	try {
-		// Clean dist directory.
-		await clean(paths.dist)
-
 		// Compile assets.
-		await Promise.all([html(), javascript()])
+		await Promise.all([css(), html(), javascript()])
 	} catch (error) {
 		console.error(error)
 	}
@@ -51,26 +41,22 @@ async function build(): Promise<void> {
 /**
  * Compiles HTML.
  *
- * @since unreleased
+ * @since  unreleased
+ * @return {Promise<void>}
  */
-async function html() {
-	const eleventy = new Eleventy('src', 'dist', {
-		quietMode: true,
+async function html(): Promise<void> {
+	// eslint-disable-next-line max-len
+	await $`eleventy --config=${paths.config.eleventy} ${serve ? '--serve' : (watch && '--watch')}`
+}
 
-		config: () => {
-			return {
-				dir: {
-					data: 'data',
-					includes: 'includes',
-					input: 'src',
-					layouts: 'layouts',
-					output: 'dist',
-				},
-			}
-		},
-	})
-
-	return eleventy
+/**
+ * Compiles CSS.
+ *
+ * @since  unreleased
+ * @return {Promise<void>}
+ */
+async function css(): Promise<void> {
+	await $`sass src/assets/scss:dist/css ${(serve || watch) && '--watch'}`
 }
 
 /**
@@ -97,4 +83,17 @@ async function javascript(): Promise<void> {
 }
 
 // Initialize build.
-build()
+switch (BUILD_ONLY) {
+	case 'css':
+		css()
+		break
+	case 'html':
+		html()
+		break
+	case 'javascript':
+		javascript()
+		break
+	default:
+		build()
+		break
+}

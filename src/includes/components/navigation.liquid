@@ -1,0 +1,11 @@
+{%- if navigation %}
+<nav class="navigation">
+	<ul class="navigation__list">
+		{%- for item in navigation %}
+			<li class="navigation__item">
+				<a class="navigation__link" href="{{ item.link }}">{{ item.label }}</a>
+			</li>
+		{%- endfor %}
+	</ul>
+</nav>
+{%- endif %}

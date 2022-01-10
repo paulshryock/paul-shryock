@@ -3,7 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>{{ title }}</title>
+	<title>{{ seo_title | default: title | strip | strip_html | truncate: 40 }}</title>
+	<meta name="description" content="{{ description | default: content | strip | strip_html | truncate: 115 }}">
+	<link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 	{{ content }}

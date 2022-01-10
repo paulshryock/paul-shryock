@@ -1,0 +1,24 @@
+.navigation {
+
+	&__list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		list-style: none;
+		padding-left: 0;
+	}
+
+	&__link {
+
+		&:link,
+		&:visited {
+			text-decoration: none;
+		}
+
+		&:hover,
+		&:focus,
+		&:active {
+			text-decoration: underline;
+		}
+	}
+}

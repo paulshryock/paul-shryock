@@ -1,0 +1,9 @@
+{%- if site.title %}
+	<a href="/">
+		{%- if page.url == '/' %}
+			<h1 class="branding__title">{{ site.title | strip | strip_html }}</h1>
+		{%- else %}
+			<p class="branding__title">{{ site.title | strip | strip_html }}</p>
+		{%- endif %}
+	</a>
+{%- endif %}

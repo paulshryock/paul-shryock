@@ -1,0 +1,18 @@
+---
+layout: scaffold
+---
+{% include 'components/masthead' %}
+<main class="content">
+	{% if page_title or title %}
+	<header>
+		{%- if page.url == '/' %}
+		<h2 class="content__title">{{ page_title | default: title | strip | strip_html }}</h2>
+		{%- else %}
+		<h1 class="content__title">{{ page_title | default: title | strip | strip_html }}</h1>
+		{%- endif %}
+	</header>
+	{% endif %}
+
+	{{ content }}
+</main>
+{% include 'components/colophon' %}

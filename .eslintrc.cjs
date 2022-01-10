@@ -30,6 +30,7 @@ module.exports = {
 			'tab',
 			{
 				offsetTernaryExpressions: true,
+				SwitchCase: 1,
 			},
 		],
 		'max-len': [
@@ -47,7 +48,7 @@ module.exports = {
 		],
 		'space-before-function-paren': [
 			'error',
-			{ anonymous: 'always', asyncArrow: 'always', named: 'never' },
+			{ anonymous: 'never', asyncArrow: 'always', named: 'never' },
 		],
 	},
 }
