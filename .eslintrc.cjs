@@ -37,6 +37,7 @@ module.exports = {
 			'error',
 			{
 				code: 80,
+				ignoreTemplateLiterals: true,
 			},
 		],
 		'multiline-ternary': ['error', 'always-multiline'],

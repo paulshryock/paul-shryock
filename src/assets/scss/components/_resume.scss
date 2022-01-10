@@ -3,5 +3,84 @@
 	&__title {
 		font-size: 1.5em;
 		font-weight: 700;
+		margin-bottom: 1em;
+	}
+
+	&__experience {
+
+		&-list {
+			list-style: none;
+			padding-left: 0;
+		}
+
+		&-item {
+			display: grid;
+			grid-template-areas:
+				"duration duration"
+				"position position"
+				". description"
+				". accomplishments";
+			grid-template-columns: 1em 1fr;
+
+			@media screen and (min-width: 37.5em) {
+				grid-template-areas:
+					"duration position"
+					". description"
+					". accomplishments";
+				grid-template-columns: 8em 1fr;
+			}
+
+			& + & {
+				margin-top: 2em;
+			}
+		}
+
+		&-duration {
+			font-size: 0.875em;
+			grid-area: duration;
+		}
+
+		&-position {
+			grid-area: position;
+		}
+
+		&-role {
+			display: block;
+			font-weight: 700;
+
+			@media screen and (min-width: 37.5em) {
+				display: inline;
+			}
+
+			&::after {
+				@media screen and (min-width: 37.5em) {
+					content: '@';
+					font-weight: 400;
+					margin-left: 0.25em;
+				}
+			}
+		}
+
+		&-employer {
+			white-space: nowrap;
+		}
+
+		&-description {
+			grid-area: description;
+			margin: 0.75em 0;
+		}
+
+		&-accomplishment {
+
+			&s {
+				grid-area: accomplishments;
+				list-style-type: disc;
+				padding-left: 1em;
+
+				& & {
+					list-style-type: circle;
+				}
+			}
+		}
 	}
 }

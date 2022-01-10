@@ -1,5 +1,7 @@
 p {
+  font: inherit;
 	margin-bottom: 1.5em;
+	max-width: 75ch;
 
 	&:last-child {
 		margin-bottom: 0;
