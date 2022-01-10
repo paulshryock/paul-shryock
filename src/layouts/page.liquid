@@ -1,7 +1,7 @@
 ---
 layout: scaffold
 ---
-{% include 'components/masthead' %}
+{% render 'components/masthead', site: site, navigation: navigation %}
 <main class="content">
 	{% if page_title or title %}
 	<header>
@@ -15,4 +15,4 @@ layout: scaffold
 
 	{{ content }}
 </main>
-{% include 'components/colophon' %}
+{% render 'components/colophon', site: site %}

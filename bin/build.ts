@@ -45,8 +45,11 @@ async function build(): Promise<void> {
  * @return {Promise<void>}
  */
 async function html(): Promise<void> {
-	// eslint-disable-next-line max-len
-	await $`eleventy --config=${paths.config.eleventy} ${serve ? '--serve' : (watch && '--watch')}`
+	serve
+		? await $`eleventy --config=${paths.config.eleventy} --serve`
+		: watch
+			? await $`eleventy --config=${paths.config.eleventy} --watch`
+			: await $`eleventy --config=${paths.config.eleventy}`
 }
 
 /**
@@ -56,7 +59,9 @@ async function html(): Promise<void> {
  * @return {Promise<void>}
  */
 async function css(): Promise<void> {
-	await $`sass src/assets/scss:dist/css ${(serve || watch) && '--watch'}`
+	serve || watch
+		? await $`sass src/assets/scss:dist/css --watch`
+		: await $`sass src/assets/scss:dist/css`
 }
 
 /**

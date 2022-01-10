@@ -7,7 +7,7 @@
 	<meta name="description" content="{{ description | default: content | strip | strip_html | truncate: 115 }}">
 	<link rel="stylesheet" href="/css/main.css">
 </head>
-<body>
+<body class="layout layout_{{ content_type }}">
 	{{ content }}
 
 	<script defer src="./js/main.js" type="module"></script>

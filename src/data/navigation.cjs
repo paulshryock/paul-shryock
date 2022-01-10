@@ -1,12 +1,12 @@
 module.exports = function() {
 	return [
 		{
-			link: '/contact',
-			label: 'Contact',
+			link: '/resume',
+			label: 'Resume',
 		},
 		{
-			link: '/404',
-			label: '404',
+			link: '/contact',
+			label: 'Contact',
 		},
 	]
 }

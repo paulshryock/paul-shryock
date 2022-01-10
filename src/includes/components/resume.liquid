@@ -1,0 +1,8 @@
+{%- if resume.experience %}
+	<h2 class="resume__title">Work experience</h2>
+	<ul class="resume__experience-list">
+		{%- for item in resume.experience %}
+			<li class="resume__experience-item"><b>{{ item.role }}</b> @ {{ item.employer }}</li>
+		{%- endfor %}
+	</ul>
+{%- endif %}

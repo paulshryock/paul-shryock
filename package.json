@@ -11,7 +11,7 @@
   "type": "module",
   "scripts": {
     "prebuild": "npm-run-all --serial clean format --parallel lint typecheck test",
-    "build": "node  --es-module-specifier-resolution=node --loader ts-node/esm -r dotenv/config bin/build.ts",
+    "build": "node --es-module-specifier-resolution=node --loader ts-node/esm -r dotenv/config bin/build.ts",
     "clean": "rm -rf dist",
     "format": "prettier --loglevel=warn --write \"./!(vendor)/**/*.{ts,js,{m,c}js,json}\"",
     "lint": "run-p lint:*",

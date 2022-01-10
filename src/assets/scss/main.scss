@@ -4,6 +4,7 @@
 // Elements.
 @import './elements/a';
 @import './elements/html';
+@import './elements/p';
 
 // Components.
 @import './components/branding';
@@ -11,7 +12,9 @@
 @import './components/content';
 @import './components/masthead';
 @import './components/navigation';
+@import './components/resume';
 
-// Layout.
+// Layouts.
+@import './layouts/page';
 
 // Utilities.
