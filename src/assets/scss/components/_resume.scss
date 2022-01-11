@@ -1,4 +1,17 @@
 .resume {
+	display: grid;
+	gap: 4em;
+	grid-template-areas:
+		"experience"
+		"skills";
+
+	/* todo: Fix print layout */
+
+	@media screen and (min-width: 75em) {
+		grid-template-areas:
+			"experience skills";
+		grid-template-columns: auto 1fr;
+	}
 
 	&__title {
 		font-size: 1.5em;
@@ -9,6 +22,10 @@
 	&__experience {
 
 		&-list {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+			gap: 2em;
 			list-style: none;
 			padding-left: 0;
 		}
@@ -28,10 +45,6 @@
 					". description"
 					". accomplishments";
 				grid-template-columns: 8em 1fr;
-			}
-
-			& + & {
-				margin-top: 2em;
 			}
 		}
 
@@ -81,6 +94,28 @@
 					list-style-type: circle;
 				}
 			}
+		}
+	}
+
+	&__skills {
+
+		&-list {
+			display: grid;
+			gap: 2em;
+			list-style: none;
+			padding-left: 0;
+		}
+
+		&-item {
+			font-weight: 700;
+		}
+	}
+
+	&__tools {
+
+		&-list {
+			font-weight: 400;
+			padding-left: 1em;
 		}
 	}
 }

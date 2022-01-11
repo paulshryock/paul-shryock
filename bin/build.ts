@@ -32,7 +32,7 @@ const watch = BUILD_WATCH === 'true'
 async function build(): Promise<void> {
 	try {
 		// Compile assets.
-		await Promise.all([css(), html(), javascript()])
+		await Promise.all([css(), html(), images(), javascript()])
 	} catch (error) {
 		console.error(error)
 	}
@@ -85,6 +85,17 @@ async function javascript(): Promise<void> {
 
 	// Transpile JavaScript bundles for legacy browsers.
 	await $`swc ${paths.js.dist} -o ${paths.js.legacy} --source-maps --quiet`
+}
+
+/**
+ * Compiles images.
+ *
+ * @since  unreleased
+ * @return {Promise<void>}
+ */
+async function images(): Promise<void> {
+	await $`mkdir -p ./dist/img`
+	await $`cp -R ./src/assets/img ./dist`
 }
 
 // Initialize build.

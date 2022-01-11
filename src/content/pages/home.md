@@ -5,3 +5,5 @@ description: On good days, Paul aspires to make the web more accessible, secure,
 slug: .
 ---
 {{ description }}
+
+![Paul Shryock's 2018 professional headshot](/img/headshots/paul-shryock-2018-avatar-office.png)

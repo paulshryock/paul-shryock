@@ -1,25 +1,50 @@
 {%- if resume.experience %}
-	<h2 class="resume__title">Work experience</h2>
-	<ol class="resume__experience-list">
-		{%- for item in resume.experience %}
-			<li class="resume__experience-item">
-				<span class="resume__experience-duration">
-					{{ item.duration.from }}&thinsp;&ndash;&thinsp;{{ item.duration.to }}
-				</span>
-				<h3 class="resume__experience-position">
-					<span class="resume__experience-role">{{ item.role }}</span>
-					<span class="resume__experience-employer">{{ item.employer }}</span>
-				</h3>
-				{%- if item.description %}
-				<p class="resume__experience-description">{{ item.description }}</p>
-				{%- endif %}
-				{%- if item.accomplishments %}
-					<ul class="resume__experience-accomplishments">
-						{%- for accomplishment in item.accomplishments %}
-						<li>{{ accomplishment }}</li>
-						{%- endfor %}
-					</ul>
-				{%- endif %}
-		{%- endfor %}
-	</ol>
+	<div class="resume">
+		{%- if resume.experience %}
+			<section class="resume__experience">
+				<h2 class="resume__title">Work experience</h2>
+				<ol class="resume__experience-list">
+					{%- for item in resume.experience %}
+						<li class="resume__experience-item">
+							<span class="resume__experience-duration">
+								{{ item.duration.from }}&thinsp;&ndash;&thinsp;{{ item.duration.to }}
+							</span>
+							<h3 class="resume__experience-position">
+								<span class="resume__experience-role">{{ item.role }}</span>
+								<span class="resume__experience-employer">{{ item.employer }}</span>
+							</h3>
+							{%- if item.description %}
+								<p class="resume__experience-description">{{ item.description }}</p>
+							{%- endif %}
+							{%- if item.accomplishments %}
+								<ul class="resume__experience-accomplishments">
+									{%- for accomplishment in item.accomplishments %}
+										<li>{{ accomplishment }}</li>
+									{%- endfor %}
+								</ul>
+							{%- endif %}
+					{%- endfor %}
+				</ol>
+			</section>
+		{%- endif %}
+		{%- if resume.skills %}
+			<section class="resume__skills">
+				<h2 class="resume__title">Skills</h2>
+				<ul class="resume__skills-list">
+					{%- for item in resume.skills %}
+						<li class="resume__skills-item">
+							{{ item.type }}
+							{%- if item.tools %}
+								<ul class="resume__tools-list">
+									{%- for tool in item.tools %}
+										<li>{{ tool }}</li>
+									{%- endfor %}
+								</ul>
+							{%- endif %}
+						</li>
+					{%- endfor %}
+				</ul>
+			</section>
+		{%- endif %}
+	</div>
 {%- endif %}

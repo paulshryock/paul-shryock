@@ -8,7 +8,7 @@ module.exports = function() {
 					from: '2020',
 					to: 'present',
 				},
-				description: `Sets coding standards and helps drive strategic technical direction of development efforts; gathers business requirements and crafts technical solutions to meet those needs. Owns the development and builds fully functional WordPress websites based on business requirements and design specs. Modifies existing systems as business requirements change. Develops system test criteria and participates in systems testing. Responds to, isolates and resolves programming problems.`,
+				description: `Engineers and maintains WordPress CMS environments and microsites, ensuring great editorial user experiences and improving public-facing user interfaces. Follows modern best practices for improving accessibility, security, performance, and UX across all digital products.`,
 			},
 			{
 				role: 'Web Developer',
@@ -17,7 +17,7 @@ module.exports = function() {
 					from: '2018',
 					to: 'present',
 				},
-				description: `Owns the existing portfolio of web-based communication platforms, including Palantir.com and its microsites. Designs and develops web-based projects and interactive displays with an emphasis on rich interaction. Independently manages projects, end-to-end, with excellent communication and organization. Maintains productive, collaborative relationships with creative partners and internal customers. Collaborates with designers, photographers, engineers, writers, and videographers to create interactive digital storytelling pieces.`,
+				description: `Develops and maintains marketing website and microsites, ensuring rich editorial CMS workflows and smooth web experiences. Contributes high-quality code and supports new features with minimal direction.`,
 			},
 			{
 				role: 'Lead Front End Developer',
@@ -26,14 +26,12 @@ module.exports = function() {
 					from: '2017',
 					to: '2020',
 				},
-				description: `Engineered and maintained many accessible websites, applications, and HTML emails for world-class real estate brands. Diagnosed business roadblocks, and proposed and executed effective marketing solutions, providing high ROI for internal clients. Managed freelancers and collaborated with design team.`,
+				description: `Engineered and maintained many accessible websites, applications, and HTML emails for world-class real estate brands. Proposed and executed effective software and marketing solutions, providing high ROI for internal clients.`,
 				accomplishments: [
 					`Built 2018 conference ecommerce platform generating $2M in sales`,
 					`Built internal application for sending employee communications at scale (80k recipients)`,
 					`Built fair housing pledge website and admin dashboard with pdf/csv exports (17k users)`,
 					`Built fast, secure web application to collect conference attendee information in a database`,
-					`Assisted in maintaining large-scale employee intranet, adding many new features and pages`,
-					`Was the resident WordPress and CMS expert`,
 				],
 			},
 			{
@@ -93,7 +91,7 @@ module.exports = function() {
 				},
 			},
 			{
-				role: 'Web Designer, Machine Operator',
+				role: 'Machine Operator, Web Designer',
 				employer: 'Folsom Tool',
 				duration: {
 					from: '2011',
@@ -117,12 +115,59 @@ module.exports = function() {
 				},
 			},
 			{
-				role: 'Web Designer, Web Developer',
+				role: 'Software Engineer, Web Designer',
 				employer: 'Freelance',
 				duration: {
 					from: '2009',
 					to: 'present',
 				},
+			},
+		],
+		skills: [
+			{
+				type: 'HTML',
+				tools: ['Eleventy, Jekyll', 'Liquid, nunchucks'],
+			},
+			{
+				type: 'CSS',
+				tools: ['PostCSS, Sass', 'ITCSS, BEM'],
+			},
+			{
+				type: 'JavaScript',
+				tools: [
+					'TypeScript, ES2020',
+					'Node.js, Express, MongoDB',
+					'Next.js, React, Angular',
+					'Jest, Ava, ESLint, Prettier',
+					'Electron',
+				],
+			},
+			{
+				type: 'PHP',
+				tools: ['WordPress, WP CLI & REST API', 'Composer', 'PHPCS'],
+			},
+			{
+				type: 'SQL',
+				tools: ['PostgreSQL', 'MySQL, MariaDB'],
+			},
+			{
+				type: 'CI/CD',
+				tools: [
+					'Docker, Docker Compose',
+					'GitHub Actions, BitBucket Pipelines',
+					'Netlify, Vercel, Heroku',
+				],
+			},
+			{
+				type: 'Other',
+				tools: [
+					'HTTP, Postman, REST APIs',
+					'JSON, Markdown, YAML, TOML',
+					'esbuild, swc, webpack, babel',
+					'Storybook',
+					'nx, oclif',
+					'Git, bash, zsh',
+				],
 			},
 		],
 	}

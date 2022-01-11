@@ -2,5 +2,25 @@
 
 	&__title {
 		font-weight: 700;
+
+		&-link {
+
+			&:link,
+			&:visited {
+				color: black;
+				text-decoration-color: blue;
+			}
+
+			&:hover,
+			&:focus {
+				color: darkblue;
+				text-decoration-color: darkblue;
+			}
+
+			&:active {
+				color: navy;
+				text-decoration-color: navy;
+			}
+		}
 	}
 }
