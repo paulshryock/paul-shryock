@@ -23,8 +23,8 @@
     "serve": "npm run build",
     "start": "npm run serve",
     "test": "npx ava --config=./config/ava.config.js --verbose",
-    "typecheck": "tsc",
-    "typecheck:watch": "tsc --watch",
+    "typecheck": "tsc -p config",
+    "typecheck:watch": "tsc -p config --watch",
     "preversion": "release-bump && git add ."
   },
   "devDependencies": {
