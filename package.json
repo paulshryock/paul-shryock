@@ -10,8 +10,8 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "prebuild": "npm-run-all --serial clean format --parallel lint typecheck test",
-    "build": "node --es-module-specifier-resolution=node --loader ts-node/esm -r dotenv/config bin/build.ts",
+    "prebuild": "npm-run-all --serial format --parallel clean lint typecheck test",
+    "build": "node --es-module-specifier-resolution=node --loader ts-node/esm  -r dotenv/config bin/build.ts",
     "clean": "rm -rf dist",
     "format": "prettier --loglevel=warn --write \"./!(vendor)/**/*.{ts,js,{m,c}js,json}\"",
     "lint": "run-p lint:*",
@@ -23,8 +23,8 @@
     "serve": "npm run build",
     "start": "npm run serve",
     "test": "npx ava --config=./config/ava.config.js --verbose",
-    "typecheck": "tsc -p config",
-    "typecheck:watch": "tsc -p config --watch",
+    "typecheck": "tsc",
+    "typecheck:watch": "tsc --watch",
     "preversion": "release-bump && git add ."
   },
   "devDependencies": {

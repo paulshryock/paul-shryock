@@ -2,13 +2,13 @@
 layout: scaffold
 ---
 {% render 'components/masthead', site: site, navigation: navigation %}
-<main class="content">
+<main class="content" aria-labelledby="content-title">
 	{% if page_title or title %}
 	<header>
 		{%- if page.url == '/' %}
-		<h2 class="content__title">{{ page_title | default: title | strip | strip_html }}</h2>
+		<h2 class="content__title" id="content-title">{{ page_title | default: title | strip | strip_html }}</h2>
 		{%- else %}
-		<h1 class="content__title">{{ page_title | default: title | strip | strip_html }}</h1>
+		<h1 class="content__title" id="content-title">{{ page_title | default: title | strip | strip_html }}</h1>
 		{%- endif %}
 	</header>
 	{% endif %}

@@ -1,7 +1,7 @@
 ---
 seo_title: Paul Shryock (he/him) | Ethical Software Engineer
 title: Ethical Software Engineer
-description: On good days, Paul aspires to make the web more accessible, secure, performant, inclusive, responsive, and ethical.
+description: I'm a WordPress Engineer at the NBA, where I build next-level CMS authoring experiences. I always aim to make the web more accessible, inclusive, and ethical.
 slug: .
 ---
 {{ description }}

@@ -3,14 +3,22 @@
 	gap: 4em;
 	grid-template-areas:
 		"experience"
-		"skills";
+		"skills"
+		"education";
 
 	/* todo: Fix print layout */
 
+	@media screen and (min-width: 55em) {
+		grid-template-areas:
+			"experience experience"
+			"education skills";
+		grid-template-columns: auto 1fr;
+	}
+
 	@media screen and (min-width: 75em) {
 		grid-template-areas:
-			"experience skills";
-		grid-template-columns: auto 1fr;
+			"experience skills"
+			"education skills";
 	}
 
 	&__title {
@@ -20,6 +28,7 @@
 	}
 
 	&__experience {
+		grid-area: experience;
 
 		&-list {
 			display: flex;
@@ -28,6 +37,10 @@
 			gap: 2em;
 			list-style: none;
 			padding-left: 0;
+		}
+
+		&-list + &-cta {
+			margin-top: 2rem;
 		}
 
 		&-item {
@@ -98,6 +111,7 @@
 	}
 
 	&__skills {
+		grid-area: skills;
 
 		&-list {
 			display: grid;
@@ -115,7 +129,12 @@
 
 		&-list {
 			font-weight: 400;
+			list-style-type: disc;
 			padding-left: 1em;
 		}
+	}
+
+	&__education {
+		grid-area: education;
 	}
 }

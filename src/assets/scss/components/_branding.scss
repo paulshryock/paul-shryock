@@ -1,25 +1,56 @@
 .branding {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.125em;
+	justify-content: center;
+	padding: 0.5rem;
+
+	@media screen and (min-width: 30em) {
+		justify-content: flex-start;
+	}
+
+	@media screen and (min-width: 32em) {
+		gap: 0.5em;
+	}
 
 	&__title {
+		font-size: 1.5em;
 		font-weight: 700;
+		line-height: 1.1;
+		margin-bottom: 0;
+	}
 
-		&-link {
+	&__link {
+		text-underline-offset: 0.125rem;
+		text-decoration-thickness: 0.125rem;
 
-			&:link,
-			&:visited {
-				color: black;
-				text-decoration-color: blue;
-			}
+		&:link,
+		&:visited {
+			color: black;
+			text-decoration-color: blue;
+		}
 
-			&:hover,
-			&:focus {
-				color: darkblue;
-				text-decoration-color: darkblue;
-			}
+		&:hover,
+		&:focus {
+			color: darkblue;
+			text-decoration-color: darkblue;
+		}
 
-			&:active {
-				color: navy;
-				text-decoration-color: navy;
+		&:active {
+			color: navy;
+			text-decoration-color: navy;
+		}
+	}
+
+	&__pronouns + &__tagline {
+
+		&::before {
+
+			@media screen and (min-width: 32em) {
+				color: blue;
+				content: '|';
+				margin-right: 0.5em;
 			}
 		}
 	}

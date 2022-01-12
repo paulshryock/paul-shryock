@@ -4,6 +4,9 @@ module.exports = function() {
 
 	return {
 		copyright: `© ${year} ${title}. All rights reserved.`,
+		language: 'en-US',
+		pronouns: ['he', 'him'],
+		tagline: 'Ethical Software Engineer',
 		title,
 	}
 }

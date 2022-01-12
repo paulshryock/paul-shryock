@@ -1,5 +1,6 @@
-import { dirname, join } from 'path'
-import { fileURLToPath } from 'url'
+import { readFile } from 'node:fs/promises'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { $ } from 'zx'
 import pkg from '../package.json'
 
@@ -18,6 +19,7 @@ const paths = {
 		dist: join(__dirname, '../dist/js/main.js'),
 		legacy: join(__dirname, '../dist/js/main-legacy.js'),
 	},
+	healthCheck: './dist/health-check/index.html',
 }
 
 const serve = BUILD_SERVE === 'true'
@@ -33,9 +35,18 @@ async function build(): Promise<void> {
 	try {
 		// Compile assets.
 		await Promise.all([css(), html(), images(), javascript()])
+
+		await healthCheck()
 	} catch (error) {
 		console.error(error)
 	}
+}
+
+async function healthCheck() {
+	const content = await readFile(paths.healthCheck, { encoding: 'utf8' })
+	if (content === 'success') return
+
+	throw new Error('health check failed')
 }
 
 /**
@@ -84,7 +95,7 @@ async function javascript(): Promise<void> {
 	await $`esbuild ${paths.js.src} --bundle --define:process=${proc} --format=iife --minify --outfile=${paths.js.dist} --sourcemap --platform=browser --target=es2015`
 
 	// Transpile JavaScript bundles for legacy browsers.
-	await $`swc ${paths.js.dist} -o ${paths.js.legacy} --source-maps --quiet`
+	await $`swc ${paths.js.dist} --config-file config/swc.config.json -o ${paths.js.legacy} --quiet --source-maps`
 }
 
 /**

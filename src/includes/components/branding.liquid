@@ -1,9 +1,19 @@
 {%- if site.title %}
-	<a href="/" class="branding__title-link">
-		{%- if page.url == '/' %}
-			<h1 class="branding__title">{{ site.title | strip | strip_html }}</h1>
-		{%- else %}
-			<p class="branding__title">{{ site.title | strip | strip_html }}</p>
+	<div class="branding">
+		{%- if page.url == '/' %}<h1 class="branding__title" id="branding-title">
+		{%- else %}<p class="branding__title" id="branding-title">
 		{%- endif %}
-	</a>
+			<a class="branding__link" href="/">
+				{{ site.title | strip | strip_html }}
+			</a>
+		{%- if page.url == '/' %}</h1>
+		{%- else %}</p>
+		{%- endif %}
+		{%- if site.pronouns %}
+			<span class="branding__pronouns">({{ site.pronouns | join: '/' }})</span>
+		{%- endif %}
+		{%- if site.tagline %}
+			<span class="branding__tagline">{{ site.tagline }}</span>
+		{%- endif %}
+	</div>
 {%- endif %}

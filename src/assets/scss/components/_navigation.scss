@@ -7,22 +7,32 @@
 	&__list {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: 0.5rem;
 		list-style: none;
 		padding-left: 0;
 	}
 
 	&__link {
+		font-weight: 700;
+		padding: 0.5rem;
+		text-underline-offset: 0.125rem;
+		text-decoration-thickness: 0.125rem;
 
 		&:link,
 		&:visited {
-			text-decoration: none;
+			color: black;
+			text-decoration-color: blue;
 		}
 
 		&:hover,
-		&:focus,
+		&:focus {
+			color: darkblue;
+			text-decoration-color: darkblue;
+		}
+
 		&:active {
-			text-decoration: underline;
+			color: navy;
+			text-decoration-color: navy;
 		}
 	}
 }

@@ -1,6 +1,21 @@
 .masthead {
+	align-items: center;
+	border-bottom: 0.25em solid black;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 1rem;
-	padding: 2rem;
+	justify-content: center;
+	padding: 0.5rem;
+
+	@media screen and (min-width: 30em) {
+		justify-content: flex-start;
+	}
+
+	@media screen and (min-width: 37.5em) {
+		gap: 1rem;
+		padding: 1.5rem;
+	}
+
+	@media screen and (min-width: 43em) {
+		gap: 1.5rem;
+	}
 }
