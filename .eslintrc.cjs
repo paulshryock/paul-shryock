@@ -38,6 +38,7 @@ module.exports = {
 			{
 				code: 80,
 				ignoreTemplateLiterals: true,
+				tabWidth: 2,
 			},
 		],
 		'multiline-ternary': ['error', 'always-multiline'],
