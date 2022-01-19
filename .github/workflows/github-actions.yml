@@ -20,9 +20,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: JS linting
-      - run: npm ci
-      - run: npm run format
-      - run: npm run lint:js
+        run: |
+          npm ci
+          npm run format
+          npm run lint:js
 
   js-typecheck:
     runs-on: ubuntu-latest
@@ -40,8 +41,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: JS type checking
-      - run: npm ci
-      - run: npm run typecheck
+        run: |
+          npm ci
+          npm run typecheck
 
   js-test:
     runs-on: ubuntu-latest
@@ -59,8 +61,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: JS unit tests
-      - run: npm ci
-      - run: npm test
+        run: |
+          npm ci
+          npm test
 
   js-build:
     runs-on: ubuntu-latest
@@ -78,5 +81,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: JavaScript build
-      - run: npm ci
-      - run: npm run buildscript
+        run: |
+          npm ci
+          npm run buildscript
