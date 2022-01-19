@@ -1,6 +1,8 @@
 const { BUILD_ENV, BUILD_VERSION } = process.env
 
-console.log({ BUILD_ENV, BUILD_VERSION })
+if (typeof BUILD_ENV !== 'undefined' && typeof BUILD_VERSION !== 'undefined') {
+	console.log({ BUILD_ENV, BUILD_VERSION })
+}
 
 /**
  * Returns the sum of two numbers.

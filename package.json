@@ -11,16 +11,23 @@
   "type": "module",
   "scripts": {
     "prebuild": "npm-run-all --serial format --parallel clean lint typecheck test",
-    "build": "node --es-module-specifier-resolution=node --loader ts-node/esm  -r dotenv/config bin/build.ts",
+    "build": "npm run buildscript",
+    "postbuild": "npm run healthcheck",
+    "build:css": "BUILD_ONLY=css npm run buildscript",
+    "build:html": "BUILD_ONLY=html npm run buildscript",
+    "build:images": "BUILD_ONLY=images npm run buildscript",
+    "build:javascript": "BUILD_ONLY=javascript npm run buildscript",
+    "buildscript": "node --es-module-specifier-resolution=node --loader ts-node/esm  -r dotenv/config bin/build.ts",
     "clean": "rm -rf dist",
     "format": "prettier --loglevel=warn --write \"./!(vendor)/**/*.{ts,js,{m,c}js,json}\"",
+    "healthcheck": "node --es-module-specifier-resolution=node --loader ts-node/esm bin/health-check.ts",
     "lint": "run-p lint:*",
     "prelint:env": "touch .env",
     "lint:env": "sync-dotenv",
     "lint:js": "eslint \"./!(vendor)/**/*.{ts,d.ts,js,{m,c}js,json}\" --fix",
     "lint:pkg": "sort-package-json",
     "prepare": "husky install",
-    "serve": "npm run build",
+    "serve": "BUILD_SERVE=true BUILD_WATCH=true npm run build",
     "start": "npm run serve",
     "test": "npx ava --config=./config/ava.config.js --verbose",
     "typecheck": "tsc",
@@ -35,6 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
     "ava": "^4.0.0",
+    "chokidar": "^3.5.3",
     "dotenv": "^10.0.0",
     "esbuild": "^0.14.10",
     "eslint": "^8.6.0",
@@ -59,7 +67,7 @@
     "zx": "^4.2.0"
   },
   "engines": {
-    "node": "^17.3",
+    "node": "^17.4",
     "npm": "^8.3"
   }
 }

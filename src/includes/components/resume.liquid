@@ -28,7 +28,6 @@
 						{%- endunless %}
 					{%- endfor %}
 				</ol>
-				<p class="resume__experience-cta"><a href="">View full work history on LinkedIn</a></p>
 			</section>
 		{%- endif %}
 		{%- if resume.skills %}
@@ -37,11 +36,11 @@
 				<ul class="resume__skills-list">
 					{%- for item in resume.skills %}
 						<li class="resume__skills-item">
-							{{ item.type }}
+							<span class="resume__skills-type">{{ item.type }}</span>
 							{%- if item.tools %}
 								<ul class="resume__tools-list">
 									{%- for tool in item.tools %}
-										<li>{{ tool }}</li>
+										<li class="resume__tools-item">{{ tool }}</li>
 									{%- endfor %}
 								</ul>
 							{%- endif %}
@@ -53,14 +52,33 @@
 		{%- if resume.education %}
 			<section class="resume__education">
 				<h2 class="resume__title">Education</h2>
-				<ul class="resume__education-list">
+				<ol class="resume__education-list">
 					{%- for item in resume.education %}
-						<li class="resume__education-item">
-							<strong>{{ item.school }}</strong>, {{ item.field }}
-						</li>
+						{%- if item.school %}
+							<li class="resume__education-item">
+								<span class="resume__education-duration">
+									{{ item.duration.from }}&thinsp;&ndash;&thinsp;{{ item.duration.to }}
+								</span>
+								<span class="resume__education-school">
+									{%- if item.url %}<a href="{{ item.url }}">{%- endif %}
+										<strong>{{ item.school }}</strong>
+									{%- if item.url %}</a>{%- endif %}
+								</span>
+								{%- if item.field %}
+									<span class="resume__education-field">
+										{{ item.field }}
+									</span>
+								{%- endif %}
+							</li>
+						{%- endif %}
 					{%- endfor %}
-				</ul>
+				</ol>
 			</section>
 		{%- endif %}
+		<section>
+			<p class="resume__education-cta">
+				<a href="{{ resume.urls.linkedin }}">View full education on LinkedIn</a>
+			</p>
+		</section>
 	</div>
 {%- endif %}

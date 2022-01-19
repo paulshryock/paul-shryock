@@ -18,4 +18,9 @@
 	@media screen and (min-width: 43em) {
 		gap: 1.5rem;
 	}
+
+	@media print {
+		border-width: 0.125em;
+		justify-content: flex-start;
+	}
 }

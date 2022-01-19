@@ -6,8 +6,8 @@ Source code for my personal website.
 
 | Tool    | Min. version | Install command          |
 | :---    | :---         | :---                     |
-| Node.js | 17.3         | `nvm use 17.3`, `n 17.3` |
-| npm     | 8            | `npm i -g npm@8.3`       |
+| Node.js | 17.4         | `nvm use 17.4`, `n 17.4` |
+| npm     | 8.3          | `npm i -g npm@8.3`       |
 
 ## Development tool chain
 
@@ -28,6 +28,7 @@ Source code for my personal website.
 
 ## Roadmap
 - Add GitHub actions to test and run a full build after pushing to remote.
+- Add JavaScript hot reloading.
 
 ## Requirements
 
