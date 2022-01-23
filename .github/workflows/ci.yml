@@ -52,7 +52,8 @@ jobs:
         with:
           node-version: '17.4'
           cache: 'npm'
-      - name: JavaScript build
+      - name: Build
         run: |
           npm ci
           npm run buildscript
+          npm run healthcheck
