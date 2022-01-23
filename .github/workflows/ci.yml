@@ -1,0 +1,39 @@
+name: JS Code Quality
+
+on: push
+
+jobs:
+
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17.4'
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format
+        run: npm run format
+
+      - name: Lint
+        run: npm run lint:js
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit Test
+        run: npm test
+
+      - name: Build
+        run: npm run buildscript
