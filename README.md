@@ -27,7 +27,6 @@ Source code for my personal website.
 | GitHub actions    | CI                                       |
 
 ## Roadmap
-- Add GitHub actions to test and run a full build after pushing to remote.
 - Add JavaScript hot reloading.
 
 ## Requirements
