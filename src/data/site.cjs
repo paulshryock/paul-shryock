@@ -4,6 +4,7 @@ module.exports = function() {
 
 	return {
 		copyright: `© ${year} ${title}. All rights reserved.`,
+		emoji: '🙂',
 		language: 'en-US',
 		pronouns: ['he', 'him'],
 		tagline: 'Ethical Software Engineer',

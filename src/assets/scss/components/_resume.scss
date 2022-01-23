@@ -3,6 +3,19 @@
 	@media print {
 		font-size: 0.675em;
 
+		a {
+			text-decoration: none;
+		}
+
+		.masthead {
+
+			&::after {
+				color: blue;
+				content: 'paul@pshry.com';
+				margin-left: auto;
+			}
+		}
+
 		.content__title {
 			display: none;
 		}
@@ -15,25 +28,24 @@
 
 .resume {
 	display: grid;
-	gap: 4em;
+	gap: 4rem;
 	grid-template-areas:
 		"experience"
 		"skills"
-		"education";
+		"education"
+		"links";
+	place-content: start;
+	place-items: start;
 
-	/* todo: Fix print layout */
-
-	@media screen and (min-width: 75em) {
+	@media screen and (min-width: 75em), print {
 		grid-template-areas:
 			"experience skills"
-			"education skills";
+			"education links";
 		grid-template-columns: calc(8em + 75ch) 1fr;
 	}
 
 	@media print {
-		grid-template-areas:
-			"experience skills"
-			"education skills";
+		gap: 1rem;
 	}
 
 	&__title {
@@ -44,6 +56,13 @@
 
 	&__experience {
 		grid-area: experience;
+
+		@media print {
+
+			a {
+				color: black;
+			}
+		}
 
 		&-list {
 			display: flex;
@@ -71,7 +90,7 @@
 				". accomplishments";
 			grid-template-columns: 1em 1fr;
 
-			@media screen and (min-width: 37.5em) {
+			@media screen and (min-width: 37.5em), print {
 				grid-template-areas:
 					"duration position"
 					". description"
@@ -93,15 +112,15 @@
 			display: block;
 			font-weight: 700;
 
-			@media screen and (min-width: 37.5em) {
+			@media screen and (min-width: 37.5em), print {
 				display: inline;
 			}
 
 			&::after {
-				@media screen and (min-width: 37.5em) {
+				@media screen and (min-width: 37.5em), print {
 					content: '@';
 					font-weight: 400;
-					margin-left: 0.25em;
+					margin: 0 0.25em;
 				}
 			}
 		}
@@ -140,7 +159,7 @@
 			max-width: calc(8em + 75ch);
 			padding-left: 0;
 
-			@media screen and (min-width: 75em) {
+			@media screen and (min-width: 75em), print {
 				grid-template-columns: 30ch;
 			}
 
@@ -182,6 +201,13 @@
 	&__education {
 		grid-area: education;
 
+		@media print {
+
+			a {
+				color: black;
+			}
+		}
+
 		&-list {
 			display: flex;
 			flex-direction: column;
@@ -191,12 +217,8 @@
 			max-width: calc(8em + 75ch);
 			padding-left: 0;
 
-			@media screen and (min-width: 48em) {
+			@media screen and (min-width: 48em), print {
 				gap: 0;
-			}
-
-			@media print {
-				gap: 1rem;
 			}
 		}
 
@@ -224,6 +246,12 @@
 					"duration school field";
 				grid-template-columns: 8em auto 1fr;
 			}
+
+			@media print {
+				grid-template-areas:
+					"duration school field";
+				grid-template-columns: 8em auto 1fr;
+			}
 		}
 
 		&-duration {
@@ -243,10 +271,24 @@
 
 			&::before {
 
-				@media screen and (min-width: 48em) {
+				@media screen and (min-width: 48em), print {
 					content: ', ';
 				}
 			}
+		}
+	}
+
+	&__links {
+		grid-area: links;
+
+		&-list {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+			gap: 0;
+			list-style: none;
+			max-width: 35ch;
+			padding-left: 0;
 		}
 	}
 }

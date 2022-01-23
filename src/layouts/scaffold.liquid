@@ -4,13 +4,13 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>{{ seo_title | default: title | strip | strip_html | truncate: 40 }}</title>
+	<title>{{ seo_title | default: title | strip | strip_html | truncate: 60 }}</title>
 
 	<link rel="stylesheet" href="/css/main.css">
 
-	<meta name="description" content="{{ description | default: content | strip | strip_html | truncate: 115 }}">
+	<meta name="description" content="{{ description | default: content | strip | strip_html | truncate: 160 }}">
 	<meta name="theme-color" content="#4285f4">
-	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💻</text></svg>" />
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>{{ site.emoji }}</text></svg>" />
 </head>
 <body class="layout layout_{{ layout }}">
 	{{ content }}

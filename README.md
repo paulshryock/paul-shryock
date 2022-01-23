@@ -4,10 +4,10 @@ Source code for my personal website.
 
 ## Pre-requisites
 
-| Tool    | Min. version | Install command          |
-| :---    | :---         | :---                     |
-| Node.js | 17.4         | `nvm use 17.4`, `n 17.4` |
-| npm     | 8.3          | `npm i -g npm@8.3`       |
+| Tool    | Minimum | Suggested | Install command          |
+| :---    | :---    | :---      | :---                     |
+| Node.js | 17.4    | 17.4      | `nvm use 17.4`, `n 17.4` |
+| npm     | 8.3     | 8.3       | `npm i -g npm@8.3`       |
 
 ## Development tool chain
 

@@ -5,6 +5,14 @@
 		padding: 2rem;
 	}
 
+	@media print {
+		padding: 1rem 0;
+	}
+
+	&__header {
+		margin-bottom: 2rem;
+	}
+
 	&__title {
 		font-size: 2em;
 		font-weight: 700;

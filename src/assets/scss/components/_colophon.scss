@@ -10,4 +10,12 @@
 	@media screen and (min-width: 37.5em) {
 		padding: 2rem;
 	}
+
+	@media print {
+		border-color: gray;
+		border-width: 0.125em;
+		color: gray;
+		padding: 0.5rem 0 0;
+		text-align: left;
+	}
 }

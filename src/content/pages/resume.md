@@ -5,4 +5,4 @@ description: Do you need to hire a competent software engineer? I turn complex b
 layout: resume
 slug: resume
 ---
-{%- render 'components/resume', resume: resume %}
+{{ description }}

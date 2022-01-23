@@ -4,6 +4,7 @@ module.exports = function() {
 			{
 				role: 'WordPress Engineer',
 				employer: 'NBA',
+				link: 'https://www.nba.com/',
 				duration: {
 					from: '2020',
 					to: 'present',
@@ -18,6 +19,7 @@ module.exports = function() {
 			{
 				role: 'Web Developer',
 				employer: 'Palantir',
+				link: 'https://www.palantir.com/',
 				duration: {
 					from: '2018',
 					to: 'present',
@@ -31,6 +33,7 @@ module.exports = function() {
 			{
 				role: 'Lead Front End Developer',
 				employer: 'Realogy',
+				link: 'https://www.realogy.com/',
 				duration: {
 					from: '2017',
 					to: '2020',
@@ -391,9 +394,20 @@ module.exports = function() {
 				],
 			},
 		],
-		urls: {
-			linkedin: 'https://linkedin.com/in/paulshryock',
-		},
+		links: [
+			{
+				label: 'GitHub',
+				link: 'github.com/paulshryock',
+			},
+			{
+				label: 'LinkedIn',
+				link: 'linkedin.com/in/paulshryock',
+			},
+			{
+				label: 'Twitter',
+				link: 'twitter.com/paul_shryock',
+			},
+		],
 	}
 
 	return resume

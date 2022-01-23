@@ -12,7 +12,7 @@ async function healthCheck() {
 		throw new Error('health check failed')
 	}
 
-	console.log('health check passed')
+	console.info('health check passed')
 }
 
 healthCheck()

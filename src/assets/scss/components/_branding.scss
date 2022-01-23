@@ -18,6 +18,7 @@
 		border-width: 0.125em;
 		gap: 0.5em;
 		justify-content: flex-start;
+		padding: 0 0.5rem 0 0;
 	}
 
 	&__title {
@@ -35,6 +36,11 @@
 		&:visited {
 			color: black;
 			text-decoration-color: blue;
+
+			@media print {
+				color: blue;
+				text-decoration: none;
+			}
 		}
 
 		&:hover,
@@ -57,6 +63,10 @@
 				color: blue;
 				content: '|';
 				margin-right: 0.5em;
+			}
+
+			@media print {
+				content: '—';
 			}
 		}
 	}

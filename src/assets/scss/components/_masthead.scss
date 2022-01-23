@@ -20,7 +20,9 @@
 	}
 
 	@media print {
+		border-color: gray;
 		border-width: 0.125em;
 		justify-content: flex-start;
+		padding: 0 0 0.5rem;
 	}
 }
