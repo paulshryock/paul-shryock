@@ -12,13 +12,6 @@ jobs:
         with:
           node-version: '17.4'
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       - name: JS linting
         run: |
           npm ci
@@ -33,13 +26,6 @@ jobs:
         with:
           node-version: '17.4'
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       - name: JS type checking
         run: |
           npm ci
@@ -53,13 +39,6 @@ jobs:
         with:
           node-version: '17.4'
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       - name: JS unit tests
         run: |
           npm ci
@@ -73,13 +52,6 @@ jobs:
         with:
           node-version: '17.4'
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       - name: JavaScript build
         run: |
           npm ci
