@@ -11,7 +11,7 @@ layout: scaffold
 		<h1 class="content__title" id="content-title">{{ page_title | default: title | strip | strip_html }}</h1>
 		{%- endif %}
 
-		<p>{{ content }}</p>
+		<p>{{ description }}</p>
 	</header>
 	{% endif %}
 
@@ -78,7 +78,7 @@ layout: scaffold
 									</span>
 									<span class="resume__education-school">
 										{%- if item.url %}<a href="{{ item.url }}">{%- endif %}
-											<strong>{{ item.school }}</strong>
+											<b>{{ item.school }}</b>
 										{%- if item.url %}</a>{%- endif %}
 									</span>
 									{%- if item.field %}
@@ -98,7 +98,7 @@ layout: scaffold
 					<ul class="resume__links-list">
 						{%- for item in links %}
 							<li class="resume__link-item">
-								<strong>{{ item.label }}:</strong>
+								<b>{{ item.label }}:</b>
 								<a href="{{ item.link }}">{{ item.link_short }}</a>
 							</li>
 						{%- endfor %}

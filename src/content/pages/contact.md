@@ -4,8 +4,6 @@ title: Contact Paul
 description: If you need an ethical software engineer to bring your Awesome Project™ to life, get in touch with Paul in one of the following ways.
 slug: contact
 ---
-{{ description }}
-
 {%- if links %}
   {%- for item in links %}
   {%- unless item.label == 'Website' %}

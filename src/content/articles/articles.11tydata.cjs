@@ -1,6 +1,6 @@
 module.exports = function content() {
 	return {
-		content_type: 'page',
-		tags: 'pages',
+		content_type: 'article',
+		tags: 'articles',
 	}
 }

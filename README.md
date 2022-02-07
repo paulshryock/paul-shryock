@@ -43,6 +43,7 @@ This project should be:
 - Inclusive (i18n, a11y, inclusive form fields and language, etc.)
 - Modern (ESM, ES2021, latest TypeScript/Node.js/npm versions, etc.)
 - Performant (lightweight, minimal dependencies, cookies, requests, etc.) (https://www.yunier.dev/post/2021/running-lighthouse-in-cicd-pipeline/)
+- Progressively enhanced
 - Responsive (mobile-first, etc.)
 - Secure (HTTP headers, firewall, auth, etc.)
 - Semantically versioned

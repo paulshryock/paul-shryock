@@ -1,7 +1,6 @@
 .layout_resume {
 
 	@media print {
-		font-size: 0.675em;
 
 		a {
 			text-decoration: none;
@@ -10,9 +9,7 @@
 		.masthead {
 
 			&::after {
-				color: blue;
 				content: 'paul@pshry.com';
-				margin-left: auto;
 			}
 		}
 
