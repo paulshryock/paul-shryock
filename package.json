@@ -24,7 +24,7 @@
     "prepare": "husky install bin/husky",
     "quality": "npm-run-all --serial format --parallel lint typecheck test",
     "serve": "BUILD_SERVE=true BUILD_WATCH=true npm run build",
-    "start": "npm run serve",
+    "start": "run-s clean serve",
     "test": "jest --coverage",
     "test:watch": "npm test -- --watch",
     "typecheck": "tsc",

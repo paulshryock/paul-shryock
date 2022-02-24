@@ -15,7 +15,9 @@ const watch = BUILD_WATCH === 'true'
  * @return {Promise<void>}
  */
 async function html(): Promise<void> {
-	await $`eleventy --config=${paths.config.eleventy} ${serve ? '--serve' : (watch ? '--watch' : '')}`
+	await $`eleventy --config=${paths.config.eleventy} ${
+		serve ? '--serve' : watch ? '--watch' : ''
+	}`
 }
 
 /**
@@ -25,7 +27,9 @@ async function html(): Promise<void> {
  * @return {Promise<void>}
  */
 async function css(): Promise<void> {
-	await $`sass ${paths.css.src}:${paths.css.dist} ${(serve || watch) ? '--watch' : ''}`
+	await $`sass ${paths.css.src}:${paths.css.dist} ${
+		serve || watch ? '--watch' : ''
+	}`
 }
 
 /**
@@ -44,10 +48,18 @@ async function javascript(): Promise<void> {
 	})
 
 	// Bundle JavaScript modules.
-	$`esbuild ${paths.js.src} --bundle --define:process=${proc} --format=iife --minify --outfile=${paths.js.dist} --sourcemap --platform=browser --target=es2015 ${(serve || watch) ? '--watch' : ''}`
+	$`esbuild ${
+		paths.js.src
+	} --bundle --define:process=${proc} --format=iife --minify --outfile=${
+		paths.js.dist
+	} --sourcemap --platform=browser --target=es2015 ${
+		serve || watch ? '--watch' : ''
+	}`
 
 	// Transpile JavaScript bundles for legacy browsers.
-	await $`swc ${paths.js.dist} --config-file config/.swcrc -o ${paths.js.legacy} --quiet --source-maps ${(serve || watch) ? '--watch' : ''}`
+	await $`swc ${paths.js.dist} --config-file config/.swcrc -o ${
+		paths.js.legacy
+	} --quiet --source-maps ${serve || watch ? '--watch' : ''}`
 }
 
 /**
