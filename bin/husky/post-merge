@@ -3,7 +3,7 @@
 
 # Checks if a file has changed since the previous commit.
 # @param {string} $1 The file to check.
-function changed {
+function changed() {
 	git diff --name-only HEAD@{1} HEAD | grep "^$1" > /dev/null 2>&1
 }
 
@@ -12,3 +12,11 @@ if changed 'package-lock.json'; then
 	echo "📦 package-lock.json changed. Running npm install to bring your dependencies up to date."
 	npm install
 fi
+
+# Install dependencies if none are installed yet.
+if [ ! -d "node_modules" ]; then
+  npm install
+fi
+
+# Check if dependencies have updates available.
+./node_modules/.bin/ncu

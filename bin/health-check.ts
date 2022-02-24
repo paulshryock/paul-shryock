@@ -1,5 +1,8 @@
-import { paths } from '../config/paths.js'
 import { readFile } from 'node:fs/promises'
+
+const paths = {
+	healthCheck: './dist/health-check/index.html',
+}
 
 /**
  * Runs health check.

@@ -18,14 +18,14 @@ module.exports = {
 
 	overrides: [
 		{
-			files: '*.{json,md,txt,yaml,yml}',
+			files: '*.{json,md,swcrc,txt,yaml,yml,xml}',
 			options: {
 				printWidth: 120,
 				useTabs: false,
 			},
 		},
 		{
-			files: '.{editorconfig,gitignore}',
+			files: '.{editorconfig,env,env.*,gitattributes,gitignore,nvmrc}',
 			options: {
 				useTabs: false,
 			},

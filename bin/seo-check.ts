@@ -8,6 +8,7 @@ import { parse } from 'node-html-parser'
  * @since  unreleased
  * @param  {string}           directory Relative directory path.
  * @return {Promise<unknown>}           Absolute file paths.
+ * @todo   Refactor and combine with getHtmlFilePaths.
  */
 async function getAbsoluteFilePaths(directory: string): Promise<unknown> {
 	const dirents = await readdir(directory, { withFileTypes: true })
@@ -30,6 +31,7 @@ async function getAbsoluteFilePaths(directory: string): Promise<unknown> {
  * @since  unreleased
  * @param  {string}            directory Relative directory path.
  * @return {Promise<string[]>}           Absolute file paths.
+ * @todo   Refactor and combine with getAbsoluteFilePaths.
  */
 async function getHtmlFilePaths(directory: string): Promise<string[]> {
 	const dirents = await readdir(directory, { withFileTypes: true })

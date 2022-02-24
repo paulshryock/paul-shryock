@@ -1,11 +1,23 @@
-# Vendor files
+# Environment variables.
+.env
+.env.*
+!.env.example
+
+# Dependencies.
 node_modules/
 vendor/
 
-# Compiled files
+# Compiled assets.
 build/
 dist/
-_site/
+
+# Cache files.
+*.cache
+.cache/
+.swc/
+
+# Test coverage reports.
+coverage/
 
 # Type definitions
 !types.d.ts

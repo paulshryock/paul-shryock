@@ -18,8 +18,8 @@ async function html(): Promise<void> {
 	serve
 		? await $`eleventy --config=${paths.config.eleventy} --incremental --serve`
 		: watch
-			? await $`eleventy --config=${paths.config.eleventy} --incremental --watch`
-			: await $`eleventy --config=${paths.config.eleventy}`
+		? await $`eleventy --config=${paths.config.eleventy} --incremental --watch`
+		: await $`eleventy --config=${paths.config.eleventy}`
 }
 
 /**
@@ -30,8 +30,8 @@ async function html(): Promise<void> {
  */
 async function css(): Promise<void> {
 	serve || watch
-		? await $`sass src/assets/scss:dist/css --watch`
-		: await $`sass src/assets/scss:dist/css`
+		? await $`sass src/scss:dist/css --watch`
+		: await $`sass src/scss:dist/css`
 }
 
 /**
@@ -56,8 +56,8 @@ async function javascript(): Promise<void> {
 
 	// Transpile JavaScript bundles for legacy browsers.
 	serve || watch
-		? await $`swc ${paths.js.dist} --config-file config/swc.config.json -o ${paths.js.legacy} --quiet --source-maps --watch`
-		: await $`swc ${paths.js.dist} --config-file config/swc.config.json -o ${paths.js.legacy} --quiet --source-maps`
+		? await $`swc ${paths.js.dist} --config-file config/.swcrc -o ${paths.js.legacy} --quiet --source-maps --watch`
+		: await $`swc ${paths.js.dist} --config-file config/.swcrc -o ${paths.js.legacy} --quiet --source-maps`
 }
 
 /**
@@ -68,7 +68,7 @@ async function javascript(): Promise<void> {
  */
 async function images(): Promise<void> {
 	await $`mkdir -p ./dist/img`
-	await $`cp -R ./src/assets/img ./dist`
+	await $`cp -R ./src/img ./dist`
 }
 
 /**

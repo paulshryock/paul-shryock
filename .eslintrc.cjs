@@ -20,7 +20,7 @@ module.exports = {
 		ecmaVersion: 13,
 		sourceType: 'module',
 	},
-	plugins: ['@typescript-eslint', 'ava', 'json-format'],
+	plugins: ['@typescript-eslint', 'json-format'],
 	rules: {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'comma-dangle': ['error', 'always-multiline'],
@@ -37,7 +37,10 @@ module.exports = {
 			'error',
 			{
 				code: 80,
+				ignoreRegExpLiterals: true,
+				ignoreStrings: true,
 				ignoreTemplateLiterals: true,
+				ignoreUrls: true,
 				tabWidth: 2,
 			},
 		],

@@ -9,11 +9,14 @@ insert_final_newline = true
 max_line_length = 80
 trim_trailing_whitespace = true
 
-[*.{json,md,txt,yaml,yml}]
+[*.{json,md,swcrc,txt,yaml,yml,xml}]
 indent_style = space
 insert_final_newline = false
 max_line_length = 120
 
-[.{editorconfig,gitignore}]
+[*.md]
+trim_trailing_whitespace = false
+
+[.{editorconfig,env,env.*,gitattributes,gitignore,node-version,npmrc,nvmrc}]
 indent_style = space
 insert_final_newline = false
