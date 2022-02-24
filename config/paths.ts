@@ -3,6 +3,10 @@ export const paths = {
 	config: {
 		eleventy: 'config/eleventy.config.cjs',
 	},
+	css: {
+		src: 'src/scss',
+		dist: 'dist/css',
+	},
 	dist: 'dist',
 	healthCheck: './dist/health-check/index.html',
 	js: {

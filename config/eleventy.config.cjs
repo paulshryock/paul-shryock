@@ -1,4 +1,4 @@
-module.exports = function (eleventyConfig) {
+module.exports = function(eleventyConfig) {
 	eleventyConfig.addWatchTarget('./src/ts/')
 	eleventyConfig.addWatchTarget('./src/images/')
 	eleventyConfig.addWatchTarget('./src/scss/')
