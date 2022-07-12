@@ -782,16 +782,9 @@ exports.test = test
  * @type {Object} Gulp series
  */
 const build = series(
-	parallel(lint, clean, fonts),
+	parallel(clean, fonts),
 	parallel(
-		series(
-			html,
-			css,
-			postHtml,
-			parallel(passThrough, hash),
-			csp,
-			validate,
-		),
+		series(html, css),
 		svg,
 		images,
 		javascript
