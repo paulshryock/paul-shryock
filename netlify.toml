@@ -8,41 +8,49 @@
 #####################
 
 [[redirects]]
-	from = "/*"
+	from = "http://pshry-com.netlify.app"
+	to = "https://www.paulshryock.dev/"
+	status = 301
+	force = true
+
+[[redirects]]
+	from = "http://pshry-com.netlify.app/*"
+	to = "https://www.paulshryock.dev/:splat"
+	status = 301
+	force = true
+
+[[redirects]]
+	from = "https://pshry-com.netlify.app"
+	to = "https://www.paulshryock.dev/"
+	status = 301
+	force = true
+
+[[redirects]]
+	from = "https://pshry-com.netlify.app/*"
+	to = "https://www.paulshryock.dev/:splat"
+	status = 301
+	force = true
+
+[[redirects]]
+	from = "http://pshry.com"
+	to = "https://www.paulshryock.dev/"
+	status = 302
+	force = true
+
+[[redirects]]
+	from = "http://pshry.com/*"
 	to = "https://www.paulshryock.dev/:splat"
 	status = 302
+	force = true
 
 [[redirects]]
-	from = "/behance"
-	to = "https://www.behance.net/pshry"
-	status = 200
+	from = "https://pshry.com"
+	to = "https://www.paulshryock.dev/"
+	status = 302
 	force = true
-	headers = {X-From = "Netlify"}
 
 [[redirects]]
-	from = "/dribbble"
-	to = "https://dribbble.com/pshry"
-	status = 200
+	from = "https://pshry.com/*"
+	to = "https://www.paulshryock.dev/:splat"
+	status = 302
 	force = true
-	headers = {X-From = "Netlify"}
-
-[[redirects]]
-	from = "/github"
-	to = "https://github.com/paulshryock"
-	status = 200
-	force = true
-	headers = {X-From = "Netlify"}
-
-[[redirects]]
-	from = "/linkedin"
-	to = "https://www.linkedin.com/in/paulshryock"
-	status = 200
-	force = true
-	headers = {X-From = "Netlify"}
-
-[[redirects]]
-	from = "/twitter"
-	to = "https://twitter.com/paul_shryock"
-	status = 200
-	force = true
-	headers = {X-From = "Netlify"}
