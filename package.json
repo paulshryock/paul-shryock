@@ -118,7 +118,7 @@
     "husky": "^5.0.9",
     "inline-csp-hash": "^1.1.14",
     "merge-stream": "^2.0.0",
-    "node-sass": "^5.0.0",
+    "node-sass": "^7.0.0",
     "pixrem": "^5.0.0",
     "postcss": "^8.2.13",
     "postcss-import": "^14.0.0",
