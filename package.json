@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/paulshryock/paul-shryock#readme",
   "scripts": {
-    "build": "echo 'skipping build'"
+    "build": "mkdir -p build/pshry.com"
   }
 }
